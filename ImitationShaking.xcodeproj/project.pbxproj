@@ -30,6 +30,9 @@
 		2AA340F8229ABEAA005DE559 /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA340F7229ABEAA005DE559 /* HomeCollectionViewCell.swift */; };
 		2AA340FB229ACA75005DE559 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA340FA229ACA75005DE559 /* HomeHeaderView.swift */; };
 		2AA340FD229ACBB7005DE559 /* HomeVideoOperationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA340FC229ACBB7005DE559 /* HomeVideoOperationView.swift */; };
+		2AA34103229AE959005DE559 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA34102229AE959005DE559 /* R.generated.swift */; };
+		2AA34106229AEA48005DE559 /* TestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA34104229AEA48005DE559 /* TestTableViewCell.swift */; };
+		2AA34107229AEA48005DE559 /* TestTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2AA34105229AEA48005DE559 /* TestTableViewCell.xib */; };
 		A898C693F6C9DAC437E5F805 /* Pods_ImitationShakingTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB8A21A8546AA41F2552136E /* Pods_ImitationShakingTests.framework */; };
 		B75EF6A506F8566F6FE679EC /* Pods_ImitationShakingUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAB9AE47C95E48072E6C02FF /* Pods_ImitationShakingUITests.framework */; };
 		DE6D9C7FB035F84F517874DC /* Pods_ImitationShaking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 240A2BF843BF79AF9245642C /* Pods_ImitationShaking.framework */; };
@@ -85,6 +88,9 @@
 		2AA340F7229ABEAA005DE559 /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
 		2AA340FA229ACA75005DE559 /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
 		2AA340FC229ACBB7005DE559 /* HomeVideoOperationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVideoOperationView.swift; sourceTree = "<group>"; };
+		2AA34102229AE959005DE559 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
+		2AA34104229AEA48005DE559 /* TestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTableViewCell.swift; sourceTree = "<group>"; };
+		2AA34105229AEA48005DE559 /* TestTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestTableViewCell.xib; sourceTree = "<group>"; };
 		2B3195471830D35CFF51399B /* Pods-ImitationShakingUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingUITests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingUITests/Pods-ImitationShakingUITests.release.xcconfig"; sourceTree = "<group>"; };
 		7EE59D65078068B2C29A0012 /* Pods-ImitationShakingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingTests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingTests/Pods-ImitationShakingTests.release.xcconfig"; sourceTree = "<group>"; };
 		89FFD4FDB688C9F31B297D98 /* Pods-ImitationShaking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShaking.release.xcconfig"; path = "Target Support Files/Pods-ImitationShaking/Pods-ImitationShaking.release.xcconfig"; sourceTree = "<group>"; };
@@ -151,6 +157,7 @@
 				2AA340D522999528005DE559 /* Modules */,
 				2AA340E52299989B005DE559 /* AppDelegate */,
 				2AA3409F22998E50005DE559 /* ViewController.swift */,
+				2AA34102229AE959005DE559 /* R.generated.swift */,
 				2AA340A122998E50005DE559 /* Main.storyboard */,
 				2AA340A422998E52005DE559 /* Assets.xcassets */,
 				2AA340A622998E52005DE559 /* LaunchScreen.storyboard */,
@@ -313,6 +320,8 @@
 			isa = PBXGroup;
 			children = (
 				2AA340F7229ABEAA005DE559 /* HomeCollectionViewCell.swift */,
+				2AA34104229AEA48005DE559 /* TestTableViewCell.swift */,
+				2AA34105229AEA48005DE559 /* TestTableViewCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -357,6 +366,7 @@
 			buildConfigurationList = 2AA340C222998E52005DE559 /* Build configuration list for PBXNativeTarget "ImitationShaking" */;
 			buildPhases = (
 				20D93D2CE786E2ECECBDC531 /* [CP] Check Pods Manifest.lock */,
+				2AA340FF229AE4DD005DE559 /* ShellScript */,
 				2AA3409622998E50005DE559 /* Sources */,
 				2AA3409722998E50005DE559 /* Frameworks */,
 				2AA3409822998E50005DE559 /* Resources */,
@@ -458,6 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AA340A822998E52005DE559 /* LaunchScreen.storyboard in Resources */,
+				2AA34107229AEA48005DE559 /* TestTableViewCell.xib in Resources */,
 				2AA340A522998E52005DE559 /* Assets.xcassets in Resources */,
 				2AA340A322998E50005DE559 /* Main.storyboard in Resources */,
 			);
@@ -501,6 +512,25 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		2AA340FF229AE4DD005DE559 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$TEMP_DIR/rswift-lastrun",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				$SRCROOT/R.generated.swift,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
 		};
 		7D9192C089CCFE75A2B86BB7 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -576,8 +606,10 @@
 				2AA340E822999B8E005DE559 /* BaseTabBar.swift in Sources */,
 				2AA340D122999136005DE559 /* BaseTabBarController.swift in Sources */,
 				2AA340A022998E50005DE559 /* ViewController.swift in Sources */,
+				2AA34103229AE959005DE559 /* R.generated.swift in Sources */,
 				2AA340E022999698005DE559 /* VideoUpdateViewController.swift in Sources */,
 				2AA340F8229ABEAA005DE559 /* HomeCollectionViewCell.swift in Sources */,
+				2AA34106229AEA48005DE559 /* TestTableViewCell.swift in Sources */,
 				2AA340FB229ACA75005DE559 /* HomeHeaderView.swift in Sources */,
 				2AA340F1229AA1D6005DE559 /* Constant.swift in Sources */,
 				2AA340F2229AA1D6005DE559 /* AboutApp.swift in Sources */,

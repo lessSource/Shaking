@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tableBarController = BaseTabBarController()
         window?.rootViewController = tableBarController
         
+//        ty? R.validate()
+        
         print(App.appName)
 
         return true

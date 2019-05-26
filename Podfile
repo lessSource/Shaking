@@ -14,7 +14,7 @@ target 'ImitationShaking' do
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'SwiftyJSON'
-
+  pod 'R.swift'
 
   # Pods for ImitationShaking
 
