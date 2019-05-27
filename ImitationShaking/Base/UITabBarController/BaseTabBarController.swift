@@ -30,6 +30,7 @@ class BaseTabBarController: UITabBarController {
         
         tabBar.isTranslucent = true
         tabBar.backgroundImage = UIImage()
+        tabBar.shadowImage = UIImage.colorCreateImage(.lineColor_191D20, size: CGSize(width: Constant.screenWidth, height: 1))
         tabBar.backgroundColor = .clear
         tabBar.tintColor = .white
     }
@@ -38,8 +39,8 @@ class BaseTabBarController: UITabBarController {
         //1.设置子控制器的tabBarItem的标题图片
         childController.title = title
         childController.tabBarItem.imageInsets = UIEdgeInsets(top: 49, left: 0, bottom: 49, right: 0)
-        childController.tabBarItem.image = UIImage(named: imageName)
-        childController.tabBarItem.selectedImage = UIImage(named: selectedImage)
+//        childController.tabBarItem.image = UIImage(named: imageName)
+//        childController.tabBarItem.selectedImage = UIImage(named: selectedImage)
         
         //添加子控制器
         let chidNav = BaseNavigationController(rootViewController: childController)

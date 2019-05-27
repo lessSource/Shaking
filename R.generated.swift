@@ -16,21 +16,63 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
   
-  /// This `R.image` struct is generated, and contains static references to 2 images.
+  /// This `R.image` struct is generated, and contains static references to 8 images.
   struct image {
     /// Image `IMG_4A7DFD335A96-1`.
     static let img_4A7DFD335A961 = Rswift.ImageResource(bundle: R.hostingBundle, name: "IMG_4A7DFD335A96-1")
-    /// Image `icon_ camera`.
-    static let icon_Camera = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_ camera")
+    /// Image `icon_camera`.
+    static let icon_camera = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_camera")
+    /// Image `icon_comments`.
+    static let icon_comments = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_comments")
+    /// Image `icon_giveLike`.
+    static let icon_giveLike = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_giveLike")
+    /// Image `icon_notes`.
+    static let icon_notes = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_notes")
+    /// Image `icon_search`.
+    static let icon_search = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_search")
+    /// Image `icon_shar`.
+    static let icon_shar = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_shar")
+    /// Image `icon_share`.
+    static let icon_share = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_share")
     
     /// `UIImage(named: "IMG_4A7DFD335A96-1", bundle: ..., traitCollection: ...)`
     static func img_4A7DFD335A961(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.img_4A7DFD335A961, compatibleWith: traitCollection)
     }
     
-    /// `UIImage(named: "icon_ camera", bundle: ..., traitCollection: ...)`
-    static func icon_Camera(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
-      return UIKit.UIImage(resource: R.image.icon_Camera, compatibleWith: traitCollection)
+    /// `UIImage(named: "icon_camera", bundle: ..., traitCollection: ...)`
+    static func icon_camera(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_camera, compatibleWith: traitCollection)
+    }
+    
+    /// `UIImage(named: "icon_comments", bundle: ..., traitCollection: ...)`
+    static func icon_comments(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_comments, compatibleWith: traitCollection)
+    }
+    
+    /// `UIImage(named: "icon_giveLike", bundle: ..., traitCollection: ...)`
+    static func icon_giveLike(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_giveLike, compatibleWith: traitCollection)
+    }
+    
+    /// `UIImage(named: "icon_notes", bundle: ..., traitCollection: ...)`
+    static func icon_notes(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_notes, compatibleWith: traitCollection)
+    }
+    
+    /// `UIImage(named: "icon_search", bundle: ..., traitCollection: ...)`
+    static func icon_search(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_search, compatibleWith: traitCollection)
+    }
+    
+    /// `UIImage(named: "icon_shar", bundle: ..., traitCollection: ...)`
+    static func icon_shar(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_shar, compatibleWith: traitCollection)
+    }
+    
+    /// `UIImage(named: "icon_share", bundle: ..., traitCollection: ...)`
+    static func icon_share(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_share, compatibleWith: traitCollection)
     }
     
     fileprivate init() {}
