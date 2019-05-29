@@ -10,6 +10,7 @@ import UIKit
 
 class HomeVideoOperationView: UIView {
     
+    /** 音乐名称 */
     fileprivate lazy var musicLabel: UILabel = {
         let label = UILabel()
         label.text = "这是谁的原创音乐"
@@ -18,6 +19,7 @@ class HomeVideoOperationView: UIView {
         return label
     }()
     
+    /** 音乐图片 */
     fileprivate lazy var musicImage: UIImageView = {
         let image = UIImageView()
         image.layer.cornerRadius = 25
@@ -28,6 +30,7 @@ class HomeVideoOperationView: UIView {
         return image
     }()
     
+    /** 发布文字内容 */
     fileprivate lazy var contentLabel: UILabel = {
         let label = UILabel()
         label.text = "终于学会分身术一起合照了。可是我还没唱完就跑了，哈哈哈哈哈哈哈哈"
@@ -37,12 +40,51 @@ class HomeVideoOperationView: UIView {
         return label
     }()
     
+    /** 发布用户名称 */
     fileprivate lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "@芥末"
         label.textColor = .white
         label.font = UIFont.boldSystemFont(ofSize: 16)
         return label
+    }()
+    
+    /** 用户头像 */
+    fileprivate lazy var headerImage: UIImageView = {
+        let image = UIImageView()
+        image.layer.cornerRadius = 24
+        image.layer.borderColor = UIColor.white.cgColor
+        image.layer.borderWidth = 1
+        image.backgroundColor = .red
+        image.clipsToBounds = true
+        return image
+    }()
+    
+    /** 分享 */
+    fileprivate lazy var shareButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("34.2W", for: .normal)
+        button.setImage(R.image.icon_shar(), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        return button
+    }()
+    
+    /** 评论 */
+    fileprivate lazy var commentsButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("34.2W", for: .normal)
+        button.setImage(R.image.icon_comments(), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        return button
+    }()
+    
+    /** 点赞 */
+    fileprivate lazy var givelikeButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("34.2W", for: .normal)
+        button.setImage(R.image.icon_giveLike(), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        return button
     }()
     
     
@@ -74,18 +116,45 @@ class HomeVideoOperationView: UIView {
             make.width.equalTo(Constant.screenWidth/2)
         }
         
+        addSubview(shareButton)
+        shareButton.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview().offset(-80)
+            make.right.equalToSuperview().offset(-15)
+            make.height.equalTo(50)
+            make.width.equalTo(shareButton.titleLabel?.intrinsicContentSize.width ?? 0)
+        }
+        shareButton.layoutButton(.top, imageTitleSpace: 2)
+        
+        addSubview(commentsButton)
+        commentsButton.snp.makeConstraints { (make) in
+            make.centerX.equalTo(shareButton)
+            make.height.equalTo(50)
+            make.bottom.equalTo(shareButton.snp_top).offset(-20)
+            make.width.equalTo(commentsButton.titleLabel?.intrinsicContentSize.width ?? 0)
+        }
+        commentsButton.layoutButton(.top, imageTitleSpace: 2)
+        
+        addSubview(givelikeButton)
+        givelikeButton.snp.makeConstraints { (make) in
+            make.centerX.equalTo(shareButton)
+            make.height.equalTo(50)
+            make.bottom.equalTo(commentsButton.snp_top).offset(-20)
+            make.width.equalTo(givelikeButton.titleLabel?.intrinsicContentSize.width ?? 0)
+        }
+        givelikeButton.layoutButton(.top, imageTitleSpace: 2)
+        
+        addSubview(headerImage)
+        headerImage.snp.makeConstraints { (make) in
+            make.width.height.equalTo(48)
+            make.centerX.equalTo(givelikeButton)
+            make.bottom.equalTo(givelikeButton.snp_top).offset(-40)
+        }
+        
         addSubview(contentLabel)
         contentLabel.snp.makeConstraints { (make) in
             make.left.equalTo(15)
-            make.right.equalToSuperview().offset(-100)
+            make.right.equalTo(shareButton.snp_left).offset(-10)
             make.bottom.equalTo(musicLabel.snp_top).offset(-10)
-        }
-        
-        addSubview(musicImage)
-        musicImage.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview().offset(-10)
-            make.width.height.equalTo(50)
-            make.right.equalTo(-15)
         }
         
         addSubview(nameLabel)
@@ -94,6 +163,14 @@ class HomeVideoOperationView: UIView {
             make.right.equalToSuperview().offset(-100)
             make.bottom.equalTo(contentLabel.snp_top).offset(-10)
         }
+        
+        addSubview(musicImage)
+        musicImage.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview().offset(-10)
+            make.width.height.equalTo(50)
+            make.centerX.equalTo(givelikeButton)
+        }
+        
     }
 }
 

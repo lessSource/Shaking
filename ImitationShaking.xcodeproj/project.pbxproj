@@ -35,6 +35,8 @@
 		2AA34107229AEA48005DE559 /* TestTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2AA34105229AEA48005DE559 /* TestTableViewCell.xib */; };
 		2AA3410B229C2906005DE559 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3410A229C2906005DE559 /* UIColor+Extension.swift */; };
 		2AA3410E229C32AE005DE559 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3410D229C32AE005DE559 /* UIImage+Extension.swift */; };
+		2AA34111229ED6D9005DE559 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA34110229ED6D9005DE559 /* UIButton+Extension.swift */; };
+		2AA34114229ED7B3005DE559 /* UIView+Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA34113229ED7B3005DE559 /* UIView+Frame.swift */; };
 		A898C693F6C9DAC437E5F805 /* Pods_ImitationShakingTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB8A21A8546AA41F2552136E /* Pods_ImitationShakingTests.framework */; };
 		B75EF6A506F8566F6FE679EC /* Pods_ImitationShakingUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAB9AE47C95E48072E6C02FF /* Pods_ImitationShakingUITests.framework */; };
 		DE6D9C7FB035F84F517874DC /* Pods_ImitationShaking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 240A2BF843BF79AF9245642C /* Pods_ImitationShaking.framework */; };
@@ -95,6 +97,8 @@
 		2AA34105229AEA48005DE559 /* TestTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestTableViewCell.xib; sourceTree = "<group>"; };
 		2AA3410A229C2906005DE559 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		2AA3410D229C32AE005DE559 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		2AA34110229ED6D9005DE559 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		2AA34113229ED7B3005DE559 /* UIView+Frame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Frame.swift"; sourceTree = "<group>"; };
 		2B3195471830D35CFF51399B /* Pods-ImitationShakingUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingUITests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingUITests/Pods-ImitationShakingUITests.release.xcconfig"; sourceTree = "<group>"; };
 		7EE59D65078068B2C29A0012 /* Pods-ImitationShakingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingTests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingTests/Pods-ImitationShakingTests.release.xcconfig"; sourceTree = "<group>"; };
 		89FFD4FDB688C9F31B297D98 /* Pods-ImitationShaking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShaking.release.xcconfig"; path = "Target Support Files/Pods-ImitationShaking/Pods-ImitationShaking.release.xcconfig"; sourceTree = "<group>"; };
@@ -343,6 +347,8 @@
 		2AA34108229C28D4005DE559 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				2AA34112229ED765005DE559 /* UIView */,
+				2AA3410F229ED6B7005DE559 /* UIButton */,
 				2AA3410C229C32A4005DE559 /* UIimage */,
 				2AA34109229C28F4005DE559 /* UIColor */,
 			);
@@ -363,6 +369,22 @@
 				2AA3410D229C32AE005DE559 /* UIImage+Extension.swift */,
 			);
 			path = UIimage;
+			sourceTree = "<group>";
+		};
+		2AA3410F229ED6B7005DE559 /* UIButton */ = {
+			isa = PBXGroup;
+			children = (
+				2AA34110229ED6D9005DE559 /* UIButton+Extension.swift */,
+			);
+			path = UIButton;
+			sourceTree = "<group>";
+		};
+		2AA34112229ED765005DE559 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				2AA34113229ED7B3005DE559 /* UIView+Frame.swift */,
+			);
+			path = UIView;
 			sourceTree = "<group>";
 		};
 		3F3EA90BA62750EAFF3BC298 /* Frameworks */ = {
@@ -650,7 +672,9 @@
 				2AA340DE2299968B005DE559 /* FriendsViewController.swift in Sources */,
 				2AA340CF2299910C005DE559 /* BaseNavigationController.swift in Sources */,
 				2AA340DC2299967D005DE559 /* HomeViewController.swift in Sources */,
+				2AA34114229ED7B3005DE559 /* UIView+Frame.swift in Sources */,
 				2AA340F5229AA326005DE559 /* UIDevice+Extension.swift in Sources */,
+				2AA34111229ED6D9005DE559 /* UIButton+Extension.swift in Sources */,
 				2AA340E4229996AD005DE559 /* MineViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
