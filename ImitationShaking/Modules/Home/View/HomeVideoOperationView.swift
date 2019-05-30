@@ -10,6 +10,12 @@ import UIKit
 
 class HomeVideoOperationView: UIView {
     
+    // 评论页面
+    fileprivate lazy var commentsView: CommentsPopUpView = {
+        let comments = CommentsPopUpView(frame: CGRect(x: 0, y: Constant.screenHeight/4, width: Constant.screenWidth, height: Constant.screenHeight/4*3))
+        return comments
+    }()
+    
     /** 音乐名称 */
     fileprivate lazy var musicLabel: UILabel = {
         let label = UILabel()
@@ -117,6 +123,7 @@ class HomeVideoOperationView: UIView {
         }
         
         addSubview(shareButton)
+        shareButton.addTarget(self, action: #selector(shareButtonClick), for: .touchUpInside)
         shareButton.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview().offset(-80)
             make.right.equalToSuperview().offset(-15)
@@ -126,6 +133,7 @@ class HomeVideoOperationView: UIView {
         shareButton.layoutButton(.top, imageTitleSpace: 2)
         
         addSubview(commentsButton)
+        commentsButton.addTarget(self, action: #selector(commentsButtonClick), for: .touchUpInside)
         commentsButton.snp.makeConstraints { (make) in
             make.centerX.equalTo(shareButton)
             make.height.equalTo(50)
@@ -135,6 +143,7 @@ class HomeVideoOperationView: UIView {
         commentsButton.layoutButton(.top, imageTitleSpace: 2)
         
         addSubview(givelikeButton)
+        givelikeButton.addTarget(self, action: #selector(givelikeButtonClick), for: .touchUpInside)
         givelikeButton.snp.makeConstraints { (make) in
             make.centerX.equalTo(shareButton)
             make.height.equalTo(50)
@@ -177,4 +186,18 @@ class HomeVideoOperationView: UIView {
 // MARK:- Event
 extension HomeVideoOperationView {
     
+    // 点赞
+    @objc fileprivate func givelikeButtonClick() {
+        
+    }
+    
+    // 评论
+    @objc fileprivate func commentsButtonClick() {
+        PopUpViewManager.sharedInstance.presentContentView(commentsView)
+    }
+    
+    // 分享
+    @objc fileprivate func shareButtonClick() {
+        
+    }
 }

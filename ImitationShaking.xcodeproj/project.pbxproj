@@ -37,6 +37,8 @@
 		2AA3410E229C32AE005DE559 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3410D229C32AE005DE559 /* UIImage+Extension.swift */; };
 		2AA34111229ED6D9005DE559 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA34110229ED6D9005DE559 /* UIButton+Extension.swift */; };
 		2AA34114229ED7B3005DE559 /* UIView+Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA34113229ED7B3005DE559 /* UIView+Frame.swift */; };
+		2AA3411822A01BC5005DE559 /* PopUpViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3411722A01BC5005DE559 /* PopUpViewManager.swift */; };
+		2AA3411A22A01C74005DE559 /* CommentsPopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3411922A01C74005DE559 /* CommentsPopUpView.swift */; };
 		A898C693F6C9DAC437E5F805 /* Pods_ImitationShakingTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB8A21A8546AA41F2552136E /* Pods_ImitationShakingTests.framework */; };
 		B75EF6A506F8566F6FE679EC /* Pods_ImitationShakingUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAB9AE47C95E48072E6C02FF /* Pods_ImitationShakingUITests.framework */; };
 		DE6D9C7FB035F84F517874DC /* Pods_ImitationShaking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 240A2BF843BF79AF9245642C /* Pods_ImitationShaking.framework */; };
@@ -99,6 +101,8 @@
 		2AA3410D229C32AE005DE559 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		2AA34110229ED6D9005DE559 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		2AA34113229ED7B3005DE559 /* UIView+Frame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Frame.swift"; sourceTree = "<group>"; };
+		2AA3411722A01BC5005DE559 /* PopUpViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopUpViewManager.swift; sourceTree = "<group>"; };
+		2AA3411922A01C74005DE559 /* CommentsPopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsPopUpView.swift; sourceTree = "<group>"; };
 		2B3195471830D35CFF51399B /* Pods-ImitationShakingUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingUITests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingUITests/Pods-ImitationShakingUITests.release.xcconfig"; sourceTree = "<group>"; };
 		7EE59D65078068B2C29A0012 /* Pods-ImitationShakingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingTests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingTests/Pods-ImitationShakingTests.release.xcconfig"; sourceTree = "<group>"; };
 		89FFD4FDB688C9F31B297D98 /* Pods-ImitationShaking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShaking.release.xcconfig"; path = "Target Support Files/Pods-ImitationShaking/Pods-ImitationShaking.release.xcconfig"; sourceTree = "<group>"; };
@@ -300,6 +304,7 @@
 		2AA340E9229AA199005DE559 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				2AA3411522A01B63005DE559 /* Tool */,
 				2AA340F3229AA301005DE559 /* UIDevice */,
 				2AA340EA229AA19D005DE559 /* Const */,
 				2AA34108229C28D4005DE559 /* Extension */,
@@ -340,6 +345,7 @@
 			children = (
 				2AA340FA229ACA75005DE559 /* HomeHeaderView.swift */,
 				2AA340FC229ACBB7005DE559 /* HomeVideoOperationView.swift */,
+				2AA3411922A01C74005DE559 /* CommentsPopUpView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -385,6 +391,22 @@
 				2AA34113229ED7B3005DE559 /* UIView+Frame.swift */,
 			);
 			path = UIView;
+			sourceTree = "<group>";
+		};
+		2AA3411522A01B63005DE559 /* Tool */ = {
+			isa = PBXGroup;
+			children = (
+				2AA3411622A01B68005DE559 /* PopUp */,
+			);
+			path = Tool;
+			sourceTree = "<group>";
+		};
+		2AA3411622A01B68005DE559 /* PopUp */ = {
+			isa = PBXGroup;
+			children = (
+				2AA3411722A01BC5005DE559 /* PopUpViewManager.swift */,
+			);
+			path = PopUp;
 			sourceTree = "<group>";
 		};
 		3F3EA90BA62750EAFF3BC298 /* Frameworks */ = {
@@ -665,9 +687,11 @@
 				2AA340F8229ABEAA005DE559 /* HomeCollectionViewCell.swift in Sources */,
 				2AA34106229AEA48005DE559 /* TestTableViewCell.swift in Sources */,
 				2AA340FB229ACA75005DE559 /* HomeHeaderView.swift in Sources */,
+				2AA3411822A01BC5005DE559 /* PopUpViewManager.swift in Sources */,
 				2AA340F1229AA1D6005DE559 /* Constant.swift in Sources */,
 				2AA340F2229AA1D6005DE559 /* AboutApp.swift in Sources */,
 				2AA340FD229ACBB7005DE559 /* HomeVideoOperationView.swift in Sources */,
+				2AA3411A22A01C74005DE559 /* CommentsPopUpView.swift in Sources */,
 				2AA3409E22998E50005DE559 /* AppDelegate.swift in Sources */,
 				2AA340DE2299968B005DE559 /* FriendsViewController.swift in Sources */,
 				2AA340CF2299910C005DE559 /* BaseNavigationController.swift in Sources */,
