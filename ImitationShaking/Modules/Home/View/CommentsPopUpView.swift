@@ -18,6 +18,8 @@ class CommentsPopUpView: PopUpContentView {
         return label
     }()
     
+//    fileprivate lazy var 
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.cornerRadius = 4

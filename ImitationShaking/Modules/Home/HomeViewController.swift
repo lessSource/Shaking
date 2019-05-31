@@ -50,6 +50,8 @@ class HomeViewController: BaseViewController {
         view.addSubview(collectionView)
         
         view.addSubview(hedaerView)
+        
+        print(Date.timeAgoSinceDate("1551365260".timeStampDate))
     }
     
 
