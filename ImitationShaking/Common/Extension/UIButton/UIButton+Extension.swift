@@ -17,6 +17,28 @@ enum ButtonEdgeInsetsStyle {
 
 
 extension UIButton {
+    
+    private struct AssociatedKeys {
+        static var buttonView: String = "buttonViewKey"
+    }
+    
+    // 边距扩充
+    var hitTestEdgeInsets: UIEdgeInsets? {
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.buttonView, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.buttonView) as? UIEdgeInsets ?? UIEdgeInsets.zero
+        }
+    }
+    
+    open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        if hitTestEdgeInsets == UIEdgeInsets.zero || !isEnabled || isHidden {
+            return super.point(inside: point, with: event)
+        }
+        return bounds.inset(by: hitTestEdgeInsets ?? UIEdgeInsets.zero).contains(point)
+      }
+    
     func layoutButton(_ style: ButtonEdgeInsetsStyle, imageTitleSpace: CGFloat) {
         let imageWidth = imageView?.width ?? 0
         let imageHeight = imageView?.height ?? 0
@@ -45,5 +67,7 @@ extension UIButton {
         titleEdgeInsets = labelInsets
         imageEdgeInsets = imageInsets
     }
+    
+    
     
 }

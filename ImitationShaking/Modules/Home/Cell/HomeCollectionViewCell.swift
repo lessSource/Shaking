@@ -42,12 +42,28 @@ class HomeCollectionViewCell: UICollectionViewCell {
             player.play()
         }
         
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapClick))
+        contentView.isUserInteractionEnabled = true
+        contentView.addGestureRecognizer(tap)
+        
         contentView.addSubview(operationView)
         operationView.snp.makeConstraints { (make) in
             make.top.equalTo(Constant.navbarAndStatusBar)
             make.left.right.equalToSuperview()
             make.bottom.equalTo(contentView.snp_bottom).offset(-Constant.bottomBarHeight)
         }
+    }
+    
+    // MARK:- Event
+    @objc fileprivate func tapClick() {
+        print("dddd")
+        
+        if player.timeControlStatus == .paused {
+            player.play()
+        }else if player.timeControlStatus == .playing {
+            player.pause()
+        }
+
     }
     
 }
