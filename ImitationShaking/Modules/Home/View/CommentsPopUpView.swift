@@ -22,8 +22,7 @@ class CommentsPopUpView: PopUpContentView {
         super.init(frame: frame)
         layer.cornerRadius = 4
         clipsToBounds = true
-//        backgroundColor = UIColor(white: 0.0, alpha: 0.9)
-        backgroundColor = UIColor.red
+        backgroundColor = UIColor.popUpColor_2F2F2F
         layoutView()
     }
     

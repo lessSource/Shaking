@@ -16,6 +16,12 @@ class HomeVideoOperationView: UIView {
         return comments
     }()
     
+    // 分享
+    fileprivate lazy var shareView: SharePopUpView = {
+        let share = SharePopUpView(frame: CGRect(x: 0, y: Constant.screenHeight/2, width: Constant.screenWidth, height: Constant.screenHeight/2))
+        return share
+    }()
+    
     /** 音乐名称 */
     fileprivate lazy var musicLabel: UILabel = {
         let label = UILabel()
@@ -198,6 +204,6 @@ extension HomeVideoOperationView {
     
     // 分享
     @objc fileprivate func shareButtonClick() {
-        
+        PopUpViewManager.sharedInstance.presentContentView(shareView)
     }
 }

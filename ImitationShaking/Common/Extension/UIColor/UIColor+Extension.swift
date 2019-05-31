@@ -32,6 +32,12 @@ extension UIColor {
         return withHex(hexString: "#191D20")
     }
     
+    /** 弹出框颜色 */
+    public class var popUpColor_2F2F2F: UIColor {
+        return UIColor.withHex(hexString: "#2F2F2F", alpha: 0.99)
+    }
+
+    
     class func withHex(hexString hex: String, alpha: CGFloat = 1) -> UIColor {
         // 去除空格
         var cString: String = hex.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines).uppercased()

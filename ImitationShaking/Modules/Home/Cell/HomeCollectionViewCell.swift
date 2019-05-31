@@ -40,6 +40,8 @@ class HomeCollectionViewCell: UICollectionViewCell {
             videoLayer.frame = contentView.bounds
             contentView.layer.addSublayer(videoLayer)
             player.play()
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(moviePlayDidEnd(_ :)), name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
         }
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapClick))
@@ -64,6 +66,12 @@ class HomeCollectionViewCell: UICollectionViewCell {
             player.pause()
         }
 
+    }
+    
+    @objc fileprivate func moviePlayDidEnd(_ notification: Notification) {
+        let item = notification.object as? AVPlayerItem
+        item?.seek(to: CMTime.zero, completionHandler: nil)
+        player.play()
     }
     
 }

@@ -67,13 +67,13 @@ extension PopUpViewManager {
         backView.addSubview(subBackView)
         if dircetionType == .center {
             self.contentView.alpha = 1
-            self.maskView.alpha = 0.5
+            self.maskView.alpha = 0.2
             self.contentView.layer.add(alertViewShowAnimation(), forKey: nil)
             self.contentView.didShwoView()
         }else {
             UIView.animate(withDuration: 0.5) {
                 self.contentView.alpha = 1
-                self.maskView.alpha = 0.5
+                self.maskView.alpha = 0.2
             }
             showAnimation(dircetionType)
         }
