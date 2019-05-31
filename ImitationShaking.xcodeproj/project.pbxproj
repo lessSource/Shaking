@@ -300,7 +300,7 @@
 		2AA340E9229AA199005DE559 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				2AA340F3229AA301005DE559 /* UIDevice */,
+				CABE8D3D229F8303004BCC5D /* NetWork */,
 				2AA340EA229AA19D005DE559 /* Const */,
 				2AA34108229C28D4005DE559 /* Extension */,
 			);
@@ -322,7 +322,8 @@
 			children = (
 				2AA340F4229AA326005DE559 /* UIDevice+Extension.swift */,
 			);
-			path = UIDevice;
+			name = UIDevice;
+			path = ../UIDevice;
 			sourceTree = "<group>";
 		};
 		2AA340F6229ABE91005DE559 /* Cell */ = {
@@ -347,6 +348,7 @@
 		2AA34108229C28D4005DE559 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				2AA340F3229AA301005DE559 /* UIDevice */,
 				2AA34112229ED765005DE559 /* UIView */,
 				2AA3410F229ED6B7005DE559 /* UIButton */,
 				2AA3410C229C32A4005DE559 /* UIimage */,
@@ -395,6 +397,13 @@
 				CAB9AE47C95E48072E6C02FF /* Pods_ImitationShakingUITests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CABE8D3D229F8303004BCC5D /* NetWork */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NetWork;
 			sourceTree = "<group>";
 		};
 		F534CFEC6FD39B4FEAF33187 /* Pods */ = {

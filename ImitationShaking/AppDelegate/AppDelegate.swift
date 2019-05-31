@@ -20,9 +20,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = .white
         
         let tableBarController = BaseTabBarController()
-        window?.rootViewController = tableBarController
-        
-//        ty? R.validate()
+        window?.rootViewController = tableBarController        
+        do {
+            try R.validate()
+        } catch {
+            
+        }
         
         print(App.appName)
 
