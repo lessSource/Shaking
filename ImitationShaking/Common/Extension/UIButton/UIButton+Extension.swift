@@ -51,7 +51,7 @@ extension UIButton {
 
         switch style {
         case .top:
-            imageInsets = UIEdgeInsets(top: -labelHeight - imageTitleSpace/2, left: 0, bottom: 0, right: -labelWidth)
+            imageInsets = UIEdgeInsets(top: -labelHeight - imageTitleSpace/2, left: (width - imageWidth)/2 - imageTitleSpace , bottom: 0, right: 0)
             labelInsets = UIEdgeInsets(top: 0, left: -imageWidth, bottom: -imageHeight - imageTitleSpace/2, right: 0)
         case .left:
             imageInsets = UIEdgeInsets(top: 0, left: -imageTitleSpace/2, bottom: 0, right: imageTitleSpace)

@@ -66,8 +66,19 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: HomeCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCollectionViewCell", for: indexPath) as! HomeCollectionViewCell
         cell.backgroundColor = .black
+        cell.url = ""
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let videoCell: HomeCollectionViewCell = cell as! HomeCollectionViewCell
+//        videoCell.player.r
+        videoCell.player.pause()
+    }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        if se
+        
+//        let rectInTableView = collectionView.convert(<#T##rect: CGRect##CGRect#>, to: <#T##UIView?#>)
+    }
 }

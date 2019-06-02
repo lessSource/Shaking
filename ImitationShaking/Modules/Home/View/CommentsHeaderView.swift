@@ -1,20 +1,22 @@
 //
-//  CommentsReplyTableViewCell.swift
+//  CommentsHeaderView.swift
 //  ImitationShaking
 //
-//  Created by Lj on 2019/5/31.
+//  Created by Lj on 2019/6/2.
 //  Copyright © 2019 study. All rights reserved.
 //
 
 import UIKit
 import Kingfisher
 
-class CommentsReplyTableViewCell: UITableViewCell {
+class CommentsHeaderView: UIView {
 
+    public var commentClick: ((Bool) -> ())?
+    
     // 头像
     fileprivate lazy var headImage: UIImageView = {
         let image = UIImageView()
-        image.layer.cornerRadius = 13
+        image.layer.cornerRadius = 18
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFill
         return image
@@ -46,10 +48,11 @@ class CommentsReplyTableViewCell: UITableViewCell {
     }()
     
     // 点赞
-    fileprivate lazy var praiseButton: UIButton = {
+    public lazy var praiseButton: UIButton = {
         let button = UIButton()
-        button.setTitle("2222", for: .normal)
+        button.setTitle("2", for: .normal)
         button.setImage(R.image.icon_giveLike(), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 10)
         return button
     }()
     
@@ -61,32 +64,19 @@ class CommentsReplyTableViewCell: UITableViewCell {
             if let url = URL(string: model.submitUser.headImg) {
                 headImage.kf.setImage(with: ImageResource(downloadURL: url), placeholder: nil)
             }
-            
+
         }
     }
     
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        layoutView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        selectionStyle = .none
-        backgroundColor = UIColor.clear
-        layoutView()
-    }
     
     // MARK:- layoutView
     fileprivate func layoutView() {
@@ -96,9 +86,13 @@ class CommentsReplyTableViewCell: UITableViewCell {
         addSubview(contentLabel)
         addSubview(praiseButton)
         
+        contentLabel.isUserInteractionEnabled = true
+        let contentTap = UITapGestureRecognizer(target: self, action: #selector(contentTapClick))
+        contentLabel.addGestureRecognizer(contentTap)
+        
         headImage.snp.makeConstraints { (make) in
-            make.height.width.equalTo(26)
-            make.left.equalTo(55)
+            make.height.width.equalTo(36)
+            make.left.equalTo(15)
             make.top.equalToSuperview()
         }
         
@@ -106,24 +100,48 @@ class CommentsReplyTableViewCell: UITableViewCell {
             make.top.equalToSuperview()
             make.left.equalTo(headImage.snp.right).offset(4)
         }
-        
+
         timeLabel.snp.makeConstraints { (make) in
             make.left.equalTo(headImage.snp.right).offset(4)
             make.top.equalTo(nameLabel.snp_bottom).offset(2)
         }
-        
+
         contentLabel.snp.makeConstraints { (make) in
             make.left.equalTo(headImage.snp.right).offset(4)
             make.top.equalTo(timeLabel.snp_bottom).offset(2)
-            make.right.equalToSuperview().offset(-60)
-            make.bottom.equalToSuperview().offset(-5)
+            make.right.equalTo(self.snp_right).offset(-60)
         }
+
+//        praiseButton.layoutButton(.top, imageTitleSpace: 2)
+//        praiseButton.snp.makeConstraints { (make) in
+//            make.width.height.equalTo(50)
+//            make.top.equalToSuperview()
+//            make.right.equalTo(self.snp_right).offset(-5)
+//        }
         
-        praiseButton.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.right.equalToSuperview().offset(-15)
-//            make
+        let userButton: UIButton = UIButton()
+        userButton.addTarget(self, action: #selector(userButtonClick), for: .touchUpInside)
+        addSubview(userButton)
+        userButton.snp.makeConstraints { (make) in
+            make.left.top.bottom.equalTo(headImage)
+            make.right.equalTo(nameLabel.snp_right)
         }
         
     }
+    
+    // MARK:- Event
+    // 内容
+    @objc fileprivate func contentTapClick() {
+        backgroundColor = UIColor(white: 0, alpha: 0.1)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.backgroundColor = .clear
+        }
+        if let closure = commentClick { closure(false) }
+    }
+    
+    // 用户
+    @objc fileprivate func userButtonClick() {
+        if let closure = commentClick { closure(true) }
+    }
+    
 }

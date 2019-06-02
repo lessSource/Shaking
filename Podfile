@@ -10,11 +10,13 @@ target 'ImitationShaking' do
   pod 'Kingfisher'
   pod 'Moya/RxSwift'
   pod 'MJRefresh'
+  pod 'PromiseKit/UIKit'
   pod 'HandyJSON', '~> 5.0.0-beta.1'
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'SwiftyJSON'
   pod 'R.swift'
+  pod 'UITextView+Placeholder'
 
   # Pods for ImitationShaking
 

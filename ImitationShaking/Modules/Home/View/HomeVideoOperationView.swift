@@ -76,7 +76,7 @@ class HomeVideoOperationView: UIView {
     fileprivate lazy var shareButton: UIButton = {
         let button = UIButton()
         button.setTitle("34.2W", for: .normal)
-        button.setImage(R.image.icon_shar(), for: .normal)
+        button.setImage(R.image.icon_share(), for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         return button
     }()

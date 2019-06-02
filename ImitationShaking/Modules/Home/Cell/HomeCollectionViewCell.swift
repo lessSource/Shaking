@@ -28,21 +28,28 @@ class HomeCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public var url: String = "" {
+        didSet {
+            if let url = URL(string: "http://47.93.30.220/video/1/c73b0aa8-45c1-4e87-86c2-7d6d5c3fe4fc.mp4") {
+                let playerItem = AVPlayerItem(url: url)
+                self.player.replaceCurrentItem(with: playerItem)
+                player.play()
+            }
+            
+        }
+    }
+    
+    
     // MARK:- layout
     fileprivate func layoutView() {
-        let url = URL(string: "http://47.93.30.220/video/1/c73b0aa8-45c1-4e87-86c2-7d6d5c3fe4fc.mp4")
-        if let videoUrl = url {
-            let playerItem = AVPlayerItem(url: videoUrl)
-            self.player = AVPlayer(playerItem: playerItem)
-
-            let videoLayer = AVPlayerLayer(player: player)
-            videoLayer.videoGravity = .resizeAspect
-            videoLayer.frame = contentView.bounds
-            contentView.layer.addSublayer(videoLayer)
-            player.play()
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(moviePlayDidEnd(_ :)), name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
-        }
+        
+        self.player = AVPlayer()
+        let videoLayer = AVPlayerLayer(player: player)
+        videoLayer.videoGravity = .resizeAspect
+        videoLayer.frame = contentView.bounds
+        contentView.layer.addSublayer(videoLayer)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(moviePlayDidEnd(_ :)), name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapClick))
         contentView.isUserInteractionEnabled = true
@@ -58,8 +65,6 @@ class HomeCollectionViewCell: UICollectionViewCell {
     
     // MARK:- Event
     @objc fileprivate func tapClick() {
-        print("dddd")
-        
         if player.timeControlStatus == .paused {
             player.play()
         }else if player.timeControlStatus == .playing {
