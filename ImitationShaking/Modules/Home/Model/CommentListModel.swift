@@ -46,9 +46,10 @@ struct CommentListModel: HandyJSON {
     var submitUser = CommentListUserModel()
     /** 父评论用户 */
     var parentUser = CommentListUserModel()
-    
     /** 回复 */
     var childrenList = [CommentListModel]()
+    /** 当前回复页数 */
+    var childrenPage: Int = 1
 }
 
 

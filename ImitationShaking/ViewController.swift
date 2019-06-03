@@ -21,8 +21,8 @@ class ViewController: UIViewController {
 //        R.fon
 //        let font = R.image
         
-    let tableView = UITableView()
-        tableView.register(UINib(resource: R.nib.testTableViewCell), forCellReuseIdentifier: R.nib.testTableViewCell.name)
+//    let tableView = UITableView()
+//        tableView.register(UINib(resource: R.nib.testTableViewCell), forCellReuseIdentifier: R.nib.testTableViewCell.name)
     }
 
 

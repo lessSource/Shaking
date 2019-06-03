@@ -31,6 +31,10 @@ extension UIColor {
         return withHex(hexString: "#979797")
     }
     
+    public class var textColor_8C8C8C: UIColor {
+        return withHex(hexString: "#8C8C8C")
+    }
+    
     /** 线的颜色 */
     public class var lineColor_191D20: UIColor {
         return withHex(hexString: "#191D20")

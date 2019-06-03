@@ -137,7 +137,7 @@ extension CommonTargetTypeApi: TargetType {
         case .uploadMultipart(_, _):
             return ["Content-type": "multipart/form-data"]
         default:
-            return ["Content-Type": "application/json","Auth-Token": "6540974853502013440"]
+            return ["Content-Type": "application/json","Auth-Token": "6541208064790368256"]
         }
     }
     

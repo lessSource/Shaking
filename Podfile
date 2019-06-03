@@ -17,6 +17,7 @@ target 'ImitationShaking' do
   pod 'SwiftyJSON'
   pod 'R.swift'
   pod 'UITextView+Placeholder'
+  pod 'MBProgressHUD'
 
   # Pods for ImitationShaking
 

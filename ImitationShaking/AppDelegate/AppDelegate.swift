@@ -13,7 +13,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         window?.makeKeyAndVisible()
@@ -55,5 +54,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
+    func loginView() {
+//        let loginVC = LoginPopUpView(frame: CGRect(x: 0, y: 0, width: Constant.screenWidth, height: Constant.screenHeight))
+//        let loginVC = LoginViewController()
+//        let nav = UINavigationController(rootViewController: loginVC)
+//        window?.rootViewController = nav
+
+//        let nav = BaseNavigationController(rootViewController: loginVC)
+        
+//        currentNav()?.present(nav, animated: true, completion: nil)
+        
+//        PopUpViewManager.sharedInstance.presentContentView(loginVC)
+    }
+    
+//    func currentNav() -> UINavigationController? {
+//
+//
+////        let tabbar = window?.rootViewController as? UITabBarController
+////        return tabbar?.selectedViewController as? UINavigationController
+//    }
+    
+    
+//    + (UINavigationController *)currentNav {
+//    UITabBarController *tabbarvc = (UITabBarController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+//    return tabbarvc.selectedViewController;
+//    }
 }
 

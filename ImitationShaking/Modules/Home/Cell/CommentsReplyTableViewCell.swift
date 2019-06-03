@@ -11,6 +11,8 @@ import Kingfisher
 
 class CommentsReplyTableViewCell: UITableViewCell {
 
+    public var commentClick: ((CommentButtonClickType) -> ())?
+    
     // 头像
     fileprivate lazy var headImage: UIImageView = {
         let image = UIImageView()
@@ -46,11 +48,25 @@ class CommentsReplyTableViewCell: UITableViewCell {
     }()
     
     // 点赞
-    fileprivate lazy var praiseButton: UIButton = {
+    public lazy var praiseButton: UIButton = {
         let button = UIButton()
-        button.setTitle("2222", for: .normal)
-        button.setImage(R.image.icon_giveLike(), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 10)
         return button
+    }()
+    
+    public lazy var praiseImage: UIImageView = {
+        let image = UIImageView()
+        image.image = R.image.icon_giveLike()
+        return image
+    }()
+    
+    public lazy var praiselabel: UILabel = {
+        let label = UILabel()
+        label.text = "2222W"
+        label.textAlignment = .center
+        label.textColor = UIColor.white
+        label.font = UIFont.systemFont(ofSize: 10)
+        return label
     }()
     
     public var model = CommentListModel() {
@@ -58,6 +74,8 @@ class CommentsReplyTableViewCell: UITableViewCell {
             nameLabel.text = model.submitUser.nickName
             timeLabel.text = model.createTime
             contentLabel.text = model.content
+            praiselabel.text = model.praiseCount.formatting
+            praiseImage.image = model.isPraise == 0 ? R.image.icon_giveLike() : R.image.icon_giveLike_click()
             if let url = URL(string: model.submitUser.headImg) {
                 headImage.kf.setImage(with: ImageResource(downloadURL: url), placeholder: nil)
             }
@@ -94,8 +112,10 @@ class CommentsReplyTableViewCell: UITableViewCell {
         addSubview(nameLabel)
         addSubview(timeLabel)
         addSubview(contentLabel)
+        addSubview(praiseImage)
+        addSubview(praiselabel)
         addSubview(praiseButton)
-        
+
         headImage.snp.makeConstraints { (make) in
             make.height.width.equalTo(26)
             make.left.equalTo(55)
@@ -119,11 +139,79 @@ class CommentsReplyTableViewCell: UITableViewCell {
             make.bottom.equalToSuperview().offset(-5)
         }
         
-        praiseButton.snp.makeConstraints { (make) in
+        praiseImage.snp.makeConstraints { (make) in
+            make.right.equalTo(self.snp_right).offset(-20)
+            make.width.height.equalTo(20)
             make.top.equalToSuperview()
-            make.right.equalToSuperview().offset(-15)
-//            make
         }
         
+        praiselabel.snp.makeConstraints { (make) in
+            make.centerX.equalTo(praiseImage)
+            make.top.equalTo(praiseImage.snp_bottom).offset(2)
+            make.right.equalTo(-5)
+        }
+        
+        praiseButton.snp.makeConstraints { (make) in
+            make.top.equalTo(praiseImage)
+            make.left.right.bottom.equalTo(praiselabel)
+        }
+        praiseButton.addTarget(self, action: #selector(praiseButtonClick), for: .touchUpInside)
+
+        let userButton: UIButton = UIButton()
+        userButton.addTarget(self, action: #selector(userButtonClick), for: .touchUpInside)
+        addSubview(userButton)
+        userButton.snp.makeConstraints { (make) in
+            make.left.top.bottom.equalTo(headImage)
+            make.right.equalTo(nameLabel.snp_right)
+        }
+    }
+    
+    // MARK:- Event
+    // 内容
+    @objc fileprivate func contentTapClick() {
+        backgroundColor = UIColor(white: 0, alpha: 0.1)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.backgroundColor = .clear
+        }
+        if let closure = commentClick { closure(.conetnt) }
+    }
+    
+    // 用户
+    @objc fileprivate func userButtonClick() {
+        if let closure = commentClick { closure(.user) }
+    }
+    
+    // 点赞
+    @objc fileprivate func praiseButtonClick() {
+        praiseAnimate()
+        if model.isPraise == 0 {
+            CommentRequestStruct.requestCommentsPraise(model.id) {
+                if let closure = self.commentClick { closure(.praise) }
+                self.model.isPraise = 1
+                self.model.praiseCount += 1
+                self.praiselabel.text = self.model.praiseCount.formatting
+                self.praiseImage.image = R.image.icon_giveLike_click()
+            }
+        }else {
+            CommentRequestStruct.requestCommentsPraiseCancel(model.id) {
+                if let closure = self.commentClick { closure(.praise) }
+                self.model.isPraise = 0
+                self.model.praiseCount -= 1
+                self.praiselabel.text = self.model.praiseCount.formatting
+                self.praiseImage.image = R.image.icon_giveLike()
+            }
+        }
+    }
+    
+    
+    // 点赞动画
+    fileprivate func praiseAnimate() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.praiseImage.height = 17
+            self.praiseImage.width = 17
+        }, completion: { (success) in
+            self.praiseImage.height = 20
+            self.praiseImage.width = 20
+        })
     }
 }

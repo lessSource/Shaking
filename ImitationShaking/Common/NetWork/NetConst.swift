@@ -27,3 +27,9 @@ let RequestCommentsSubmit = "api/comment"
 
 /** 获取评论回复列表 */
 let RequestCommentsReplyList = "api/comment/list/origin"
+
+/** 评论点赞 */
+let RequestCommentsPraise = "api/comment/praise/"
+
+/** 评论取消点赞 */
+let RequestCommentsPraiseCancel = "api/comment/praise_cancel/"

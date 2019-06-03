@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MJRefresh
 
 class CommentsPopUpView: PopUpContentView {
     
@@ -52,11 +53,20 @@ class CommentsPopUpView: PopUpContentView {
         return view
     }()
     
+    fileprivate lazy var refreshFooter = MJRefreshBackNormalFooter()
+    
+    fileprivate lazy var page: Int = 1
+
+    
     fileprivate var dataArray = [CommentListModel]()
     
     override func willShowView() {
         super.willShowView()
         addNotification()
+        if dataArray.count == 0 {
+            page = 1
+            rquestCommentsList(page)
+        }
     }
     
     override func didShwoView() {
@@ -70,6 +80,15 @@ class CommentsPopUpView: PopUpContentView {
     override func didCancelView() {
         super.didCancelView()
         keyMaskView.removeFromSuperview()
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    deinit {
+        commentInputView.removeObserver(self, forKeyPath: "frame")
+    }
+    
+    public func removeData() {
+        dataArray.removeAll()
     }
     
     override init(frame: CGRect) {
@@ -106,27 +125,59 @@ class CommentsPopUpView: PopUpContentView {
         
         addSubview(tableView)
         tableView.register(CommentsReplyTableViewCell.self, forCellReuseIdentifier: CommentsReplyTableViewCell.identifire)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifire)
+        tableView.register(CommentsReplyMoreTableViewCell.self, forCellReuseIdentifier: CommentsReplyMoreTableViewCell.identifire)
+        refreshFooter = MJRefreshBackNormalFooter(refreshingTarget: self, refreshingAction: #selector(footerRefresh))
+        refreshFooter.setTitle("没有更多数据了", for: .noMoreData)
+        tableView.mj_footer = refreshFooter
 
         addSubview(commentInputView)
+        commentInputView.addObserver(self, forKeyPath: "frame", options: [.new,.old], context: nil)
         addSubview(barView)
-        rquestCommentsList()
     }
     
-    // MARK:-
-    fileprivate func replyComment(_ section: Int, isUser: Bool) {
-        if isUser {
-            print("点击头像")
-            return
-        }
-        commentInputView.textView.becomeFirstResponder()
-        let rect = tableView.rectForHeader(inSection: section)
-        let y = rect.maxY + keyboardH - height + 100 + Constant.barHeight
-        if y > 0 {
-            tableView.setContentOffset(CGPoint(x: 0, y: y), animated: true)
+    // MARK:- 点击评论
+    fileprivate func commentClick(_ section: Int, clickType: CommentButtonClickType) {
+        switch clickType {
+        case .user: break
+        case .conetnt:
+            commentInputView.textView.becomeFirstResponder()
+            let rect = tableView.rectForHeader(inSection: section)
+            let y = rect.maxY + keyboardH - height + 100 + Constant.barHeight
+            if y > 0 {
+                tableView.setContentOffset(CGPoint(x: 0, y: y), animated: true)
+            }
+        case .praise:
+            dataArray[section].isPraise == 0 ? (dataArray[section].isPraise = 1) : (dataArray[section].isPraise = 0)
+            dataArray[section].isPraise == 0 ? (dataArray[section].praiseCount += 1) : (dataArray[section].praiseCount -= 1)
+
         }
     }
     
+    // MARK: - 点击回复
+    fileprivate func replyClick(_ index: IndexPath, clickType: CommentButtonClickType) {
+        switch clickType {
+        case .user:
+            if let deleagte = UIApplication.shared.delegate as? AppDelegate {
+                deleagte.loginView()
+            }
+        case .conetnt:
+            commentInputView.textView.becomeFirstResponder()
+            let rect = tableView.rectForRow(at: index)
+            let y = rect.maxY + keyboardH - height + 100 + Constant.barHeight
+            if y > 0 {
+                tableView.setContentOffset(CGPoint(x: 0, y: y), animated: true)
+            }
+        case .praise:
+            dataArray[index.section].childrenList[index.row].isPraise == 0 ? (dataArray[index.section].childrenList[index.row].isPraise = 1) : (dataArray[index.section].childrenList[index.row].isPraise = 0)
+            dataArray[index.section].childrenList[index.row].isPraise == 0 ? (dataArray[index.section].childrenList[index.row].praiseCount += 1) : (dataArray[index.section].childrenList[index.row].praiseCount -= 1)
+        }
+    }
+    
+    fileprivate func endRefreshingWithNoMoreData() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.tableView.mj_footer.endRefreshingWithNoMoreData()
+        }
+    }
     
     // MARK:- Notification
     fileprivate func addNotification() {
@@ -143,6 +194,12 @@ class CommentsPopUpView: PopUpContentView {
         endEditing(true)
     }
     
+    // 上拉加载
+    @objc fileprivate func footerRefresh() {
+        page += 1
+        rquestCommentsList(page)
+    }
+    
     @objc fileprivate func keyboardWillShow(_ notification: Notification) {
         DispatchQueue.main.async {
             let userInfo = notification.userInfo
@@ -152,7 +209,6 @@ class CommentsPopUpView: PopUpContentView {
             UIView.animate(withDuration: duration, animations: {
                 self.commentInputView.y = self.height - self.commentInputView.height - (keyboardFrame?.cgRectValue.height ?? 0)
                 self.keyMaskView.height = Constant.screenHeight - self.keyboardH - self.commentInputView.height
-                self.tableView.height = self.height - 50 - Constant.barHeight - self.keyboardH
             })
         }
     }
@@ -165,38 +221,56 @@ class CommentsPopUpView: PopUpContentView {
             UIView.animate(withDuration: duration, animations: {
                 self.commentInputView.y = self.height - 50 - Constant.barHeight
                 self.keyMaskView.height = 0
-                self.tableView.height = self.height - 100 - Constant.barHeight
             })
+        }
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "frame" {
+            tableView.height = commentInputView.y - 50
         }
     }
     
     // MARK:- request
     // 评论列表
-    func rquestCommentsList() {
+    func rquestCommentsList(_ page: Int) {
         var params: Dictionary = [String: Any]()
+        MBAlertUtil.alertManager.showLoadingMessage(in: tableView)
         params.updateValue("1", forKey: "sourceId")
         params.updateValue("1", forKey: "sourceType")
-        params.updateValue("1", forKey: "pageNo")
+        params.updateValue(page, forKey: "pageNo")
         params.updateValue("10", forKey: "pageSize")
 
         Network.default.request(CommonTargetTypeApi.getRequest(RquestCommentsList, params), successClosure: { (response) in
+            if page == 1 { self.dataArray.removeAll() }
+            MBAlertUtil.alertManager.hiddenLoading()
             if let array = [CommentListModel].deserialize(from: response.arrayObject) as? [CommentListModel] {
-                self.dataArray = array
+                self.dataArray += array
+//                if array.count < 10 { self.endRefreshingWithNoMoreData() }
             }
+            self.tableView.mj_footer.endRefreshing()
             self.tableView.reloadData()
         }) { (error) in
             
         }
     }
     
-    func requestCommentsReplyList() {
+    // 回复列表
+    func requestCommentsReplyList(_ index: IndexPath) {
+        MBAlertUtil.alertManager.showLoadingMessage(in: tableView)
         var params: Dictionary = [String: Any]()
-        params.updateValue(dataArray[0].id, forKey: "id")
-        params.updateValue("1", forKey: "pageNo")
+        params.updateValue(dataArray[index.section].id, forKey: "id")
+        params.updateValue(dataArray[index.section].childrenPage, forKey: "pageNo")
         params.updateValue("10", forKey: "pageSize")
         Network.default.request(CommonTargetTypeApi.getRequest(RequestCommentsReplyList, params), successClosure: { (response) in
+            MBAlertUtil.alertManager.hiddenLoading()
             if let array = [CommentListModel].deserialize(from: response.arrayObject) as? [CommentListModel] {
-                self.dataArray[0].childrenList += array
+                if self.dataArray[index.section].childrenPage == 1 {
+                    self.dataArray[index.section].childrenList = array
+                }else {
+                    self.dataArray[index.section].childrenList += array
+                }
+                self.dataArray[index.section].childrenPage += 1
             }
             self.tableView.reloadData()
         }) { (error) in
@@ -215,7 +289,8 @@ class CommentsPopUpView: PopUpContentView {
 
         Network.default.request(CommonTargetTypeApi.postRequest(RequestCommentsSubmit, params), successClosure: { (response) in
             self.endEditing(true)
-            self.rquestCommentsList()
+            self.page = 1
+            self.rquestCommentsList(self.page)
         }) { (error) in
             
         }
@@ -234,12 +309,15 @@ extension CommentsPopUpView: UITableViewDelegate, UITableViewDataSource, PublicI
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if dataArray[indexPath.section].childrenList.count < dataArray[indexPath.section].commentCount && indexPath.row == dataArray[indexPath.section].childrenList.count {
-            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.identifire)
-            cell?.textLabel?.text = "查看更多评论\(dataArray[indexPath.section].commentCount)"
-            return cell!
+            let cell = tableView.dequeueReusableCell(withIdentifier: CommentsReplyMoreTableViewCell.identifire) as! CommentsReplyMoreTableViewCell
+            cell.numberLabel.text = "展开更多回复（\(dataArray[indexPath.section].commentCount - dataArray[indexPath.section].childrenList.count)）"
+            return cell
         }
         let cell: CommentsReplyTableViewCell = tableView.dequeueReusableCell(withIdentifier: CommentsReplyTableViewCell.identifire) as! CommentsReplyTableViewCell
         cell.model = dataArray[indexPath.section].childrenList[indexPath.row]
+        cell.commentClick = { [weak self] type in
+            self?.replyClick(indexPath, clickType: type)
+        }
         return cell
     }
     
@@ -254,14 +332,16 @@ extension CommentsPopUpView: UITableViewDelegate, UITableViewDataSource, PublicI
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = CommentsHeaderView()
         headerView.model = dataArray[section]
-        headerView.commentClick = { [weak self] isUser in
-            self?.replyComment(section, isUser: isUser)
+        headerView.commentClick = { [weak self] type in
+            self?.commentClick(section, clickType: type)
         }
         return headerView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        requestCommentsReplyList()
+        if dataArray[indexPath.section].childrenList.count < dataArray[indexPath.section].commentCount && indexPath.row == dataArray[indexPath.section].childrenList.count {
+            requestCommentsReplyList(indexPath)
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

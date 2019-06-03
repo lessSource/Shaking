@@ -16,7 +16,21 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
   
-  /// This `R.image` struct is generated, and contains static references to 8 images.
+  /// This `R.file` struct is generated, and contains static references to 1 files.
+  struct file {
+    /// Resource file `抖腿短视频(1).md`.
+    static let 抖腿短视频1Md = Rswift.FileResource(bundle: R.hostingBundle, name: "抖腿短视频(1)", pathExtension: "md")
+    
+    /// `bundle.url(forResource: "抖腿短视频(1)", withExtension: "md")`
+    static func 抖腿短视频1Md(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.抖腿短视频1Md
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+    
+    fileprivate init() {}
+  }
+  
+  /// This `R.image` struct is generated, and contains static references to 9 images.
   struct image {
     /// Image `IMG_4A7DFD335A96-1`.
     static let img_4A7DFD335A961 = Rswift.ImageResource(bundle: R.hostingBundle, name: "IMG_4A7DFD335A96-1")
@@ -26,6 +40,8 @@ struct R: Rswift.Validatable {
     static let icon_comments = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_comments")
     /// Image `icon_fork`.
     static let icon_fork = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_fork")
+    /// Image `icon_giveLike_click`.
+    static let icon_giveLike_click = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_giveLike_click")
     /// Image `icon_giveLike`.
     static let icon_giveLike = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_giveLike")
     /// Image `icon_notes`.
@@ -60,6 +76,11 @@ struct R: Rswift.Validatable {
       return UIKit.UIImage(resource: R.image.icon_giveLike, compatibleWith: traitCollection)
     }
     
+    /// `UIImage(named: "icon_giveLike_click", bundle: ..., traitCollection: ...)`
+    static func icon_giveLike_click(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_giveLike_click, compatibleWith: traitCollection)
+    }
+    
     /// `UIImage(named: "icon_notes", bundle: ..., traitCollection: ...)`
     static func icon_notes(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.icon_notes, compatibleWith: traitCollection)
@@ -73,24 +94,6 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "icon_share", bundle: ..., traitCollection: ...)`
     static func icon_share(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.icon_share, compatibleWith: traitCollection)
-    }
-    
-    fileprivate init() {}
-  }
-  
-  /// This `R.nib` struct is generated, and contains static references to 1 nibs.
-  struct nib {
-    /// Nib `TestTableViewCell`.
-    static let testTableViewCell = _R.nib._TestTableViewCell()
-    
-    /// `UINib(name: "TestTableViewCell", in: bundle)`
-    @available(*, deprecated, message: "Use UINib(resource: R.nib.testTableViewCell) instead")
-    static func testTableViewCell(_: Void = ()) -> UIKit.UINib {
-      return UIKit.UINib(resource: R.nib.testTableViewCell)
-    }
-    
-    static func testTableViewCell(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> TestTableViewCell? {
-      return R.nib.testTableViewCell.instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? TestTableViewCell
     }
     
     fileprivate init() {}
@@ -132,21 +135,6 @@ struct R: Rswift.Validatable {
 struct _R: Rswift.Validatable {
   static func validate() throws {
     try storyboard.validate()
-  }
-  
-  struct nib {
-    struct _TestTableViewCell: Rswift.NibResourceType {
-      let bundle = R.hostingBundle
-      let name = "TestTableViewCell"
-      
-      func firstView(owner ownerOrNil: AnyObject?, options optionsOrNil: [UINib.OptionsKey : Any]? = nil) -> TestTableViewCell? {
-        return instantiate(withOwner: ownerOrNil, options: optionsOrNil)[0] as? TestTableViewCell
-      }
-      
-      fileprivate init() {}
-    }
-    
-    fileprivate init() {}
   }
   
   struct storyboard: Rswift.Validatable {
