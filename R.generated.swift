@@ -22,8 +22,8 @@ struct R: Rswift.Validatable {
     static let provincesDataJson = Rswift.FileResource(bundle: R.hostingBundle, name: "provincesData", pathExtension: "json")
     /// Resource file `schoolData.json`.
     static let schoolDataJson = Rswift.FileResource(bundle: R.hostingBundle, name: "schoolData", pathExtension: "json")
-    /// Resource file `抖腿短视频(1).md`.
-    static let 抖腿短视频1Md = Rswift.FileResource(bundle: R.hostingBundle, name: "抖腿短视频(1)", pathExtension: "md")
+    /// Resource file `抖腿短视频.md`.
+    static let 抖腿短视频Md = Rswift.FileResource(bundle: R.hostingBundle, name: "抖腿短视频", pathExtension: "md")
     
     /// `bundle.url(forResource: "provincesData", withExtension: "json")`
     static func provincesDataJson(_: Void = ()) -> Foundation.URL? {
@@ -37,9 +37,9 @@ struct R: Rswift.Validatable {
       return fileResource.bundle.url(forResource: fileResource)
     }
     
-    /// `bundle.url(forResource: "抖腿短视频(1)", withExtension: "md")`
-    static func 抖腿短视频1Md(_: Void = ()) -> Foundation.URL? {
-      let fileResource = R.file.抖腿短视频1Md
+    /// `bundle.url(forResource: "抖腿短视频", withExtension: "md")`
+    static func 抖腿短视频Md(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.抖腿短视频Md
       return fileResource.bundle.url(forResource: fileResource)
     }
     

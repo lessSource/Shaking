@@ -47,9 +47,9 @@
 		2AA3413422A370F3005DE559 /* CommentsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3413322A370F3005DE559 /* CommentsHeaderView.swift */; };
 		2AA3413722A38EB3005DE559 /* CommentListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3413622A38EB3005DE559 /* CommentListModel.swift */; };
 		2AA3413B22A3B3D6005DE559 /* PublicBottomInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3413A22A3B3D6005DE559 /* PublicBottomInputView.swift */; };
-		2AA3414422A42AA6005DE559 /* 抖腿短视频(1).md in Resources */ = {isa = PBXBuildFile; fileRef = 2AA3414322A42AA5005DE559 /* 抖腿短视频(1).md */; };
 		2AA3414822A57774005DE559 /* schoolData.json in Resources */ = {isa = PBXBuildFile; fileRef = 2AA3414722A57774005DE559 /* schoolData.json */; };
 		2AA3414A22A57810005DE559 /* provincesData.json in Resources */ = {isa = PBXBuildFile; fileRef = 2AA3414922A57810005DE559 /* provincesData.json */; };
+		2AA3414C22A583E9005DE559 /* 抖腿短视频.md in Resources */ = {isa = PBXBuildFile; fileRef = 2AA3414B22A583E9005DE559 /* 抖腿短视频.md */; };
 		A898C693F6C9DAC437E5F805 /* Pods_ImitationShakingTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB8A21A8546AA41F2552136E /* Pods_ImitationShakingTests.framework */; };
 		B75EF6A506F8566F6FE679EC /* Pods_ImitationShakingUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAB9AE47C95E48072E6C02FF /* Pods_ImitationShakingUITests.framework */; };
 		CA0D368222A0D68E004F6968 /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0D368122A0D68E004F6968 /* UIDevice+Extension.swift */; };
@@ -130,9 +130,9 @@
 		2AA3413622A38EB3005DE559 /* CommentListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentListModel.swift; sourceTree = "<group>"; };
 		2AA3413A22A3B3D6005DE559 /* PublicBottomInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicBottomInputView.swift; sourceTree = "<group>"; };
 		2AA3413C22A3B5DA005DE559 /* ImitationShaking-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ImitationShaking-Bridging-Header.h"; sourceTree = "<group>"; };
-		2AA3414322A42AA5005DE559 /* 抖腿短视频(1).md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "抖腿短视频(1).md"; sourceTree = "<group>"; };
 		2AA3414722A57774005DE559 /* schoolData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schoolData.json; sourceTree = "<group>"; };
 		2AA3414922A57810005DE559 /* provincesData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = provincesData.json; sourceTree = "<group>"; };
+		2AA3414B22A583E9005DE559 /* 抖腿短视频.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "抖腿短视频.md"; sourceTree = "<group>"; };
 		2B3195471830D35CFF51399B /* Pods-ImitationShakingUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingUITests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingUITests/Pods-ImitationShakingUITests.release.xcconfig"; sourceTree = "<group>"; };
 		7EE59D65078068B2C29A0012 /* Pods-ImitationShakingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingTests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingTests/Pods-ImitationShakingTests.release.xcconfig"; sourceTree = "<group>"; };
 		89FFD4FDB688C9F31B297D98 /* Pods-ImitationShaking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShaking.release.xcconfig"; path = "Target Support Files/Pods-ImitationShaking/Pods-ImitationShaking.release.xcconfig"; sourceTree = "<group>"; };
@@ -209,7 +209,7 @@
 				2AA34102229AE959005DE559 /* R.generated.swift */,
 				2AA3414722A57774005DE559 /* schoolData.json */,
 				2AA3414922A57810005DE559 /* provincesData.json */,
-				2AA3414322A42AA5005DE559 /* 抖腿短视频(1).md */,
+				2AA3414B22A583E9005DE559 /* 抖腿短视频.md */,
 				2AA3413C22A3B5DA005DE559 /* ImitationShaking-Bridging-Header.h */,
 				2AA340A122998E50005DE559 /* Main.storyboard */,
 				2AA340A422998E52005DE559 /* Assets.xcassets */,
@@ -680,8 +680,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AA3414822A57774005DE559 /* schoolData.json in Resources */,
-				2AA3414422A42AA6005DE559 /* 抖腿短视频(1).md in Resources */,
 				2AA340A822998E52005DE559 /* LaunchScreen.storyboard in Resources */,
+				2AA3414C22A583E9005DE559 /* 抖腿短视频.md in Resources */,
 				2AA3414A22A57810005DE559 /* provincesData.json in Resources */,
 				2AA340A522998E52005DE559 /* Assets.xcassets in Resources */,
 				2AA340A322998E50005DE559 /* Main.storyboard in Resources */,
