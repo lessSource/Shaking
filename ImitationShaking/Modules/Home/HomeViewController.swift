@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class HomeViewController: BaseViewController {
     
@@ -52,9 +53,30 @@ class HomeViewController: BaseViewController {
         view.addSubview(hedaerView)
         
         print(Date.timeAgoSinceDate("1551365260".timeStampDate))
+        
+        if let jsonPath = R.file.provincesDataJson(), let school = R.file.schoolDataJson() {
+            do {
+                let jsonData = try Data(contentsOf: jsonPath)
+                
+                let schoolData = try Data(contentsOf: school)
+
+                
+                let array = try JSON(data: jsonData)
+                
+                let array1 = try JSON(data: schoolData)
+
+                
+                print(array, array1)
+                
+            } catch {
+                
+            }
+            
+        }
+        
     }
     
-
+    
 }
 
 

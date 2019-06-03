@@ -16,10 +16,26 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
   
-  /// This `R.file` struct is generated, and contains static references to 1 files.
+  /// This `R.file` struct is generated, and contains static references to 3 files.
   struct file {
+    /// Resource file `provincesData.json`.
+    static let provincesDataJson = Rswift.FileResource(bundle: R.hostingBundle, name: "provincesData", pathExtension: "json")
+    /// Resource file `schoolData.json`.
+    static let schoolDataJson = Rswift.FileResource(bundle: R.hostingBundle, name: "schoolData", pathExtension: "json")
     /// Resource file `抖腿短视频(1).md`.
     static let 抖腿短视频1Md = Rswift.FileResource(bundle: R.hostingBundle, name: "抖腿短视频(1)", pathExtension: "md")
+    
+    /// `bundle.url(forResource: "provincesData", withExtension: "json")`
+    static func provincesDataJson(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.provincesDataJson
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+    
+    /// `bundle.url(forResource: "schoolData", withExtension: "json")`
+    static func schoolDataJson(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.schoolDataJson
+      return fileResource.bundle.url(forResource: fileResource)
+    }
     
     /// `bundle.url(forResource: "抖腿短视频(1)", withExtension: "md")`
     static func 抖腿短视频1Md(_: Void = ()) -> Foundation.URL? {
