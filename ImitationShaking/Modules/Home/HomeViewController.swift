@@ -33,9 +33,11 @@ class HomeViewController: BaseViewController {
         return collection
     }()
     
+    fileprivate var dataArray = [HomeVideoListModel]()
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: true)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -47,7 +49,7 @@ class HomeViewController: BaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        collectionView.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: "HomeCollectionViewCell")
+        collectionView.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: HomeCollectionViewCell.identifire)
         view.addSubview(collectionView)
         
         view.addSubview(hedaerView)
@@ -74,21 +76,35 @@ class HomeViewController: BaseViewController {
             
         }
         
+        requestVideoList()
+        
     }
     
+    
+    // MARK:- request
+    fileprivate func requestVideoList() {
+        Network.default.request(CommonTargetTypeApi.getRequest(RequestVideoList, nil), successClosure: { (response) in
+            if let array = [HomeVideoListModel].deserialize(from: response.arrayObject) as? [HomeVideoListModel] {
+                self.dataArray = array
+            }
+            self.collectionView.reloadData()
+        }) { (error) in
+            
+        }
+    }
     
 }
 
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return dataArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: HomeCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCollectionViewCell", for: indexPath) as! HomeCollectionViewCell
+        let cell: HomeCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.identifire, for: indexPath) as! HomeCollectionViewCell
         cell.backgroundColor = .black
-        cell.url = ""
+        cell.listModel = dataArray[indexPath.item]
         return cell
     }
     

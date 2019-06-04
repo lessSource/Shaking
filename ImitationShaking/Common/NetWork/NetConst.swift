@@ -18,7 +18,11 @@ enum HomeRequest: String {
     case homeDetail = "dasdasdewww"
 }
 
+// MARK:- 视频
+/** 视频列表 */
+let RequestVideoList = "api/video/list"
 
+// MARK:- 评论
 /** 获取评论列表 */
 let RquestCommentsList = "api/comment/list/source"
 

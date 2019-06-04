@@ -43,25 +43,13 @@ struct CommentListModel: HandyJSON {
     /** 插眼数量 */
     var markCount: Int = 0
     /** 评论用户 */
-    var submitUser = CommentListUserModel()
+    var submitUser = PublicUserModel()
     /** 父评论用户 */
-    var parentUser = CommentListUserModel()
+    var parentUser = PublicUserModel()
     /** 回复 */
     var childrenList = [CommentListModel]()
     /** 当前回复页数 */
     var childrenPage: Int = 1
 }
 
-
-
-struct CommentListUserModel: HandyJSON {
-    /** 用户ID */
-    var id: String = ""
-    /** 用户头像 */
-    var headImg: String = ""
-    /** 用户昵称 */
-    var nickName: String = ""
-    /** 用户性别 */
-    var sex: String = ""
-}
 

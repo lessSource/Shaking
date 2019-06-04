@@ -14,6 +14,8 @@ class VideoUpdateViewController: BaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        title = "视频"
+
     }
     
 

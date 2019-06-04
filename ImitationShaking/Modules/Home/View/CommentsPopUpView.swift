@@ -246,7 +246,7 @@ class CommentsPopUpView: PopUpContentView {
             MBAlertUtil.alertManager.hiddenLoading()
             if let array = [CommentListModel].deserialize(from: response.arrayObject) as? [CommentListModel] {
                 self.dataArray += array
-//                if array.count < 10 { self.endRefreshingWithNoMoreData() }
+                if array.count < 10 { self.endRefreshingWithNoMoreData() }
             }
             self.tableView.mj_footer.endRefreshing()
             self.tableView.reloadData()
@@ -345,7 +345,7 @@ extension CommentsPopUpView: UITableViewDelegate, UITableViewDataSource, PublicI
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(scrollView.contentOffset.y)
+//        print(scrollView.contentOffset.y)
     }
     
     func publicInputView(_ inputView: PublicBottomInputView, sendText text: String) {

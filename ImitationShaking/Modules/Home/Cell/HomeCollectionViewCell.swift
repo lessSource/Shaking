@@ -24,18 +24,20 @@ class HomeCollectionViewCell: UICollectionViewCell {
         layoutView()
     }
     
+    
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public var url: String = "" {
+    public var listModel = HomeVideoListModel() {
         didSet {
-            if let url = URL(string: "http://47.93.30.220/video/1/c73b0aa8-45c1-4e87-86c2-7d6d5c3fe4fc.mp4") {
+            if let url = URL(string: listModel.visitPath) {
                 let playerItem = AVPlayerItem(url: url)
                 self.player.replaceCurrentItem(with: playerItem)
                 player.play()
             }
-            
+            operationView.listModel = listModel
         }
     }
     

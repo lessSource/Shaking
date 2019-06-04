@@ -14,6 +14,7 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+         view.backgroundColor = UIColor.black
     }
     
     /** 是否能够返回 */
