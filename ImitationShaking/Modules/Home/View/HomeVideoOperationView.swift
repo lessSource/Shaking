@@ -70,27 +70,27 @@ class HomeVideoOperationView: UIView {
     }()
     
     /** 分享 */
-    fileprivate lazy var shareButton: UIButton = {
-        let button = UIButton()
-        button.setImage(R.image.icon_share(), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        return button
+    fileprivate lazy var shareButtonView: VideoButtonView = {
+        let buttonView = VideoButtonView()
+        buttonView.imageView.image = R.image.icon_share()
+        buttonView.numberLabel.text = "0"
+        return buttonView
     }()
     
     /** 评论 */
-    fileprivate lazy var commentsButton: UIButton = {
-        let button = UIButton()
-        button.setImage(R.image.icon_comments(), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        return button
+    fileprivate lazy var commentsButtonView: VideoButtonView = {
+        let buttonView = VideoButtonView()
+        buttonView.imageView.image = R.image.icon_comments()
+        buttonView.numberLabel.text = "0"
+        return buttonView
     }()
     
     /** 点赞 */
-    fileprivate lazy var givelikeButton: UIButton = {
-        let button = UIButton()
-        button.setImage(R.image.icon_giveLike(), for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        return button
+    fileprivate lazy var givelikeButtonView: VideoButtonView = {
+        let buttonView = VideoButtonView()
+        buttonView.imageView.image = R.image.icon_giveLike()
+        buttonView.numberLabel.text = "0"
+        return buttonView
     }()
     
     public var listModel = HomeVideoListModel() {
@@ -98,16 +98,15 @@ class HomeVideoOperationView: UIView {
             musicLabel.text = "暂无字段"
             contentLabel.text = listModel.title
             nameLabel.text = "@\(listModel.submitUser.nickName)"
-            shareButton.setTitle(listModel.shareCount.formatting, for: .normal)
-            commentsButton.setTitle(listModel.commentCount.formatting, for: .normal)
-            givelikeButton.setTitle(listModel.praiseCount.formatting, for: .normal)
+            shareButtonView.numberLabel.text = listModel.shareCount.formatting
+            commentsButtonView.numberLabel.text = listModel.commentCount.formatting
+            givelikeButtonView.numberLabel.text = listModel.praiseCount.formatting
+            givelikeButtonView.imageView.image = listModel.isPraise == 0 ? R.image.icon_giveLike() : R.image.icon_giveLike_click()
             if let url = URL(string: listModel.submitUser.headImg) {
                 headerImage.kf.setImage(with: ImageResource(downloadURL: url), placeholder: nil)
             }
         }
     }
-    
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -137,57 +136,6 @@ class HomeVideoOperationView: UIView {
             make.width.equalTo(Constant.screenWidth/2)
         }
         
-        addSubview(shareButton)
-        shareButton.addTarget(self, action: #selector(shareButtonClick), for: .touchUpInside)
-        shareButton.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview().offset(-80)
-            make.right.equalToSuperview().offset(-15)
-            make.height.equalTo(50)
-            make.width.equalTo(shareButton.titleLabel?.intrinsicContentSize.width ?? 0)
-        }
-        shareButton.layoutButton(.top, imageTitleSpace: 2)
-        
-        addSubview(commentsButton)
-        commentsButton.addTarget(self, action: #selector(commentsButtonClick), for: .touchUpInside)
-        commentsButton.snp.makeConstraints { (make) in
-            make.centerX.equalTo(shareButton)
-            make.height.equalTo(50)
-            make.bottom.equalTo(shareButton.snp_top).offset(-20)
-            make.width.equalTo(commentsButton.titleLabel?.intrinsicContentSize.width ?? 0)
-        }
-        commentsButton.layoutButton(.top, imageTitleSpace: 2)
-        
-        addSubview(givelikeButton)
-        givelikeButton.addTarget(self, action: #selector(givelikeButtonClick), for: .touchUpInside)
-        givelikeButton.snp.makeConstraints { (make) in
-            make.centerX.equalTo(shareButton)
-            make.height.equalTo(50)
-            make.bottom.equalTo(commentsButton.snp_top).offset(-20)
-            make.width.equalTo(givelikeButton.titleLabel?.intrinsicContentSize.width ?? 0)
-        }
-        givelikeButton.layoutButton(.top, imageTitleSpace: 2)
-        
-        addSubview(headerImage)
-        headerImage.snp.makeConstraints { (make) in
-            make.width.height.equalTo(48)
-            make.centerX.equalTo(givelikeButton)
-            make.bottom.equalTo(givelikeButton.snp_top).offset(-40)
-        }
-        
-        addSubview(contentLabel)
-        contentLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(15)
-            make.right.equalTo(shareButton.snp_left).offset(-10)
-            make.bottom.equalTo(musicLabel.snp_top).offset(-10)
-        }
-        
-        addSubview(nameLabel)
-        nameLabel.snp.makeConstraints { (make) in
-            make.left.equalTo(15)
-            make.right.equalToSuperview().offset(-100)
-            make.bottom.equalTo(contentLabel.snp_top).offset(-10)
-        }
-        
         addSubview(musicImage)
         musicImage.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview().offset(-10)
@@ -201,6 +149,51 @@ class HomeVideoOperationView: UIView {
         animation.duration = 3
         animation.repeatCount = HUGE // 无限重复
         musicImage.layer.add(animation, forKey: "centerLayer")
+        
+        addSubview(shareButtonView)
+        shareButtonView.button.addTarget(self, action: #selector(shareButtonClick), for: .touchUpInside)
+        shareButtonView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(musicImage.snp_top).offset(-25)
+            make.height.width.equalTo(50)
+            make.centerX.equalTo(musicImage)
+        }
+        
+        addSubview(commentsButtonView)
+        commentsButtonView.button.addTarget(self, action: #selector(commentsButtonClick), for: .touchUpInside)
+        commentsButtonView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(shareButtonView.snp_top).offset(-25)
+            make.height.width.equalTo(50)
+            make.centerX.equalTo(musicImage)
+        }
+        
+        addSubview(givelikeButtonView)
+        givelikeButtonView.button.addTarget(self, action: #selector(givelikeButtonClick), for: .touchUpInside)
+        givelikeButtonView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(commentsButtonView.snp_top).offset(-25)
+            make.height.width.equalTo(50)
+            make.centerX.equalTo(musicImage)
+        }
+        
+        addSubview(headerImage)
+        headerImage.snp.makeConstraints { (make) in
+            make.width.height.equalTo(48)
+            make.centerX.equalTo(givelikeButtonView)
+            make.bottom.equalTo(givelikeButtonView.snp_top).offset(-30)
+        }
+        
+        addSubview(contentLabel)
+        contentLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(15)
+            make.right.equalTo(shareButtonView.snp_left).offset(-5)
+            make.bottom.equalTo(musicLabel.snp_top).offset(-10)
+        }
+        
+        addSubview(nameLabel)
+        nameLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(15)
+            make.right.equalToSuperview().offset(-100)
+            make.bottom.equalTo(contentLabel.snp_top).offset(-10)
+        }
 
     }
 }
@@ -215,6 +208,9 @@ extension HomeVideoOperationView {
     
     // 评论
     @objc fileprivate func commentsButtonClick() {
+        commentsView.numberLabel.text = "\(listModel.commentCount)条评论"
+        commentsView.sourceId = listModel.id
+//        viewController()?.tabBarController?.tabBar.isHidden = true
         PopUpViewManager.sharedInstance.presentContentView(commentsView)
     }
     
@@ -234,11 +230,19 @@ class VideoButtonView: UIView {
     
     public lazy var numberLabel: UILabel = {
         let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = UIColor.white
         return label
+    }()
+    
+    public lazy var button: UIButton = {
+        let button = UIButton()
+        return button
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        layoutView()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -247,6 +251,23 @@ class VideoButtonView: UIView {
     
     // MARK:- layoutView
     fileprivate func layoutView() {
+        addSubview(numberLabel)
+        addSubview(imageView)
+        addSubview(button)
         
+        numberLabel.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        
+        imageView.snp.makeConstraints { (make) in
+            make.width.height.equalTo(32)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview()
+        }
+        
+        button.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
     }
 }

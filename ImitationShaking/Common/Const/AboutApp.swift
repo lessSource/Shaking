@@ -58,6 +58,13 @@ public struct App {
     public static var keyWindow: UIView {
         return UIApplication.shared.keyWindow ?? UIView()
     }
+    
+    public static var rootView: UIView {
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            return appDelegate.window?.rootViewController?.view ?? UIView()
+        }
+        return keyWindow
+    }
 }
 
 

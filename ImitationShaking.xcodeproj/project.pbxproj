@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A1026F222A8110B00C31746 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1026F122A8110B00C31746 /* Array+Extension.swift */; };
 		2AA3409E22998E50005DE559 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409D22998E50005DE559 /* AppDelegate.swift */; };
 		2AA340A022998E50005DE559 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409F22998E50005DE559 /* ViewController.swift */; };
 		2AA340A322998E50005DE559 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2AA340A122998E50005DE559 /* Main.storyboard */; };
@@ -85,6 +86,7 @@
 		121EA2573FF1D3D3F6E5FC32 /* Pods-ImitationShaking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShaking.debug.xcconfig"; path = "Target Support Files/Pods-ImitationShaking/Pods-ImitationShaking.debug.xcconfig"; sourceTree = "<group>"; };
 		2083061DAA7E671768881726 /* Pods-ImitationShakingTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingTests.debug.xcconfig"; path = "Target Support Files/Pods-ImitationShakingTests/Pods-ImitationShakingTests.debug.xcconfig"; sourceTree = "<group>"; };
 		240A2BF843BF79AF9245642C /* Pods_ImitationShaking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImitationShaking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A1026F122A8110B00C31746 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		2AA3409A22998E50005DE559 /* ImitationShaking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImitationShaking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AA3409D22998E50005DE559 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2AA3409F22998E50005DE559 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -180,6 +182,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A1026F022A810F400C31746 /* Array */ = {
+			isa = PBXGroup;
+			children = (
+				2A1026F122A8110B00C31746 /* Array+Extension.swift */,
+			);
+			path = Array;
+			sourceTree = "<group>";
+		};
 		2AA3409122998E50005DE559 = {
 			isa = PBXGroup;
 			children = (
@@ -395,6 +405,7 @@
 		2AA34108229C28D4005DE559 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				2A1026F022A810F400C31746 /* Array */,
 				CA9DC16122A4CB9400BF331A /* Int */,
 				2AA3412522A16623005DE559 /* Date */,
 				2AA3412222A161FC005DE559 /* String */,
@@ -849,6 +860,7 @@
 				2AA3412722A16631005DE559 /* Date+Extension.swift in Sources */,
 				2AA340FB229ACA75005DE559 /* HomeHeaderView.swift in Sources */,
 				2AA3413022A2CE92005DE559 /* MoyaTargetTypeEx.swift in Sources */,
+				2A1026F222A8110B00C31746 /* Array+Extension.swift in Sources */,
 				CA0D368222A0D68E004F6968 /* UIDevice+Extension.swift in Sources */,
 				2AA3411822A01BC5005DE559 /* PopUpViewManager.swift in Sources */,
 				2AA3412E22A2CE53005DE559 /* MoyaNetworkConfig.swift in Sources */,

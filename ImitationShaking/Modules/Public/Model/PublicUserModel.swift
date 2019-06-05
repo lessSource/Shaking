@@ -19,5 +19,15 @@ struct PublicUserModel: HandyJSON {
     var nickName: String = ""
     /** 用户性别 */
     var sex: String = ""
+    /** 生日 */
+    var birthday: String = ""
+    /** 地区 */
+    var region: String = ""
+    /** 介绍 */
+    var introduction: String = ""
+    /** 抖腿号 */
+    var shakelegsName: String = ""
+    /** 是否关注 */
+    var isFollewed: Int = 0
 }
 

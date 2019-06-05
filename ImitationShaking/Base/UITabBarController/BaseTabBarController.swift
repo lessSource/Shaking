@@ -34,12 +34,6 @@ class BaseTabBarController: UITabBarController {
         
         // 我的
         addChildViewController(MineViewController(), title: "我的")
-        
-//        tabBar.isTranslucent = true
-//        tabBar.backgroundImage = UIImage()
-//        tabBar.shadowImage = UIImage.colorCreateImage(.lineColor_191D20, size: CGSize(width: Constant.screenWidth, height: 1))
-//        tabBar.backgroundColor = .clear
-//        tabBar.tintColor = .white
     }
     
     private func addChildViewController(_ childController: UIViewController, title: String = "", imageName: String = "", selectedImage: String = "") {

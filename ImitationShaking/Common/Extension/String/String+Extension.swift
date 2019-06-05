@@ -59,6 +59,15 @@ extension String {
         return rect.size.height
     }
     
+    /** 设置文字部分高亮 */
+    func stringHighlighted(_ string: String, color: UIColor) -> NSMutableAttributedString {
+        let attrString: NSMutableAttributedString = NSMutableAttributedString(string: self)
+        let str = NSString(string: self)
+        let range = str.range(of: string)
+        attrString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: range)
+        return attrString
+    }
+    
     /** 随机字符串 */
     static let random_str_characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     static func randomStr(len: Int) -> String {

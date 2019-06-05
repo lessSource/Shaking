@@ -73,7 +73,12 @@ class CommentsReplyTableViewCell: UITableViewCell {
         didSet {
             nameLabel.text = model.submitUser.nickName
             timeLabel.text = model.createTime
-            contentLabel.text = model.content
+            if model.parentId == model.originId {
+                contentLabel.text = model.content
+            }else {
+                let content = "回复\(model.parentUser.nickName)：\(model.content)"
+                contentLabel.attributedText = content.stringHighlighted("\(model.parentUser.nickName)：", color: UIColor.textColor_979797)
+            }
             praiselabel.text = model.praiseCount.formatting
             praiseImage.image = model.isPraise == 0 ? R.image.icon_giveLike() : R.image.icon_giveLike_click()
             if let url = URL(string: model.submitUser.headImg) {
@@ -116,6 +121,10 @@ class CommentsReplyTableViewCell: UITableViewCell {
         addSubview(praiselabel)
         addSubview(praiseButton)
 
+        contentLabel.isUserInteractionEnabled = true
+        let contentTap = UITapGestureRecognizer(target: self, action: #selector(contentTapClick))
+        contentLabel.addGestureRecognizer(contentTap)
+        
         headImage.snp.makeConstraints { (make) in
             make.height.width.equalTo(26)
             make.left.equalTo(55)

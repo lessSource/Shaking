@@ -20,7 +20,7 @@ struct CommentListModel: HandyJSON {
     var userId: String = ""
     /** 资源id */
     var sourceId: String = ""
-    /** 资源类型1:视频 2:图片 3:文字 */
+    /** 资源类型1:视频 2:图片 3:文字 4:评论、回复 */
     var sourceType: Int = 0
     /** 评论类容 */
     var content: String = ""
@@ -50,6 +50,8 @@ struct CommentListModel: HandyJSON {
     var childrenList = [CommentListModel]()
     /** 当前回复页数 */
     var childrenPage: Int = 1
+    /** 当前选择indexPath */
+    var currentIndex: IndexPath = IndexPath()
 }
 
 

@@ -11,13 +11,15 @@ import MJRefresh
 
 class CommentsPopUpView: PopUpContentView {
     
+    public var sourceId: String = ""
+    
     fileprivate var keyboardH: CGFloat = 0
     
-    fileprivate lazy var numberLabel: UILabel = {
+    public lazy var numberLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.white
         label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.text = "333条评论"
+        label.text = "0条评论"
         return label
     }()
     
@@ -60,6 +62,8 @@ class CommentsPopUpView: PopUpContentView {
     
     fileprivate var dataArray = [CommentListModel]()
     
+    fileprivate var currentComment = CommentListModel()
+    
     override func willShowView() {
         super.willShowView()
         addNotification()
@@ -81,6 +85,7 @@ class CommentsPopUpView: PopUpContentView {
         super.didCancelView()
         keyMaskView.removeFromSuperview()
         NotificationCenter.default.removeObserver(self)
+        viewController()?.tabBarController?.tabBar.isHidden = false
     }
     
     deinit {
@@ -146,6 +151,12 @@ class CommentsPopUpView: PopUpContentView {
             if y > 0 {
                 tableView.setContentOffset(CGPoint(x: 0, y: y), animated: true)
             }
+            currentComment.parentId = dataArray[section].id
+            currentComment.originId = dataArray[section].id
+            currentComment.currentIndex = IndexPath(row: -1, section: section)
+            currentComment.parentUser = dataArray[section].submitUser
+            currentComment.sourceType = 4
+            commentInputView.textView.placeholder = "回复\(currentComment.parentUser.nickName)"
         case .praise:
             dataArray[section].isPraise == 0 ? (dataArray[section].isPraise = 1) : (dataArray[section].isPraise = 0)
             dataArray[section].isPraise == 0 ? (dataArray[section].praiseCount += 1) : (dataArray[section].praiseCount -= 1)
@@ -167,6 +178,12 @@ class CommentsPopUpView: PopUpContentView {
             if y > 0 {
                 tableView.setContentOffset(CGPoint(x: 0, y: y), animated: true)
             }
+            currentComment.parentId = dataArray[index.section].childrenList[index.row].id
+            currentComment.originId = dataArray[index.section].id
+            currentComment.currentIndex = index
+            currentComment.sourceType = 4
+            currentComment.parentUser = dataArray[index.section].childrenList[index.row].submitUser
+            commentInputView.textView.placeholder = "回复\(currentComment.parentUser.nickName)"
         case .praise:
             dataArray[index.section].childrenList[index.row].isPraise == 0 ? (dataArray[index.section].childrenList[index.row].isPraise = 1) : (dataArray[index.section].childrenList[index.row].isPraise = 0)
             dataArray[index.section].childrenList[index.row].isPraise == 0 ? (dataArray[index.section].childrenList[index.row].praiseCount += 1) : (dataArray[index.section].childrenList[index.row].praiseCount -= 1)
@@ -187,7 +204,9 @@ class CommentsPopUpView: PopUpContentView {
     
     // MARK:- Event
     @objc fileprivate func cancleButtonClick() {
-        PopUpViewManager.sharedInstance.cancalContentView(self)
+//        PopUpViewManager.sharedInstance.cancalContentView(self)
+        self.viewController()?.navigationController?.pushViewController(MineViewController(), animated: true)
+
     }
     
     @objc fileprivate func keyMaskViewClick() {
@@ -218,6 +237,7 @@ class CommentsPopUpView: PopUpContentView {
             let userInfo = notification.userInfo
             let duration: Double = userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double ?? 0
             self.keyboardH = 0
+            self.commentInputView.textView.placeholder = "写句神评论"
             UIView.animate(withDuration: duration, animations: {
                 self.commentInputView.y = self.height - 50 - Constant.barHeight
                 self.keyMaskView.height = 0
@@ -236,7 +256,7 @@ class CommentsPopUpView: PopUpContentView {
     func rquestCommentsList(_ page: Int) {
         var params: Dictionary = [String: Any]()
         MBAlertUtil.alertManager.showLoadingMessage(in: tableView)
-        params.updateValue("1", forKey: "sourceId")
+        params.updateValue(sourceId, forKey: "sourceId")
         params.updateValue("1", forKey: "sourceType")
         params.updateValue(page, forKey: "pageNo")
         params.updateValue("10", forKey: "pageSize")
@@ -279,18 +299,32 @@ class CommentsPopUpView: PopUpContentView {
     }
     
     // 提交评论回复
-    fileprivate func requestCommentsSubmit(_ content: String) {
+    fileprivate func requestCommentsSubmit() {
         var params: Dictionary = [String: Any]()
-        params.updateValue("1", forKey: "sourceId")
-        params.updateValue("4", forKey: "sourceType")
-        params.updateValue(content, forKey: "content")
-        params.updateValue(dataArray[0].childrenList[0].id, forKey: "parentId")
-        params.updateValue(dataArray[0].id, forKey: "originId")
-
+        params.updateValue(sourceId, forKey: "sourceId")
+        params.updateValue(currentComment.sourceType, forKey: "sourceType")
+        params.updateValue(currentComment.content, forKey: "content")
+        if !currentComment.originId.isEmpty {
+            params.updateValue(currentComment.originId, forKey: "originId")
+        }
+        if !currentComment.parentId.isEmpty {
+            params.updateValue(currentComment.parentId, forKey: "parentId")
+        }
         Network.default.request(CommonTargetTypeApi.postRequest(RequestCommentsSubmit, params), successClosure: { (response) in
             self.endEditing(true)
-            self.page = 1
-            self.rquestCommentsList(self.page)
+            MBAlertUtil.alertManager.showPromptInfo("评论成功", in: self)
+            guard let model = CommentListModel.deserialize(from: response.dictionaryObject) else { return }
+            if model.parentId.isEmpty {
+                self.page = 1
+                self.rquestCommentsList(self.page)
+            }else {
+                self.dataArray[self.currentComment.currentIndex.section].childrenList.append(model)
+                self.tableView.reloadData()
+            }
+            self.currentComment = CommentListModel()
+            self.currentComment.sourceType = 1
+            self.commentInputView.textView.text = ""
+            self.commentInputView.textView.placeholder = "写句神评论吧"
         }) { (error) in
             
         }
@@ -341,6 +375,8 @@ extension CommentsPopUpView: UITableViewDelegate, UITableViewDataSource, PublicI
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if dataArray[indexPath.section].childrenList.count < dataArray[indexPath.section].commentCount && indexPath.row == dataArray[indexPath.section].childrenList.count {
             requestCommentsReplyList(indexPath)
+        }else {
+            self.viewController()?.navigationController?.pushViewController(MineViewController(), animated: true)
         }
     }
     
@@ -349,7 +385,8 @@ extension CommentsPopUpView: UITableViewDelegate, UITableViewDataSource, PublicI
     }
     
     func publicInputView(_ inputView: PublicBottomInputView, sendText text: String) {
-        requestCommentsSubmit(text)
+        currentComment.content = text
+        requestCommentsSubmit()
     }
     
     func publicInputView(_ inputView: PublicBottomInputView, textChange text: String, height: CGFloat) {
