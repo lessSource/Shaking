@@ -32,7 +32,11 @@ class CommentsPopUpView: PopUpContentView {
         tableView.estimatedRowHeight = 50
         tableView.estimatedSectionFooterHeight = 0
         tableView.estimatedSectionHeaderHeight = 0
-        tableView.contentInsetAdjustmentBehavior = .never
+        if #available(iOS 11.0, *) {
+            tableView.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
         tableView.backgroundColor = .clear
         return tableView
     }()

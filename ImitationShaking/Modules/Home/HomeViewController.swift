@@ -78,6 +78,7 @@ class HomeViewController: BaseViewController {
         
         requestVideoList()
         
+        
     }
     
     

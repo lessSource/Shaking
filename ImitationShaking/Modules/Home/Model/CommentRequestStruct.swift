@@ -28,4 +28,22 @@ struct CommentRequestStruct {
         }
     }
     
+    /** 视频点赞 */
+    static func requestVideoPraise(_ commentId: String, success: @escaping (() -> ())) {
+        Network.default.request(CommonTargetTypeApi.postRequest(RequestVideoPraise + commentId, nil), successClosure: { (response) in
+            success()
+        }) { (error) in
+            
+        }
+    }
+    
+    /** 视频取消点赞 */
+    static func requestVideoPraiseCancel(_ commentId: String, success: @escaping (() -> ())) {
+        Network.default.request(CommonTargetTypeApi.putRequest(RequestVideoPraiseCancel + commentId, nil), successClosure: { (response) in
+            success()
+        }) { (error) in
+            
+        }
+    }
+    
 }

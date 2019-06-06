@@ -22,6 +22,13 @@ enum HomeRequest: String {
 /** 视频列表 */
 let RequestVideoList = "api/video/list"
 
+/** 视频点赞 */
+let RequestVideoPraise = "api/video/praise/"
+
+/** 视频取消点赞 */
+let RequestVideoPraiseCancel = "api/video/praise_cancel/"
+
+
 // MARK:- 评论
 /** 获取评论列表 */
 let RquestCommentsList = "api/comment/list/source"

@@ -203,7 +203,7 @@ extension HomeVideoOperationView {
     
     // 点赞
     @objc fileprivate func givelikeButtonClick() {
-        
+        praiseAnimate()
     }
     
     // 评论
@@ -217,6 +217,15 @@ extension HomeVideoOperationView {
     // 分享
     @objc fileprivate func shareButtonClick() {
         PopUpViewManager.sharedInstance.presentContentView(shareView)
+    }
+    
+    // 点赞动画
+    fileprivate func praiseAnimate() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.givelikeButtonView.imageView.size = CGSize(width: 25, height: 25)
+        }, completion: { (success) in
+            self.givelikeButtonView.imageView.size = CGSize(width: 32, height: 32)
+        })
     }
 }
 
