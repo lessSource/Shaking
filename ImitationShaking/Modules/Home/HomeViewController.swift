@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftyJSON
+import Alamofire
+import Moya
 
 class HomeViewController: BaseViewController {
     
@@ -77,14 +79,14 @@ class HomeViewController: BaseViewController {
         }
         
         requestVideoList()
-        
+        requestLogin()
         
     }
     
     
     // MARK:- request
     fileprivate func requestVideoList() {
-        Network.default.request(CommonTargetTypeApi.getRequest(RequestVideoList, nil), successClosure: { (response) in
+        Network.default.request(CommonTargetTypeApi.getRequest(VideoRequest.list, nil), successClosure: { (response) in
             if let array = [HomeVideoListModel].deserialize(from: response.arrayObject) as? [HomeVideoListModel] {
                 self.dataArray = array
             }
@@ -94,6 +96,85 @@ class HomeViewController: BaseViewController {
         }
     }
     
+    // 测试登录
+    fileprivate func requestLogin() {
+        var params: Dictionary = [String: Any]()
+        params.updateValue("13288888888", forKey: "phone")
+        params.updateValue("123456", forKey: "password")
+        Network.default.request(CommonTargetTypeApi.postRequest(LoginRegisterRequest.login, params), successClosure: { (response) in
+            if let model = UserCacheModel.deserialize(from: response.dictionaryObject) {
+                LCacheModel.shareInstance.save(model)
+                
+                print("dddd")
+                self.requestHeadImage()
+
+            }
+        }) { (error) in
+            
+        }
+    }
+    
+    
+    // 测试头像
+    fileprivate func requestHeadImage() {
+        var params: Dictionary = [String: Any]()
+        let image = UIImage(named: "icon_music")
+        let str: String = "意大利"
+        let data1 = str.data(using: String.Encoding.utf8)
+
+        
+        
+        if let jsonPath = R.file.provincesDataJson(), let school = R.file.schoolDataJson() {
+            do {
+                let jsonData = try Data(contentsOf: jsonPath)
+                
+                let schoolData = try Data(contentsOf: school)
+                
+                let ddd: String = String()
+                
+                let dd: Int = Int()
+                
+                let dddd: CGFloat = CGFloat()
+                
+//                let array = try JSON(data: jsonData)
+                
+//                let array1 = try JSON(data: schoolData)
+                let image = R.image.icon_music()?.pngData() ?? Data()
+                
+                let data =  Moya.MultipartFormData(provider: .data(image), name: "headImg", fileName: "headImg", mimeType: "png")
+
+                Network.default.request(CommonTargetTypeApi.uploadMultipart(LoginRegisterRequest.headImage, [data]), successClosure: { (response) in
+                    print("ddd")
+                }) { (error) in
+                    print("aaaaa")
+                }
+                
+//                print(array, array1)
+                
+            } catch {
+                
+            }
+            
+        }
+        
+        
+        
+//        let date = MultipartFormData()
+//        date.append(image, withName: "headImg")
+//        let Provider = MultipartFormData.FormDataProvider()
+        
+
+        
+//        let dd = RequestMultipartFormData()
+//        dd.append(image, withName: "headImg", fileName: "headImg", mimeType: "headImg")
+        
+//        params.updateValue(image ?? Date(), forKey: "headImg")
+//        Network.default.request(CommonTargetTypeApi.uploadMultipart(RequestHeadImage, [data]), successClosure: { (response) in
+//            print("ddd")
+//        }) { (error) in
+//
+//        }
+    }
 }
 
 

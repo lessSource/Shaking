@@ -8,39 +8,34 @@
 
 import UIKit
 
-
-
-enum HomeRequest: String {
-    /** 首页 */
-    case homeList = "dasdasde"
-    
-    /** 首页 */
-    case homeDetail = "dasdasdewww"
+/** 登录注册 */
+struct LoginRegisterRequest {
+    /** 登录 */
+    static let login = "api/auth/login"
+    /** 跟新头像 */
+    static let headImage = "api/personal/headImg"
 }
 
-// MARK:- 视频
-/** 视频列表 */
-let RequestVideoList = "api/video/list"
+/** 视频 */
+struct VideoRequest {
+    /** 列表 */
+    static let list = "api/video/list"
+    /** 点赞 */
+    static let praise = "api/video/praise/"
+    /** 取消点赞 */
+    static let praiseCancel = "api/video/praise_cancel/"
+}
 
-/** 视频点赞 */
-let RequestVideoPraise = "api/video/praise/"
-
-/** 视频取消点赞 */
-let RequestVideoPraiseCancel = "api/video/praise_cancel/"
-
-
-// MARK:- 评论
-/** 获取评论列表 */
-let RquestCommentsList = "api/comment/list/source"
-
-/** 提交评论 */
-let RequestCommentsSubmit = "api/comment"
-
-/** 获取评论回复列表 */
-let RequestCommentsReplyList = "api/comment/list/origin"
-
-/** 评论点赞 */
-let RequestCommentsPraise = "api/comment/praise/"
-
-/** 评论取消点赞 */
-let RequestCommentsPraiseCancel = "api/comment/praise_cancel/"
+/** 评论 */
+struct CommentsRequest {
+    /** 列表 */
+    static let list = "api/comment/list/source"
+    /** 提交评论 */
+    static let submit = "api/comment"
+    /** 回复列表 */
+    static let replyList = "api/comment/list/origin"
+    /** 点赞 */
+    static let praise = "api/comment/praise/"
+    /** 取消点赞 */
+    static let praiseCancel = "api/comment/praise_cancel/"
+}

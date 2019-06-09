@@ -81,7 +81,8 @@ public final class Network {
                     if appCode == RelustCode.success.rawValue {
                         successClosure(json["data"])
                     }
-                case let .error(_): break
+                case let .error(error):
+                    print(error)
                 }
             }
             .disposed(by: dispose)

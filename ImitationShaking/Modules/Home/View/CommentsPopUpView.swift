@@ -265,7 +265,7 @@ class CommentsPopUpView: PopUpContentView {
         params.updateValue(page, forKey: "pageNo")
         params.updateValue("10", forKey: "pageSize")
 
-        Network.default.request(CommonTargetTypeApi.getRequest(RquestCommentsList, params), successClosure: { (response) in
+        Network.default.request(CommonTargetTypeApi.getRequest(CommentsRequest.list, params), successClosure: { (response) in
             if page == 1 { self.dataArray.removeAll() }
             MBAlertUtil.alertManager.hiddenLoading()
             if let array = [CommentListModel].deserialize(from: response.arrayObject) as? [CommentListModel] {
@@ -286,7 +286,7 @@ class CommentsPopUpView: PopUpContentView {
         params.updateValue(dataArray[index.section].id, forKey: "id")
         params.updateValue(dataArray[index.section].childrenPage, forKey: "pageNo")
         params.updateValue("10", forKey: "pageSize")
-        Network.default.request(CommonTargetTypeApi.getRequest(RequestCommentsReplyList, params), successClosure: { (response) in
+        Network.default.request(CommonTargetTypeApi.getRequest(CommentsRequest.replyList, params), successClosure: { (response) in
             MBAlertUtil.alertManager.hiddenLoading()
             if let array = [CommentListModel].deserialize(from: response.arrayObject) as? [CommentListModel] {
                 if self.dataArray[index.section].childrenPage == 1 {
@@ -314,7 +314,7 @@ class CommentsPopUpView: PopUpContentView {
         if !currentComment.parentId.isEmpty {
             params.updateValue(currentComment.parentId, forKey: "parentId")
         }
-        Network.default.request(CommonTargetTypeApi.postRequest(RequestCommentsSubmit, params), successClosure: { (response) in
+        Network.default.request(CommonTargetTypeApi.postRequest(CommentsRequest.submit, params), successClosure: { (response) in
             self.endEditing(true)
             MBAlertUtil.alertManager.showPromptInfo("评论成功", in: self)
             guard let model = CommentListModel.deserialize(from: response.dictionaryObject) else { return }

@@ -104,7 +104,7 @@ extension CommonTargetTypeApi: TargetType {
             if let param = param {
                 switch url {
                 case "222":
-                    let jsonData = jsonToData(jsonDic: param)
+                    let jsonData = jsonToData(json: param)
                     return .requestData(jsonData!)
                 default:
                     return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
@@ -135,41 +135,25 @@ extension CommonTargetTypeApi: TargetType {
     var headers: [String : String]? {
         switch self {
         case .uploadMultipart(_, _):
-            return ["Content-type": "multipart/form-data"]
+            return ["Content-type": "multipart/form-data","Auth-Token": LCacheModel.shareInstance.getData().token]
         default:
-            return ["Content-Type": "application/json","Auth-Token": "6542067048355205120"]
+            return ["Content-Type": "application/json","Auth-Token": LCacheModel.shareInstance.getData().token]
         }
     }
     
-    //字典转Data
-    private func jsonToData(jsonDic:Dictionary<String, Any>) -> Data? {
-        if (!JSONSerialization.isValidJSONObject(jsonDic)) {
+    // json转data
+    private func jsonToData(json: Any) -> Data? {
+        if !JSONSerialization.isValidJSONObject(json) {
             print("is not a valid json object")
             return nil
         }
         //利用自带的json库转换成Data
         //如果设置options为JSONSerialization.WritingOptions.prettyPrinted，则打印格式更好阅读
-        let data = try? JSONSerialization.data(withJSONObject: jsonDic, options: [])
-        //Data转换成String打印输出
-        let str = String(data:data!, encoding: String.Encoding.utf8)
-        //输出json字符串
-        print("Json Str:\(str!)")
-        return data
-    }
-    
-    //数组转Data
-    private func jsonToData(jsonArray:Array<Any>) -> Data? {
-        if (!JSONSerialization.isValidJSONObject(jsonArray)) {
-            print("is not a valid json object")
-            return nil
-        }
-        //利用自带的json库转换成Data
-        //如果设置options为JSONSerialization.WritingOptions.prettyPrinted，则打印格式更好阅读
-        let data = try? JSONSerialization.data(withJSONObject: jsonArray, options: [])
-        //Data转换成String打印输出
-        let str = String(data:data!, encoding: String.Encoding.utf8)
-        //输出json字符串
-        print("Json Str:\(str!)")
+        let data = try? JSONSerialization.data(withJSONObject: json, options: [])
+        // Data转换成String打印输出
+        let str = String(data: data ?? Data(), encoding: String.Encoding.utf8)
+        // 输出json字符串
+        print("Json Str:\(str ?? "")")
         return data
     }
 }
