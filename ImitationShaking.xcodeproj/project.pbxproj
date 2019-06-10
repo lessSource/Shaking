@@ -56,6 +56,8 @@
 		CA049CE522A8B04A0058A55E /* UserCacheModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA049CE422A8B04A0058A55E /* UserCacheModel.swift */; };
 		CA0D368222A0D68E004F6968 /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0D368122A0D68E004F6968 /* UIDevice+Extension.swift */; };
 		CA0D368422A1026F004F6968 /* SharePopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0D368322A1026F004F6968 /* SharePopUpView.swift */; };
+		CA279F6D22AE4D2200DE3CE8 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA279F6C22AE4D2200DE3CE8 /* RootViewController.swift */; };
+		CA279F7022AE588200DE3CE8 /* PublicShootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA279F6F22AE588200DE3CE8 /* PublicShootViewController.swift */; };
 		CA9AAAF322A66E160084B409 /* PublicUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9AAAF222A66E160084B409 /* PublicUserModel.swift */; };
 		CA9AAAF522A66E4E0084B409 /* HomeVideoListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9AAAF422A66E4E0084B409 /* HomeVideoListModel.swift */; };
 		CA9DC15E22A4B90A00BF331A /* MBAlertUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9DC15D22A4B90A00BF331A /* MBAlertUtil.swift */; };
@@ -148,6 +150,8 @@
 		CA049CE422A8B04A0058A55E /* UserCacheModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCacheModel.swift; sourceTree = "<group>"; };
 		CA0D368122A0D68E004F6968 /* UIDevice+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		CA0D368322A1026F004F6968 /* SharePopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePopUpView.swift; sourceTree = "<group>"; };
+		CA279F6C22AE4D2200DE3CE8 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		CA279F6F22AE588200DE3CE8 /* PublicShootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicShootViewController.swift; sourceTree = "<group>"; };
 		CA9AAAF222A66E160084B409 /* PublicUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUserModel.swift; sourceTree = "<group>"; };
 		CA9AAAF422A66E4E0084B409 /* HomeVideoListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVideoListModel.swift; sourceTree = "<group>"; };
 		CA9DC15D22A4B90A00BF331A /* MBAlertUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBAlertUtil.swift; sourceTree = "<group>"; };
@@ -279,6 +283,7 @@
 			isa = PBXGroup;
 			children = (
 				2AA340D022999136005DE559 /* BaseTabBarController.swift */,
+				CA279F6C22AE4D2200DE3CE8 /* RootViewController.swift */,
 			);
 			path = UITabBarController;
 			sourceTree = "<group>";
@@ -521,6 +526,7 @@
 		2AA3413822A3B3A4005DE559 /* Public */ = {
 			isa = PBXGroup;
 			children = (
+				CA279F6E22AE583C00DE3CE8 /* VC */,
 				CA9AAAEE22A66DD70084B409 /* Model */,
 				2AA3413922A3B3BB005DE559 /* View */,
 			);
@@ -561,6 +567,14 @@
 			name = UIDevice;
 			path = ImitationShaking/Common/UIDevice;
 			sourceTree = SOURCE_ROOT;
+		};
+		CA279F6E22AE583C00DE3CE8 /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				CA279F6F22AE588200DE3CE8 /* PublicShootViewController.swift */,
+			);
+			path = VC;
+			sourceTree = "<group>";
 		};
 		CA9AAAEE22A66DD70084B409 /* Model */ = {
 			isa = PBXGroup;
@@ -893,7 +907,9 @@
 				2AA3409E22998E50005DE559 /* AppDelegate.swift in Sources */,
 				2AA340DE2299968B005DE559 /* FriendsViewController.swift in Sources */,
 				2AA3413422A370F3005DE559 /* CommentsHeaderView.swift in Sources */,
+				CA279F7022AE588200DE3CE8 /* PublicShootViewController.swift in Sources */,
 				2AA340CF2299910C005DE559 /* BaseNavigationController.swift in Sources */,
+				CA279F6D22AE4D2200DE3CE8 /* RootViewController.swift in Sources */,
 				2AA340DC2299967D005DE559 /* HomeViewController.swift in Sources */,
 				CA9AAAF322A66E160084B409 /* PublicUserModel.swift in Sources */,
 				2AA34114229ED7B3005DE559 /* UIView+Frame.swift in Sources */,

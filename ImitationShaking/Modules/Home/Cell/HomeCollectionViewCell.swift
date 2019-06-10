@@ -53,9 +53,9 @@ class HomeCollectionViewCell: UICollectionViewCell {
         
         NotificationCenter.default.addObserver(self, selector: #selector(moviePlayDidEnd(_ :)), name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapClick))
-        contentView.isUserInteractionEnabled = true
-        contentView.addGestureRecognizer(tap)
+//        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapClick))
+//        contentView.isUserInteractionEnabled = true
+//        contentView.addGestureRecognizer(tap)
         
         contentView.addSubview(operationView)
         operationView.snp.makeConstraints { (make) in

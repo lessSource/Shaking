@@ -44,7 +44,7 @@ class HomeViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: true)
+//        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     override func viewDidLoad() {
@@ -79,7 +79,6 @@ class HomeViewController: BaseViewController {
         }
         
         requestVideoList()
-        requestLogin()
         
     }
     
@@ -91,24 +90,6 @@ class HomeViewController: BaseViewController {
                 self.dataArray = array
             }
             self.collectionView.reloadData()
-        }) { (error) in
-            
-        }
-    }
-    
-    // 测试登录
-    fileprivate func requestLogin() {
-        var params: Dictionary = [String: Any]()
-        params.updateValue("13288888888", forKey: "phone")
-        params.updateValue("123456", forKey: "password")
-        Network.default.request(CommonTargetTypeApi.postRequest(LoginRegisterRequest.login, params), successClosure: { (response) in
-            if let model = UserCacheModel.deserialize(from: response.dictionaryObject) {
-                LCacheModel.shareInstance.save(model)
-                
-                print("dddd")
-                self.requestHeadImage()
-
-            }
         }) { (error) in
             
         }
@@ -199,6 +180,17 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 //        if se
         
-//        let rectInTableView = collectionView.convert(<#T##rect: CGRect##CGRect#>, to: <#T##UIView?#>)
+//        let rectInTableView = collectionView.convert(T##rect: CGRect##CGRect, to: <#T##UIView?#>)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let loginVC = LoginViewController()
+        //            loginVC.modalPresentationStyle = .overCurrentContext
+        //            self.definesPresentationContext = true
+//        loginVC.modalPresentationStyle = .overCurrentContext
+//        loginVC.view.backgroundColor = UIColor(white: 0, alpha: 0.2)
+//        self.definesPresentationContext = true
+//        loginVC.modalPresentationStyle = .overCurrentContext
+//        present(loginVC, animated: true, completion: nil)
     }
 }

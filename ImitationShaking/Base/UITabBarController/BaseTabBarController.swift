@@ -12,12 +12,15 @@ class BaseTabBarController: UITabBarController {
 
     fileprivate lazy var baseTabBar: BaseTabBar = {
         let bar = BaseTabBar()
+//        bar.delegate = self
         return bar
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        delegate = self
+        
         setValue(baseTabBar, forKey: "tabBar")
         
         // 首页
@@ -52,5 +55,26 @@ class BaseTabBarController: UITabBarController {
         addChild(chidNav)
     }
     
+//    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+//        print(item)
+//
+//    }
 
+    
+    
 }
+
+extension BaseTabBarController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if LCacheModel.shareInstance.getData().token.isEmpty {
+            let loginVC = LoginViewController()
+            loginVC.view.backgroundColor = UIColor(white: 0, alpha: 0.9)
+            self.definesPresentationContext = true
+            loginVC.modalPresentationStyle = .overCurrentContext
+            present(loginVC, animated: true, completion: nil)
+            return false
+        }
+        return true
+    }
+}
+

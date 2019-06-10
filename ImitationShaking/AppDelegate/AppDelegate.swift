@@ -18,8 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         window?.backgroundColor = .white
         
-        let tableBarController = BaseTabBarController()
-        window?.rootViewController = tableBarController        
+        let rootVC = RootViewController()
+        window?.rootViewController = rootVC
         do {
             try R.validate()
         } catch {
