@@ -12,6 +12,8 @@ import AVFoundation
 
 class HomeCollectionViewCell: UICollectionViewCell {
  
+    public var handLeftClick = { }
+    
     var player: AVPlayer!
     
     fileprivate lazy var operationView: HomeVideoOperationView = {
@@ -53,9 +55,13 @@ class HomeCollectionViewCell: UICollectionViewCell {
         
         NotificationCenter.default.addObserver(self, selector: #selector(moviePlayDidEnd(_ :)), name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
         
-//        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapClick))
-//        contentView.isUserInteractionEnabled = true
-//        contentView.addGestureRecognizer(tap)
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapClick))
+        contentView.isUserInteractionEnabled = true
+        contentView.addGestureRecognizer(tap)
+        
+        let hand: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleftClick))
+        hand.direction = .left
+        contentView.addGestureRecognizer(hand)
         
         contentView.addSubview(operationView)
         operationView.snp.makeConstraints { (make) in
@@ -72,7 +78,10 @@ class HomeCollectionViewCell: UICollectionViewCell {
         }else if player.timeControlStatus == .playing {
             player.pause()
         }
-
+    }
+    
+    @objc fileprivate func handleftClick() {
+        handLeftClick()
     }
     
     @objc fileprivate func moviePlayDidEnd(_ notification: Notification) {
@@ -81,4 +90,5 @@ class HomeCollectionViewCell: UICollectionViewCell {
         player.play()
     }
     
+
 }

@@ -62,7 +62,6 @@ class CommentsReplyTableViewCell: UITableViewCell {
     
     public lazy var praiselabel: UILabel = {
         let label = UILabel()
-        label.text = "2222W"
         label.textAlignment = .center
         label.textColor = UIColor.white
         label.font = UIFont.systemFont(ofSize: 10)

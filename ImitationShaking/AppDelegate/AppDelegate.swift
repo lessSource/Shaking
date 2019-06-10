@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         window?.backgroundColor = .white
         
-        let rootVC = RootViewController()
+        let rootVC = BaseTabBarController()
         window?.rootViewController = rootVC
         do {
             try R.validate()

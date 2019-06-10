@@ -168,6 +168,9 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         let cell: HomeCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.identifire, for: indexPath) as! HomeCollectionViewCell
         cell.backgroundColor = .black
         cell.listModel = dataArray[indexPath.item]
+        cell.handLeftClick = { [weak self] in
+            self?.pushNextVC()
+        }
         return cell
     }
     
@@ -181,6 +184,12 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
 //        if se
         
 //        let rectInTableView = collectionView.convert(T##rect: CGRect##CGRect, to: <#T##UIView?#>)
+    }
+    
+    func pushNextVC() {
+        let mineVC = MineViewController()
+        mineVC.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(mineVC, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

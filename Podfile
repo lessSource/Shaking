@@ -18,6 +18,7 @@ target 'ImitationShaking' do
   pod 'R.swift'
   pod 'UITextView+Placeholder'
   pod 'MBProgressHUD'
+#  pod 'EZPlayer'
 
   # Pods for ImitationShaking
 
