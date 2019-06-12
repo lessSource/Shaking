@@ -74,5 +74,95 @@ protocol PagesViewDataScorce: NSObjectProtocol {
 import UIKit
 
 class LPagesView: UIView {
+    enum HeaderContentStatus {
+        case top       // headerContenter到达顶端
+        case changeing // headerContenter变化中
+        case ceiling   // headerContenter吸顶
+    }
+    
+    enum DragingStatus {
+        case up   // 向上拖动
+        case dowm // 向下拖动
+    }
+    
+    enum LeftScrollOffsetLockStatus {
+        case unLook
+        case looked
+    }
+    
+    enum RightScrollOffsetLockStatus {
+        case unLook
+        case looked
+    }
+    
+    
+    // 设置header
+    public var headerView: UIView = UIView()
+    
+    // 最大缓存页数，默认不限制
+    public var cacheNumber: Int = 0
+    
+    // 靠边后是否可滑动（默认为false）
+    public var bounces: Bool = false
+    
+    // 需要通过header上下滑动列表（默认为false）
+    public var needSlideByHeader: Bool = false
+    
+    // slideView 上方空余空间 （值要大于0）
+    public var degeInSetTop: CGFloat = 0
 
+    fileprivate weak var dataSource: PagesViewDataScorce?
+    
+    // 子控制器容器控制器
+    fileprivate var currentController = UIViewController()
+    
+    // 子视图容器视图
+    fileprivate lazy var pagesContener: UIScrollView = {
+        let scrollView = UIScrollView(frame: self.bounds)
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            self.currentController.automaticallyAdjustsScrollViewInsets = false
+        }
+        scrollView.isPagingEnabled = true
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.alwaysBounceHorizontal = false
+        scrollView.bounces = false
+        scrollView.delegate = self
+        return scrollView
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    convenience init(frame: CGRect, dataScorce: PagesViewDataScorce, page: Int, titleBarLayout: LTitleBarLayout, style: LPageViewStyle) {
+        self.init(frame: frame)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK:- public
+    // 缓存自控制器
+    public func dequeueReusablePage(forIndex index: Int) -> UIViewController {
+        return UIViewController()
+    }
+    
+    // 定位到某页
+    public func jumptoPage(page: Int) {
+        
+    }
+    
+    // 刷新控制器列表，并定位到某页
+    public func reloadataToPage(page: Int) {
+        
+    }
+}
+
+
+extension LPagesView: UIScrollViewDelegate {
+    
 }

@@ -67,6 +67,8 @@
 		CA9DC16522A4CF9300BF331A /* CommentRequestStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9DC16422A4CF9300BF331A /* CommentRequestStruct.swift */; };
 		CA9DC16A22A51DAE00BF331A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9DC16922A51DAE00BF331A /* LoginViewController.swift */; };
 		CAA1883C22B0D15B0077B7AA /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAA1883B22B0D15B0077B7AA /* IJKMediaFramework.framework */; };
+		CAA1883E22B0DA8E0077B7AA /* LTitleBarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA1883D22B0DA8E0077B7AA /* LTitleBarLayout.swift */; };
+		CAA1884022B0E3E30077B7AA /* LPagesCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA1883F22B0E3E30077B7AA /* LPagesCache.swift */; };
 		DE6D9C7FB035F84F517874DC /* Pods_ImitationShaking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 240A2BF843BF79AF9245642C /* Pods_ImitationShaking.framework */; };
 /* End PBXBuildFile section */
 
@@ -163,6 +165,8 @@
 		CA9DC16422A4CF9300BF331A /* CommentRequestStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRequestStruct.swift; sourceTree = "<group>"; };
 		CA9DC16922A51DAE00BF331A /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		CAA1883B22B0D15B0077B7AA /* IJKMediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IJKMediaFramework.framework; sourceTree = "<group>"; };
+		CAA1883D22B0DA8E0077B7AA /* LTitleBarLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTitleBarLayout.swift; sourceTree = "<group>"; };
+		CAA1883F22B0E3E30077B7AA /* LPagesCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LPagesCache.swift; sourceTree = "<group>"; };
 		CAB9AE47C95E48072E6C02FF /* Pods_ImitationShakingUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImitationShakingUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD792A7AC2491788E8E060C0 /* Pods-ImitationShakingUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingUITests.debug.xcconfig"; path = "Target Support Files/Pods-ImitationShakingUITests/Pods-ImitationShakingUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -200,6 +204,8 @@
 			isa = PBXGroup;
 			children = (
 				2A0DEA5F22AFF4AA0059C299 /* LPageView.swift */,
+				CAA1883D22B0DA8E0077B7AA /* LTitleBarLayout.swift */,
+				CAA1883F22B0E3E30077B7AA /* LPagesCache.swift */,
 			);
 			path = LPageView;
 			sourceTree = "<group>";
@@ -922,6 +928,7 @@
 				2AA340F1229AA1D6005DE559 /* Constant.swift in Sources */,
 				2AA340F2229AA1D6005DE559 /* AboutApp.swift in Sources */,
 				2AA3413B22A3B3D6005DE559 /* PublicBottomInputView.swift in Sources */,
+				CAA1883E22B0DA8E0077B7AA /* LTitleBarLayout.swift in Sources */,
 				CA9DC16322A4CBC300BF331A /* Int+Extension.swift in Sources */,
 				CA9AAAF522A66E4E0084B409 /* HomeVideoListModel.swift in Sources */,
 				2AA340FD229ACBB7005DE559 /* HomeVideoOperationView.swift in Sources */,
@@ -934,6 +941,7 @@
 				CA279F7022AE588200DE3CE8 /* PublicShootViewController.swift in Sources */,
 				2AA340CF2299910C005DE559 /* BaseNavigationController.swift in Sources */,
 				CA279F6D22AE4D2200DE3CE8 /* RootViewController.swift in Sources */,
+				CAA1884022B0E3E30077B7AA /* LPagesCache.swift in Sources */,
 				2AA340DC2299967D005DE559 /* HomeViewController.swift in Sources */,
 				CA9AAAF322A66E160084B409 /* PublicUserModel.swift in Sources */,
 				2AA34114229ED7B3005DE559 /* UIView+Frame.swift in Sources */,
