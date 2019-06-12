@@ -66,6 +66,7 @@
 		CA9DC16322A4CBC300BF331A /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9DC16222A4CBC300BF331A /* Int+Extension.swift */; };
 		CA9DC16522A4CF9300BF331A /* CommentRequestStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9DC16422A4CF9300BF331A /* CommentRequestStruct.swift */; };
 		CA9DC16A22A51DAE00BF331A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9DC16922A51DAE00BF331A /* LoginViewController.swift */; };
+		CAA1883C22B0D15B0077B7AA /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAA1883B22B0D15B0077B7AA /* IJKMediaFramework.framework */; };
 		DE6D9C7FB035F84F517874DC /* Pods_ImitationShaking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 240A2BF843BF79AF9245642C /* Pods_ImitationShaking.framework */; };
 /* End PBXBuildFile section */
 
@@ -161,6 +162,7 @@
 		CA9DC16222A4CBC300BF331A /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		CA9DC16422A4CF9300BF331A /* CommentRequestStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRequestStruct.swift; sourceTree = "<group>"; };
 		CA9DC16922A51DAE00BF331A /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		CAA1883B22B0D15B0077B7AA /* IJKMediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IJKMediaFramework.framework; sourceTree = "<group>"; };
 		CAB9AE47C95E48072E6C02FF /* Pods_ImitationShakingUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImitationShakingUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD792A7AC2491788E8E060C0 /* Pods-ImitationShakingUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingUITests.debug.xcconfig"; path = "Target Support Files/Pods-ImitationShakingUITests/Pods-ImitationShakingUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -171,6 +173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE6D9C7FB035F84F517874DC /* Pods_ImitationShaking.framework in Frameworks */,
+				CAA1883C22B0D15B0077B7AA /* IJKMediaFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,6 +477,7 @@
 		2AA3411522A01B63005DE559 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				CAA1883822B0CF350077B7AA /* ThirdParty */,
 				2A0DEA5E22AFF46F0059C299 /* LPageView */,
 				CA9DC15C22A4B88C00BF331A /* MBProgressHUD */,
 				2AA3411622A01B68005DE559 /* PopUp */,
@@ -618,6 +622,14 @@
 				CA9DC16922A51DAE00BF331A /* LoginViewController.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		CAA1883822B0CF350077B7AA /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				CAA1883B22B0D15B0077B7AA /* IJKMediaFramework.framework */,
+			);
+			path = ThirdParty;
 			sourceTree = "<group>";
 		};
 		F534CFEC6FD39B4FEAF33187 /* Pods */ = {
@@ -1054,6 +1066,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CustomProductName = "预发布";
 				DEVELOPMENT_TEAM = 5P2JD4K827;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ImitationShaking/Common/Tool/ThirdParty",
+				);
 				INFOPLIST_FILE = ImitationShaking/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1237,6 +1253,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CustomProductName = "测试环境";
 				DEVELOPMENT_TEAM = 5P2JD4K827;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ImitationShaking/Common/Tool/ThirdParty",
+				);
 				INFOPLIST_FILE = ImitationShaking/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1261,6 +1281,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CustomProductName = "正式环境";
 				DEVELOPMENT_TEAM = 5P2JD4K827;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ImitationShaking/Common/Tool/ThirdParty",
+				);
 				INFOPLIST_FILE = ImitationShaking/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
