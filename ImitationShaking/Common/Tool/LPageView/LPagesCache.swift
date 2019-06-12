@@ -11,7 +11,7 @@ import UIKit
 struct LPagesCache {
     
     // 子控制器缓存
-    var cachesVC: Dictionary = [String: Any]()
+    var cachesVC: Dictionary = [String: UIViewController]()
     // 子控制器ScrollView缓存
     var cachesSView: Dictionary = [String: Any]()
     // 每个页面变动前对应的headery
@@ -21,4 +21,6 @@ struct LPagesCache {
     
     // 当前缓存顺序表
     var cachesTable: Array = [String]()
+    // 当前所有添加了观察者的对象标题
+    var cachesKVO: Array = [String]()
 }

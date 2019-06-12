@@ -116,6 +116,9 @@ class LPagesView: UIView {
     // 子控制器容器控制器
     fileprivate var currentController = UIViewController()
     
+    // 缓存
+    fileprivate var cache: LPagesCache = LPagesCache()
+    
     // 子视图容器视图
     fileprivate lazy var pagesContener: UIScrollView = {
         let scrollView = UIScrollView(frame: self.bounds)
@@ -132,6 +135,11 @@ class LPagesView: UIView {
         scrollView.delegate = self
         return scrollView
     }()
+    
+    deinit {
+        // 清除监听
+        // 清除缓存
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -158,6 +166,100 @@ class LPagesView: UIView {
     
     // 刷新控制器列表，并定位到某页
     public func reloadataToPage(page: Int) {
+        
+    }
+    
+    // MARK: - 清除
+    // 清除监听
+    fileprivate func clearKVO() {
+        while cache.cachesVC.count > 0 {
+            
+        }
+    }
+    // 清除缓存顺序表及对应对象
+    fileprivate func clearStack() {
+        while cache.cachesTable.count > 0 {
+            popDataOnStack()
+        }
+    }
+    
+    // 数据出缓存（同时删除对应的控制器）
+    fileprivate func popDataOnStack() {
+        guard let title = cache.cachesTable.last, let _ = cache.cachesVC[title] else {
+            return
+        }
+        cancelPageVCByTitle(title)
+    }
+    
+    // 去掉被删掉的子控制器及缓存
+    fileprivate func cancelPageVCByTitle(_ title: String) {
+        guard let pageVC = cache.cachesVC[title] as? UIViewController else { return }
+        pageVC.view.removeFromSuperview()
+//        pageVC.view = nil
+        pageVC.willMove(toParent: nil)
+        pageVC.removeFromParent()
+        cache.cachesVC.removeValue(forKey: title)
+        cache.cachesSView.removeValue(forKey: title)
+        cache.cachesTable.removeAll { $0 == title }
+        cache.cachesHeadery.removeValue(forKey: title)
+    }
+    
+    // MARK: - 获取scrollView
+    // 找到对应控制器中的scrollView
+    fileprivate func scrollViewInPageVC(pageVC: UIViewController) -> UIScrollView? {
+        var scrollV: UIScrollView?
+        if pageVC.view is UIScrollView {
+            scrollV = pageVC.view as? UIScrollView
+        }else {
+            for view in pageVC.view.subviews {
+                if view is UIScrollView {
+                    scrollV = view as? UIScrollView
+                    break
+                }
+            }
+        }
+        
+        if #available(iOS 11.0, *) {
+            scrollV?.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        assert(scrollV == nil, "控制器中不包含可滚动控件")
+
+        return scrollV
+    }
+    
+    // 找到title对应的scrollView
+    fileprivate func scrollViewByTitle(title: String) -> UIScrollView? {
+        var scrollV: UIScrollView?
+        scrollV = cache.cachesSView[title] as? UIScrollView
+        
+        if scrollV == nil {
+            if let vc = cache.cachesVC[title] {
+                scrollV = scrollViewInPageVC(pageVC: vc)
+            }
+        }
+        
+        if let scrollVC = scrollV {
+            cache.cachesSView.updateValue(scrollVC, forKey: title)
+        }
+        
+        return scrollV
+    }
+    
+    // MARK: - 滑动
+    // 情况1：更改界面时同步（根据headerContent的y去同步当前和左右三个界面的offset）。
+    // 情况2：上下滚动子tableview时联动（根据该tableview的contentOffset.y联动左右两边的子tableview的contentOffset.y）。
+    
+    // 情况1 (同步)
+    fileprivate func synchronizeCurrentPageWithRightAndLeftWhenChangeToPage(page: Int) {
+        // headerContener的高度（header + bar）
+        
+    }
+    
+    // 情况2 (联动)
+    fileprivate func synchronizeRightAndLeftWhenScrollByHCStatus(status: HeaderContentStatus, distance: CGFloat, page: Int) {
         
     }
 }
