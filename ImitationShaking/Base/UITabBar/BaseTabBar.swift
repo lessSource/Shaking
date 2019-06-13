@@ -8,7 +8,17 @@
 
 import UIKit
 
+protocol BaseTabBarDelegate: NSObjectProtocol {
+    func tabBarClick()
+}
+
+extension BaseTabBarDelegate {
+    func tabBarClick() { }
+}
+
 class BaseTabBar: UITabBar {
+    
+    public weak var barDelegate: BaseTabBarDelegate?
     
     fileprivate lazy var publishBtn: UIButton = {
         let button = UIButton()
@@ -19,6 +29,7 @@ class BaseTabBar: UITabBar {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundImage = UIImage.colorCreateImage(UIColor.clear, size: CGSize(width: Constant.screenWidth, height: Constant.bottomBarHeight))
+        publishBtn.addTarget(self, action: #selector(publishBtnClick), for: .touchUpInside)
         addSubview(publishBtn)
     }
     
@@ -52,6 +63,9 @@ class BaseTabBar: UITabBar {
 
     }
     
+    @objc func publishBtnClick() {
+        barDelegate?.tabBarClick()
+    }
     
     
 }

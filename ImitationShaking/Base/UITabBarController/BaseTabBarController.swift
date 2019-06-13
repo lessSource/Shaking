@@ -12,7 +12,7 @@ class BaseTabBarController: UITabBarController {
 
     fileprivate lazy var baseTabBar: BaseTabBar = {
         let bar = BaseTabBar()
-//        bar.delegate = self
+        bar.barDelegate = self
         return bar
     }()
     
@@ -54,17 +54,9 @@ class BaseTabBarController: UITabBarController {
         let chidNav = BaseNavigationController(rootViewController: childController)
         addChild(chidNav)
     }
-    
-//    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-//        print(item)
-//
-//    }
-
-    
-    
 }
 
-extension BaseTabBarController: UITabBarControllerDelegate {
+extension BaseTabBarController: UITabBarControllerDelegate, BaseTabBarDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if LCacheModel.shareInstance.getData().token.isEmpty {
             let loginVC = LoginViewController()
@@ -75,6 +67,11 @@ extension BaseTabBarController: UITabBarControllerDelegate {
             return false
         }
         return true
+    }
+    
+    func tabBarClick() {
+        let publicCameraVC = PublicCameraViewController()
+        present(publicCameraVC, animated: true, completion: nil)
     }
 }
 

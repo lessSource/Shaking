@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 extension UIImage {
     private func convertViewToImage(view: UIView) -> UIImage {
@@ -52,6 +53,16 @@ extension UIImage {
             }
         }
         return nil
+    }
+    
+    // CMSampleBufferRef -> UIImage
+    static func imageConvert(_ sampleBuffer: CMSampleBuffer?) -> UIImage? {
+        guard sampleBuffer != nil && CMSampleBufferIsValid(sampleBuffer!) == true  else {
+            return nil
+        }
+        let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer!)
+        let ciImage = CIImage(cvImageBuffer: pixelBuffer!)
+        return UIImage(ciImage: ciImage)
     }
     
 }

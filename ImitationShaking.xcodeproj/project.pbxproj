@@ -10,6 +10,7 @@
 		2A0DEA6022AFF4AA0059C299 /* LPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA5F22AFF4AA0059C299 /* LPageView.swift */; };
 		2A0DEA6522B139850059C299 /* IJKMediaFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A0DEA6422B139850059C299 /* IJKMediaFramework.framework */; };
 		2A0DEA6722B149320059C299 /* LHeaderContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA6622B149320059C299 /* LHeaderContentView.swift */; };
+		2A0DEA6922B27D7C0059C299 /* PublicCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA6822B27D7C0059C299 /* PublicCameraViewController.swift */; };
 		2A1026F222A8110B00C31746 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1026F122A8110B00C31746 /* Array+Extension.swift */; };
 		2AA3409E22998E50005DE559 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409D22998E50005DE559 /* AppDelegate.swift */; };
 		2AA340A022998E50005DE559 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409F22998E50005DE559 /* ViewController.swift */; };
@@ -100,6 +101,7 @@
 		2A0DEA5F22AFF4AA0059C299 /* LPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LPageView.swift; sourceTree = "<group>"; };
 		2A0DEA6422B139850059C299 /* IJKMediaFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IJKMediaFramework.framework; sourceTree = "<group>"; };
 		2A0DEA6622B149320059C299 /* LHeaderContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LHeaderContentView.swift; sourceTree = "<group>"; };
+		2A0DEA6822B27D7C0059C299 /* PublicCameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCameraViewController.swift; sourceTree = "<group>"; };
 		2A1026F122A8110B00C31746 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		2AA3409A22998E50005DE559 /* ImitationShaking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImitationShaking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AA3409D22998E50005DE559 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -610,6 +612,7 @@
 			isa = PBXGroup;
 			children = (
 				CA279F6F22AE588200DE3CE8 /* PublicShootViewController.swift */,
+				2A0DEA6822B27D7C0059C299 /* PublicCameraViewController.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -911,6 +914,7 @@
 				2A0DEA6022AFF4AA0059C299 /* LPageView.swift in Sources */,
 				CA9DC16A22A51DAE00BF331A /* LoginViewController.swift in Sources */,
 				CA9DC16522A4CF9300BF331A /* CommentRequestStruct.swift in Sources */,
+				2A0DEA6922B27D7C0059C299 /* PublicCameraViewController.swift in Sources */,
 				2AA3412122A16118005DE559 /* NSObject+Extension.swift in Sources */,
 				2AA3410B229C2906005DE559 /* UIColor+Extension.swift in Sources */,
 				2AA340D422999237005DE559 /* BaseViewController.swift in Sources */,
