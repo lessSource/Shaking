@@ -136,6 +136,11 @@ class LPagesView: UIView {
         return scrollView
     }()
     
+    // 头部容器视图
+    fileprivate var headerContener: LHeaderContentView!
+    
+    fileprivate var style: LPageViewStyle = .headerFirst
+    
     deinit {
         // 清除监听
         // 清除缓存
@@ -193,7 +198,7 @@ class LPagesView: UIView {
     
     // 去掉被删掉的子控制器及缓存
     fileprivate func cancelPageVCByTitle(_ title: String) {
-        guard let pageVC = cache.cachesVC[title] as? UIViewController else { return }
+        guard let pageVC = cache.cachesVC[title] else { return }
         pageVC.view.removeFromSuperview()
 //        pageVC.view = nil
         pageVC.willMove(toParent: nil)
@@ -203,6 +208,19 @@ class LPagesView: UIView {
         cache.cachesTable.removeAll { $0 == title }
         cache.cachesHeadery.removeValue(forKey: title)
     }
+    
+    // MARK: - 缓存
+    // headery
+    fileprivate func cacheHeaderyForPageTitle(title: String) {
+        cache.cachesHeadery.updateValue(headerContener.y, forKey: title)
+    }
+    
+    // 控制器
+    fileprivate func cachePageVc(pageVC: UIViewController, title: String) {
+        cache.cachesVC.updateValue(pageVC, forKey: title)
+    }
+    
+    
     
     // MARK: - 获取scrollView
     // 找到对应控制器中的scrollView
@@ -255,6 +273,81 @@ class LPagesView: UIView {
     // 情况1 (同步)
     fileprivate func synchronizeCurrentPageWithRightAndLeftWhenChangeToPage(page: Int) {
         // headerContener的高度（header + bar）
+        let HC_Height = headerContener.headerContentHeight
+        
+        // headerTitleBar的高度
+        let HB_Height = headerContener.headerBarHeight
+        
+        // bar margin to top
+        let HB_Top = headerContener.barMarginTop < 0 ? 0 : headerContener.barMarginTop
+        
+        // headerContent的y
+        let header_y = headerContener.y
+        
+        // 当headercontener没有变动空间时之间返回
+        if HB_Top >= HC_Height - HB_Height { return }
+        
+        // 所需同步数组
+        var needSynArray: Array<String> = [String]()
+        
+        // 当前视图
+        needSynArray.append(cache.cachesTitles[page])
+        
+        // 左边视图
+        if page - 1 > 0 {
+            needSynArray.append(cache.cachesTitles[page - 1])
+        }
+        
+        // 右边视图
+        if page + 1 < cache.cachesTitles.count {
+            needSynArray.append(cache.cachesTitles[page + 1])
+        }
+        
+        if style == .headerFirst {
+            // 表头优先时
+            for item in needSynArray {
+                if let childS: UIScrollView = scrollViewByTitle(title: item) {
+                    // 子滚动页的offset_Y
+                    let childS_y = childS.contentOffset.y
+                    
+                    if header_y >= 0 {
+                        if childS_y != -HB_Height {
+                            childS.contentOffset = CGPoint(x: 0, y: -HC_Height)
+                        }
+                    }else if header_y > HB_Height + HB_Top - HC_Height && header_y < 0 && childS.contentOffset.y != -HC_Height - header_y {
+                        childS.contentOffset = CGPoint(x: 0, y: -HC_Height - header_y)
+                    }else if header_y <= HB_Height + HB_Top - HC_Height {
+                        if childS_y <= -HB_Height -  HB_Top && childS_y != -HB_Height - HB_Top {
+                            childS.contentOffset = CGPoint(x: 0, y: -HB_Height - HB_Top)
+                        }
+                    }
+                }
+                
+            }
+        }else if style == .tablesFiret {
+            // 列表优先时
+            for item in needSynArray {
+                if let childS = scrollViewByTitle(title: item) {
+                    var cache_H_Y: CGFloat = 0
+                    if let cacheNum = cache.cachesHeadery[item] {
+                        cache_H_Y = cacheNum as? CGFloat ?? 0
+                    }else {
+                        cacheHeaderyForPageTitle(title: item)
+                        cache_H_Y = header_y
+                    }
+                    
+                    // 子滚动页的offset_Y
+                    let child_y = childS.contentOffset.y
+                    
+                    if header_y >= 0 {
+                        // -HC_Height - cache_H_Y 是同步之前的headerContener偏移，由于当前child_Y是同步之前的，所以y一定要和之前的headerContener偏移比较
+                        if child_y <= -HC_Height - cache_H_Y {
+//                            childS.contentOffset = child_y
+                        }
+                    }
+                }
+            }
+        }
         
     }
     

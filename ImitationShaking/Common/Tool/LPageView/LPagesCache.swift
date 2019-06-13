@@ -17,7 +17,7 @@ struct LPagesCache {
     // 每个页面变动前对应的headery
     var cachesHeadery: Dictionary = [String: Any]()
     // 所有标题缓存
-    var cachesTitles: Dictionary = [String: Any]()
+    var cachesTitles: Array = [String]()
     
     // 当前缓存顺序表
     var cachesTable: Array = [String]()
