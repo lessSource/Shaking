@@ -123,7 +123,7 @@ class HomeViewController: BaseViewController {
                 
                 let data =  Moya.MultipartFormData(provider: .data(image), name: "headImg", fileName: "headImg", mimeType: "png")
 
-                Network.default.request(CommonTargetTypeApi.uploadMultipart(LoginRegisterRequest.headImage, [data]), successClosure: { (response) in
+                Network.default.request(CommonTargetTypeApi.uploadMultipart(LoginRegisterRequest.headImage, [data], nil), successClosure: { (response) in
                     print("ddd")
                 }) { (error) in
                     print("aaaaa")

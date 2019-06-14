@@ -7,142 +7,157 @@
 //
 
 import UIKit
-import AVFoundation
-import AssetsLibrary
-import Photos
 
 class PublicCameraViewController: BaseViewController {
-
-    /** 闪光灯是否打开 */
-    private(set) var isTorch: Bool = false
-    
-
-    fileprivate var device: AVCaptureDevice?
-
-    fileprivate lazy var output: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
     
     
-    fileprivate lazy var session: AVCaptureSession = AVCaptureSession()
-    // 视频输出流
-    fileprivate lazy var movieFileOutPut: AVCaptureMovieFileOutput = AVCaptureMovieFileOutput()
-    // 预览层
-    fileprivate lazy var previewLayer: AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: session)
-    // 音频设备
-    fileprivate var audioDevice: AVCaptureDevice?
-    fileprivate var audioDeviceInput: AVCaptureDeviceInput?
-    // 视频设备
-    fileprivate var captureDevice: AVCaptureDevice?
-    fileprivate var captureDeviceInput: AVCaptureDeviceInput?
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        session.startRunning()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        session.stopRunning()
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        // 视频存放地址
-//        let fileUrl = URL(fileURLWithPath: "index")
-//        https://github.com/ginhoor/GinCamera
         
+        let videoVC = PublicVideoCameraView(frame: CGRect(x: 0, y: 0, width: Constant.screenWidth, height: Constant.screenHeight))
+        videoVC.delegate = self
+        videoVC.setUpSession()
+        view.addSubview(videoVC)
+        videoVC.maxDuration = 10
+        videoVC.captureSession.startRunning()
         
-        setupCameraSession()
-        configurationCameraSession()
-    }
-
-    // MARK:- private
-    // 创建一个回话session
-    fileprivate func setupCameraSession() {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            session.sessionPreset = AVCaptureSession.Preset.vga640x480
-        }else {
-            session.sessionPreset = AVCaptureSession.Preset.photo
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            videoVC.startRecordVideo(filePath: MediaFileStruct.getVideoFileName())
         }
-        // 设置为高分辨率
-        if session.canSetSessionPreset(AVCaptureSession.Preset(rawValue: "AVCaptureSessionPreset1280x720")) {
-            session.sessionPreset = AVCaptureSession.Preset(rawValue: "AVCaptureSessionPreset1280x720")
-        }
-        // 获取输入设备，builtInWideAngleCamera是通用相机，AVMediaType.video代表视频媒体，back代表前置摄像头，如果需要后置摄像头修改为front
-        let availbleDevices = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .front).devices
-        device = availbleDevices.first
-    }
-    // 配置session
-    fileprivate func configurationCameraSession() {
-        // 获取摄像设备
-        guard let device = AVCaptureDevice.default(for: .video) else {
-            return
-        }
-        session.beginConfiguration()
-        do {
-            // 将后置摄像头作为session的input 输入流
-            let captureDeviceInput = try AVCaptureDeviceInput(device: device)
-            session.addInput(captureDeviceInput)
-        } catch {
-            print(error.localizedDescription)
-        }
-        // 设定视频预览层
-        view.layer.addSublayer(previewLayer)
-        previewLayer.frame = view.bounds
-        previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill // 拉伸充满
         
-        // 设定输出流
-        // 指定像素格式
-        output.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA]
-        // 是否直接丢弃处理旧帧时捕获的新帧，默认为true，如果改为false会大幅提高内存使用
-        output.alwaysDiscardsLateVideoFrames = true
-        if session.canAddOutput(output) {
-            session.addOutput(output)
-        }
-        // beginConfiguration() 和 commitConfiguration() 方法中的修改将在commit时同时提交
-        session.commitConfiguration()
-        session.startRunning()
-        
-        // 开新线程进行输出流代理方法调用
-        let queue = DispatchQueue(label: "com.ImitationShaking.captureQueue")
-        output.setSampleBufferDelegate(self, queue: queue)
-        
-        let captureConnection = output.connection(with: .video)
-        if captureConnection?.isVideoStabilizationSupported == true {
-            // 防止图片旋转90度
-            captureConnection?.videoOrientation = getCaptureVideoOrientation()
-        }
     }
     
-    // 旋转方向
-    fileprivate func getCaptureVideoOrientation() -> AVCaptureVideoOrientation {
-        switch UIDevice.current.orientation {
-        case .portrait, .faceUp, .faceDown:
-            return .portrait
-        case .portraitUpsideDown: // 如果这里设置成AVCaptureVideoOrientationPortraitUpsideDown,则视频方向和拍摄时的方向是相反的。
-            return .portrait
-        case .landscapeLeft:
-            return .landscapeRight
-        case .landscapeRight:
-            return .landscapeLeft
-        default:
-            return .portrait
-        }
+//    let data1 =  Moya.MultipartFormData(provider: .file(outputFileURL), name: "file", fileName: "file", mimeType: "mp4")
+//    var params: Dictionary<String, Any> = [String: Any]()
+//    params.updateValue("dddddddd", forKey: "title")
+//    params.updateValue(15, forKey: "timeLength")
+//    Network.default.request(CommonTargetTypeApi.uploadMultipart(VideoRequest.upload, [data1], params), successClosure: { (response) in
+//    print("ddd")
+//    }) { (error) in
+//    print("aaaaa")
+//    }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        dismiss(animated: true, completion: nil)
     }
 }
 
+extension PublicCameraViewController: PublicVideoCameraDelegate {
+    /** 当AVCaptureDevice实例检测到视频主题区域有实质性变化时 */
+    func publicVideoCaptureDeviceDidChange() {
+        print("AVCaptureDevice")
+    }
+    
+    /** 视频录制结束 */
+    func publicVideoDidFinishRecording(_ success: Bool, filePath: String, currentDuration: TimeInterval, totalDuration: TimeInterval, isOverDuration: Bool) {
+        print("视频录制结束" + filePath + "当前时间：\(currentDuration), 总时间：\(totalDuration)")
+    }
+    
+    /** 视频开始录制 */
+    func publicVideoDidStartRecording(filePath: String) {
+        print("视频开始录制" + filePath)
+    }
+    
+    /** 视频录制中 */
+    func publicVideoDidRecording(filePath: String, currentDuration: TimeInterval, totalDuration: TimeInterval) {
+        print("视频录制中" + filePath + "当前时间：\(currentDuration), 总时间：\(totalDuration)")
+    }
 
-extension PublicCameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-    func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        
-        DispatchQueue.main.async {
-            #if false
-//            self.session.stopRunning()
-            #else
-//            self.session.stopRunning()
-            #endif
+}
+
+
+
+
+struct MediaFileStruct {
+    static func getVideoFileName() -> String {
+        _ = createFolder()
+        let name = createFilename()
+        return "/\(filePath(name: name)).mp4"
+    }
+    
+    static func deleteVideoFile(filePath: String) -> Bool {
+        if filePath.isEmpty { return false }
+        let manager = FileManager.default
+        do {
+            try manager.removeItem(atPath: filePath)
+            return true
+        } catch  {
+            print(error.localizedDescription)
+            return false
         }
         
     }
+    
+    static func saveImage(image: UIImage) -> Dictionary<String, Any> {
+        let name = createFilename()
+        let flag = writeToFile(image: image, path: filePath(name: name))
+        return ["name": name, "success": flag]
+    }
+    
+    static func getImageByName(name: String) -> UIImage? {
+        if name.isEmpty { return nil }
+        let image = UIImage(contentsOfFile: filePath(name: name))
+        return image
+    }
+    
+    static func deleteImageByName(name: String) -> Bool {
+        if name.isEmpty { return false }
+        let manager = FileManager.default
+        do {
+            try manager.removeItem(atPath: filePath(name: name))
+        } catch  {
+            print(error.localizedDescription)
+            return false
+        }
+        return true
+    }
+
+    static func filePath(name: String = "") -> String {
+        var tempPath = ""
+        if name.isEmpty {
+            tempPath = App.bundelName + "/\(name)"
+        }else {
+            tempPath = App.bundelName
+        }
+        let rootPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first ?? ""
+        let filePath = rootPath + "/\(tempPath)"
+        return filePath
+        
+    }
+    
+    static func createFolder() -> Bool {
+        let manager = FileManager.default
+        let flag = manager.fileExists(atPath: filePath(), isDirectory: nil)
+        
+        if !flag {
+            do {
+                try manager.createDirectory(atPath: filePath(), withIntermediateDirectories: true, attributes: nil)
+            } catch  {
+                print(error.localizedDescription)
+            }
+        }
+        return flag
+    }
+
+    static func createFilename() -> String {
+        return UUID().uuidString
+    }
+    
+    static fileprivate func writeToFile(image: UIImage, path: String) -> Bool {
+        _ = createFolder()
+        let data: Data = image.jpegData(compressionQuality: 0.3) ?? Data()
+        do {
+            try data.write(to: URL(fileURLWithPath: path))
+        } catch  {
+            print(error.localizedDescription)
+            return false
+        }
+        return true
+    }
+    
 }

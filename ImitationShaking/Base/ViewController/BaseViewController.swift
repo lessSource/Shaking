@@ -9,7 +9,12 @@
 import UIKit
 
 class BaseViewController: UIViewController {
-
+    
+    deinit {
+        print(self.description + "释放")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

@@ -33,7 +33,7 @@ enum CommonTargetTypeApi {
     case postRequest(String, [String: Any]?)
     case deleteRequest(String, [String: Any]?)
     case putRequest(String, [String: Any]?)
-    case uploadMultipart(String, [Moya.MultipartFormData])
+    case uploadMultipart(String, [Moya.MultipartFormData], [String: Any]?)
     case uploadFile(String, URL)
     case download(String, Moya.DownloadDestination)
     case downloadWithParams(String, [String: Any], Moya.DownloadDestination)
@@ -61,7 +61,7 @@ extension CommonTargetTypeApi: TargetType {
             return urlPath
         case .putRequest(let urlPath, _):
             return urlPath
-        case .uploadMultipart(let urlPath, _):
+        case .uploadMultipart(let urlPath, _, _):
             return urlPath
         case .uploadFile(let urlPath, _):
             return urlPath
@@ -82,7 +82,7 @@ extension CommonTargetTypeApi: TargetType {
             return .delete
         case .putRequest(_, _):
             return .put
-        case .uploadMultipart(_, _):
+        case .uploadMultipart(_, _, _):
             return .post
         case .uploadFile(_, _):
             return .post
@@ -121,8 +121,11 @@ extension CommonTargetTypeApi: TargetType {
                 return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
             }
             return .requestPlain
-        case .uploadMultipart(_, let datas):
-            return .uploadMultipart(datas)
+        case .uploadMultipart(_, let datas, let param):
+            if param?.isEmpty == true {
+                return .uploadMultipart(datas)
+            }
+            return .uploadCompositeMultipart(datas, urlParameters: param!)
         case .uploadFile(_, let fileURL):
             return .uploadFile(fileURL)
         case .download(_, let destination):
@@ -134,7 +137,7 @@ extension CommonTargetTypeApi: TargetType {
     
     var headers: [String : String]? {
         switch self {
-        case .uploadMultipart(_, _):
+        case .uploadMultipart(_, _, _):
             return ["Content-type": "multipart/form-data","Auth-Token": LCacheModel.shareInstance.getData().token]
         default:
             return ["Content-Type": "application/json","Auth-Token": LCacheModel.shareInstance.getData().token]

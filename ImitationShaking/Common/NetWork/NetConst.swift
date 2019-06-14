@@ -24,6 +24,8 @@ struct VideoRequest {
     static let praise = "api/video/praise/"
     /** 取消点赞 */
     static let praiseCancel = "api/video/praise_cancel/"
+    /** 上传 */
+    static let upload = "api/video/upload"
 }
 
 /** 评论 */

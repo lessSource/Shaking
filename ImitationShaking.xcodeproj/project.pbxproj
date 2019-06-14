@@ -60,6 +60,7 @@
 		CA049CE522A8B04A0058A55E /* UserCacheModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA049CE422A8B04A0058A55E /* UserCacheModel.swift */; };
 		CA0D368222A0D68E004F6968 /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0D368122A0D68E004F6968 /* UIDevice+Extension.swift */; };
 		CA0D368422A1026F004F6968 /* SharePopUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0D368322A1026F004F6968 /* SharePopUpView.swift */; };
+		CA16AF2022B37D7F001A5BB5 /* PublicVideoCameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA16AF1F22B37D7F001A5BB5 /* PublicVideoCameraManager.swift */; };
 		CA279F6D22AE4D2200DE3CE8 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA279F6C22AE4D2200DE3CE8 /* RootViewController.swift */; };
 		CA279F7022AE588200DE3CE8 /* PublicShootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA279F6F22AE588200DE3CE8 /* PublicShootViewController.swift */; };
 		CA93589522B1EC26004C7EFF /* LTitleItemLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA93589422B1EC26004C7EFF /* LTitleItemLayout.swift */; };
@@ -162,6 +163,7 @@
 		CA049CE422A8B04A0058A55E /* UserCacheModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCacheModel.swift; sourceTree = "<group>"; };
 		CA0D368122A0D68E004F6968 /* UIDevice+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		CA0D368322A1026F004F6968 /* SharePopUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePopUpView.swift; sourceTree = "<group>"; };
+		CA16AF1F22B37D7F001A5BB5 /* PublicVideoCameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicVideoCameraManager.swift; sourceTree = "<group>"; };
 		CA279F6C22AE4D2200DE3CE8 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		CA279F6F22AE588200DE3CE8 /* PublicShootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicShootViewController.swift; sourceTree = "<group>"; };
 		CA93589422B1EC26004C7EFF /* LTitleItemLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTitleItemLayout.swift; sourceTree = "<group>"; };
@@ -621,6 +623,7 @@
 			isa = PBXGroup;
 			children = (
 				CA9AAAF222A66E160084B409 /* PublicUserModel.swift */,
+				CA16AF1F22B37D7F001A5BB5 /* PublicVideoCameraManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -954,6 +957,7 @@
 				2AA340DE2299968B005DE559 /* FriendsViewController.swift in Sources */,
 				2A0DEA6722B149320059C299 /* LHeaderContentView.swift in Sources */,
 				2AA3413422A370F3005DE559 /* CommentsHeaderView.swift in Sources */,
+				CA16AF2022B37D7F001A5BB5 /* PublicVideoCameraManager.swift in Sources */,
 				CA279F7022AE588200DE3CE8 /* PublicShootViewController.swift in Sources */,
 				2AA340CF2299910C005DE559 /* BaseNavigationController.swift in Sources */,
 				CA279F6D22AE4D2200DE3CE8 /* RootViewController.swift in Sources */,
@@ -1105,7 +1109,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "ImitationShaking/ImitationShaking-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Pre-Release";
 		};
@@ -1292,7 +1296,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "ImitationShaking/ImitationShaking-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1319,7 +1323,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ImitationShaking/ImitationShaking-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
