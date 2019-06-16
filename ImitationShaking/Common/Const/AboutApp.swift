@@ -45,6 +45,10 @@ public struct App {
         return "https://itunes.apple.com/cn/app//id1455050254?mt=8"
     }
     
+    public static var documentsPath: String {
+        return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first ?? ""
+    }
+    
     /** IDFA */
     public static var IDFA: String {
         return ASIdentifierManager.shared().advertisingIdentifier.uuidString

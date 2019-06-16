@@ -7,43 +7,99 @@
 //
 
 import UIKit
+import Moya
+import AVFoundation
 
 class PublicCameraViewController: BaseViewController {
     
+    fileprivate var videoView: PublicVideoCameraView = PublicVideoCameraView(frame: CGRect(x: 0, y: 0, width: Constant.screenWidth, height: Constant.screenHeight))
+    
+    fileprivate var takingView: UIView = UIView()
+    
+    fileprivate lazy var progressView: PublicVideoProgressView = {
+        let progressView = PublicVideoProgressView(frame: CGRect(x: 5, y: 5, width: Constant.screenWidth - 10, height: 5))
+        return progressView
+    }()
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let videoVC = PublicVideoCameraView(frame: CGRect(x: 0, y: 0, width: Constant.screenWidth, height: Constant.screenHeight))
-        videoVC.delegate = self
-        videoVC.setUpSession()
-        view.addSubview(videoVC)
-        videoVC.maxDuration = 10
-        videoVC.captureSession.startRunning()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            videoVC.startRecordVideo(filePath: MediaFileStruct.getVideoFileName())
-        }
-        
+    override var prefersStatusBarHidden: Bool {
+        return true
     }
     
-//    let data1 =  Moya.MultipartFormData(provider: .file(outputFileURL), name: "file", fileName: "file", mimeType: "mp4")
-//    var params: Dictionary<String, Any> = [String: Any]()
-//    params.updateValue("dddddddd", forKey: "title")
-//    params.updateValue(15, forKey: "timeLength")
-//    Network.default.request(CommonTargetTypeApi.uploadMultipart(VideoRequest.upload, [data1], params), successClosure: { (response) in
-//    print("ddd")
-//    }) { (error) in
-//    print("aaaaa")
-//    }
+    var urlArray: Array<URL> = [URL]()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        layoutView()
+    }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        dismiss(animated: true, completion: nil)
+    // MARK: - layoutView
+    fileprivate func layoutView() {
+        videoView.delegate = self
+        videoView.setUpSession()
+        view.addSubview(videoView)
+        videoView.maxDuration = 15
+        videoView.captureSession.startRunning()
+        
+        
+        let longTap: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longTapClick(_ :)))
+        takingView.layer.cornerRadius = 40
+        takingView.backgroundColor = UIColor.red
+        takingView.layer.borderWidth = 5
+        takingView.layer.borderColor = UIColor.withHex(hexString: "#E7465E", alpha: 0.5).cgColor
+        takingView.isUserInteractionEnabled = true
+        takingView.addGestureRecognizer(longTap)
+        view.addSubview(takingView)
+        takingView.snp.makeConstraints { (make) in
+            make.width.height.equalTo(80)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-Constant.barMargin - 30)
+        }
+        
+        view.addSubview(progressView)
+        
+        let button = UIButton()
+        button.setTitle("完成", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.backgroundColor = UIColor.red
+        button.addTarget(self, action: #selector(buttonClick), for: .touchUpInside)
+        view.addSubview(button)
+        button.snp.makeConstraints { (make) in
+            make.width.equalTo(100)
+            make.height.equalTo(40)
+            make.top.left.equalTo(100)
+        }
+    }
+    
+    // MARK: - Event
+    @objc fileprivate func longTapClick(_ sender: UILongPressGestureRecognizer) {
+        switch sender.state {
+        case .began:
+            videoView.startRecordVideo(filePath: MediaFileStruct.getVideoFileName())
+        case .changed: break
+        case .ended:
+            videoView.stopVideoRecoding()
+        default: break
+        }
+    }
+    
+    @objc func buttonClick() {
+        MediaFileStruct.mergeAndExportVideos(urlArray, outputPath: MediaFileStruct.getVideoFileName()) { (success, url) in
+            
+            
+            let videoData =  Moya.MultipartFormData(provider: .file(url), name: "file", fileName: "file", mimeType: "mp4")
+            var params: Dictionary<String, Any> = [String: Any]()
+            params.updateValue("测试一个合成视频", forKey: "title")
+            params.updateValue(15, forKey: "timeLength")
+            Network.default.request(CommonTargetTypeApi.uploadMultipart(VideoRequest.upload, [videoData], params), successClosure: { (response) in
+                self.dismiss(animated: true, completion: nil)
+            }) { (error) in
+                print("aaaaa")
+            }
+        }
     }
 }
 
@@ -54,8 +110,26 @@ extension PublicCameraViewController: PublicVideoCameraDelegate {
     }
     
     /** 视频录制结束 */
-    func publicVideoDidFinishRecording(_ success: Bool, filePath: String, currentDuration: TimeInterval, totalDuration: TimeInterval, isOverDuration: Bool) {
-        print("视频录制结束" + filePath + "当前时间：\(currentDuration), 总时间：\(totalDuration)")
+    func publicVideoDidFinishRecording(_ success: Bool, filePathUrl: URL, currentDuration: TimeInterval, totalDuration: TimeInterval, isOverDuration: Bool) {
+        print("视频录制结束：\(filePathUrl)" + "当前时间：\(currentDuration), 总时间：\(totalDuration)")
+        urlArray.append(filePathUrl)
+        print(urlArray)
+        if currentDuration < 15 {
+            progressView.suspensionProportion()
+        }else {
+
+            
+            
+//            let videoData =  Moya.MultipartFormData(provider: .file(filePathUrl), name: "file", fileName: "file", mimeType: "mp4")
+//            var params: Dictionary<String, Any> = [String: Any]()
+//            params.updateValue("测试视频", forKey: "title")
+//            params.updateValue(15, forKey: "timeLength")
+//            Network.default.request(CommonTargetTypeApi.uploadMultipart(VideoRequest.upload, [videoData], params), successClosure: { (response) in
+//                self.dismiss(animated: true, completion: nil)
+//            }) { (error) in
+//                print("aaaaa")
+//            }
+        }
     }
     
     /** 视频开始录制 */
@@ -66,6 +140,7 @@ extension PublicCameraViewController: PublicVideoCameraDelegate {
     /** 视频录制中 */
     func publicVideoDidRecording(filePath: String, currentDuration: TimeInterval, totalDuration: TimeInterval) {
         print("视频录制中" + filePath + "当前时间：\(currentDuration), 总时间：\(totalDuration)")
+        progressView.progress = CGFloat(currentDuration / 15.0)
     }
 
 }
@@ -74,10 +149,10 @@ extension PublicCameraViewController: PublicVideoCameraDelegate {
 
 
 struct MediaFileStruct {
-    static func getVideoFileName() -> String {
+    static func getVideoFileName(_ str: String = "/dasd") -> String {
         _ = createFolder()
-        let name = createFilename()
-        return "/\(filePath(name: name)).mp4"
+        let name = filePath(name: str)
+        return "\(name).mp4"
     }
     
     static func deleteVideoFile(filePath: String) -> Bool {
@@ -122,7 +197,7 @@ struct MediaFileStruct {
         if name.isEmpty {
             tempPath = App.bundelName + "/\(name)"
         }else {
-            tempPath = App.bundelName
+            tempPath = App.bundelName + "/\(String.randomStr(len: 5))"
         }
         let rootPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first ?? ""
         let filePath = rootPath + "/\(tempPath)"
@@ -145,7 +220,7 @@ struct MediaFileStruct {
     }
 
     static func createFilename() -> String {
-        return UUID().uuidString
+        return UUID().uuidString + String.randomStr(len: 3)
     }
     
     static fileprivate func writeToFile(image: UIImage, path: String) -> Bool {
@@ -158,6 +233,94 @@ struct MediaFileStruct {
             return false
         }
         return true
+    }
+    
+    /**
+     视频合成
+     
+     - parameter videoPathList: 视频地址
+     - parameter outputPath: 输出地址
+     - parameter presetName: 分辨率， 默认：AVAssetExportPreset640x480
+     - parameter outputFileType: 输出格式，默认：AVFileType.mp4
+     - parameter completion: 完成回调
+     */
+    static func mergeAndExportVideos(_ videoPathList: Array<URL>, outputPath: String, presetName: String = AVAssetExportPreset640x480, outputFileType: AVFileType = AVFileType.mp4, completion: @escaping ((Bool, URL) -> ())) {
+        if videoPathList.count < 0 { return }
+        
+        print("视频开始合成")
+        
+        let mixComposition: AVMutableComposition = AVMutableComposition()
+        
+        guard let audioTrank: AVMutableCompositionTrack = mixComposition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid) else {
+            return
+        }
+        
+        guard let videoTrank: AVMutableCompositionTrack = mixComposition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid) else {
+            return
+        }
+        
+        var totalDuration: CMTime = .zero
+        
+        videoPathList.forEach { (url) in
+            let asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey: false])
+            
+            // 向通道内加入视频
+            guard let assetVideoTrack = asset.tracks(withMediaType: .video).first else {
+                return
+            }
+            videoTrank.preferredTransform = assetVideoTrack.preferredTransform
+            do {
+                try videoTrank.insertTimeRange(CMTimeRange(start: .zero, duration: asset.duration), of: assetVideoTrack, at: totalDuration)
+            } catch {
+                print("videoTrack insert error \(error.localizedDescription)")
+            }
+
+            // 获取AVURLAsset中的音频
+            guard let assetAudioTrack = asset.tracks(withMediaType: .audio).first else {
+                return
+            }
+            
+            // 向通道内加入音频
+            do {
+                try audioTrank.insertTimeRange(CMTimeRange(start: .zero, duration: asset.duration), of: assetAudioTrack, at: totalDuration)
+            } catch {
+                print("audioTrack insert error \(error.localizedDescription)")
+            }
+
+
+            
+            totalDuration = CMTimeAdd(totalDuration, asset.duration)
+        }
+
+        let mergeFileURL = URL(fileURLWithPath: outputPath)
+        
+        let exporter = AVAssetExportSession(asset: mixComposition, presetName: presetName)
+        exporter?.outputURL = mergeFileURL
+        exporter?.outputFileType = outputFileType
+        exporter?.shouldOptimizeForNetworkUse = true
+        exporter?.timeRange = CMTimeRange(start: .zero, duration: totalDuration)
+        
+        exporter?.exportAsynchronously(completionHandler: {
+            // 导出状态为完成
+            switch exporter!.status {
+            case .unknown:
+                print("unknown")
+            case .failed:
+                print("failed")
+            case .waiting:
+                print("waiting")
+            case .exporting:
+                print("exporting")
+            case .cancelled:
+                print("cancelled")
+            case .completed:
+                print("视频合成完成")
+                completion(true, mergeFileURL)
+            @unknown default:
+                print("@unknown default")
+            }
+            
+        })
     }
     
 }
