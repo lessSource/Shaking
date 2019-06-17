@@ -163,7 +163,7 @@ class PublicVideoCameraView: UIView {
     
     /** 开始录制 */
     public func startRecordVideo(filePath: String) {
-        if totleDuration + currentDuration >= maxDuration {
+        if totleDuration >= maxDuration {
             return
         }
         let captureConnection = captureMovieFileOutput.connection(with: .video)
@@ -215,18 +215,6 @@ class PublicVideoCameraView: UIView {
         captureDevice.unlockForConfiguration()
     }
     
-    fileprivate func removeCurrentVideoFile(filePath: String) {
-        if filePath.isEmpty { return }
-        let manager = FileManager.default
-        if manager.fileExists(atPath: filePath) {
-            do {
-                try manager.removeItem(atPath: filePath)
-            } catch  {
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
     fileprivate func startCountDurTimer() {
         cuontDurTime = Timer(timeInterval: COUNT_DUR_TIMER_INTERVAL, repeats: true, block: { [weak self] (timer) in
             self?.timeTask(time: timer)
@@ -237,10 +225,11 @@ class PublicVideoCameraView: UIView {
     fileprivate func timeTask(time: Timer) {
         delegate?.publicVideoDidRecording(filePath: videoFilePath, currentDuration: currentDuration, totalDuration: totleDuration)
         // 当录制时间超过最长时间
-        if totleDuration + currentDuration >= maxDuration {
+        if totleDuration >= maxDuration {
             stopVideoRecoding()
         }else {
             currentDuration += COUNT_DUR_TIMER_INTERVAL
+            totleDuration += COUNT_DUR_TIMER_INTERVAL
         }
     }
     
@@ -259,21 +248,21 @@ extension PublicVideoCameraView: AVCaptureFileOutputRecordingDelegate {
             stopVideoRecoding()
             return
         }
+        currentDuration = 0
         startCountDurTimer()
         delegate?.publicVideoDidStartRecording(filePath: videoFilePath)
     }
     
     
     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
-        
         waitingForStop = false
-        if error != nil {
-            totleDuration += currentDuration
+        if error == nil {
             let isOverDuration = totleDuration >= maxDuration
             delegate?.publicVideoDidFinishRecording(true, filePathUrl: outputFileURL, currentDuration: currentDuration, totalDuration: totleDuration, isOverDuration: isOverDuration)
             print("结束录制")
         }else {
-            removeCurrentVideoFile(filePath: videoFilePath)
+            totleDuration -= currentDuration
+            PublicCameraStruct.deleteVideoFile(filePathArr: [videoFilePath])
             delegate?.publicVideoDidFinishRecording(false, filePathUrl: outputFileURL, currentDuration: currentDuration, totalDuration: totleDuration, isOverDuration: false)
             print("录制失败")
         }
