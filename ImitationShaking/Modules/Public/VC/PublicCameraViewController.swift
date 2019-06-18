@@ -16,39 +16,18 @@ class PublicCameraViewController: BaseViewController {
     
     // 摄像按钮
     fileprivate lazy var takingView: UIView = {
-        let view = UIView(frame: CGRect(x: Constant.screenWidth/2 - 40, y: Constant.screenHeight - 130, width: 80, height: 80))
-        view.layer.cornerRadius = 40
+        let view = UIView(frame: CGRect(x: Constant.screenWidth/2 - 35, y: Constant.screenHeight - 120, width: 70, height: 70))
+        view.layer.cornerRadius = 35
         view.isUserInteractionEnabled = true
         view.backgroundColor = UIColor.withHex(hexString: "#E7445A")
         return view
     }()
     
-//     圆环
-    fileprivate lazy var ringShapeLayer: CAShapeLayer = {
-        let shapeLayer = CAShapeLayer()
-//        shapeLayer.frame = self.takingView.bounds
-        let path = UIBezierPath()
-        path.addArc(withCenter: CGPoint(x: 200, y: 200), radius: 40, startAngle: 0, endAngle: CGFloat.pi * 2, clockwise: true)
-        
-//        let path = v(arcCenter: CGPoint(x: 200, y: 200), radius: 47, startAngle: 0, endAngle: CGFloat.pi * 2, clockwise: true)
-//        path.lineWidth = 47
-        
-        shapeLayer.path = path.cgPath
-        // 描线的线宽
-        shapeLayer.lineWidth = 40
-        // 描线起始点
-//        shapeLayer.strokeStart = 0
-        // 描线终点
-//        shapeLayer.strokeEnd = 1
-        shapeLayer.miterLimit = 0
-        
-        shapeLayer.lineCap = CAShapeLayerLineCap.round
-        
-        
-        shapeLayer.fillColor = UIColor.clear.cgColor
-        // 填充色
-        shapeLayer.strokeColor = UIColor.withHex(hexString: "#E7445A", alpha: 0.8).cgColor
-        return shapeLayer
+    // 圆环
+    fileprivate lazy var ringView: TakingRingView = {
+        let view = TakingRingView(frame: CGRect(x: 0, y: 0, width: 85, height: 85))
+        view.center = takingView.center
+        return view
     }()
 
     
@@ -80,24 +59,40 @@ class PublicCameraViewController: BaseViewController {
         videoView.maxDuration = 15
         videoView.captureSession.startRunning()
         
-        
         let longTap: UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longTapClick(_ :)))
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapGestureClick))
         takingView.addGestureRecognizer(longTap)
         takingView.addGestureRecognizer(tapGesture)
-        view.layer.addSublayer(ringShapeLayer)
+        view.addSubview(ringView)
         view.addSubview(takingView)
-
         view.addSubview(progressView)
-
+        let cancleButton = UIButton(frame: CGRect(x: 15, y: progressView.frame.maxY + 20, width: 25, height: 25))
+        cancleButton.addTarget(self, action: #selector(cancleButtonClick), for: .touchUpInside)
+        cancleButton.setBackgroundImage(R.image.icon_fork(), for: .normal)
+        view.addSubview(cancleButton)
+        
+        let deleteButton = UIButton()
+        deleteButton.setImage(R.image.icon_VideoDel(), for: .normal)
+        videoView.addSubview(deleteButton)
+//        deleteButton.hitTestEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: -10, right: -10)
+        deleteButton.addTarget(self, action: #selector(deleteButtonClick), for: .touchUpInside)
+        deleteButton.snp.makeConstraints { (make) in
+            make.centerY.equalTo(takingView)
+            make.right.equalTo(-30)
+            make.width.equalTo(44)
+            make.height.equalTo(44)
+        }
     }
     
     // MARK: - Event
     @objc fileprivate func longTapClick(_ sender: UILongPressGestureRecognizer) {
         print("longTapClick")
         switch sender.state {
-        case .began: 
-            videoView.startRecordVideo(filePath: PublicCameraStruct.getVideoFileName())
+        case .began:
+            if videoView.totleDuration < 15 {
+                videoView.startRecordVideo(filePath: PublicCameraStruct.getVideoFileName())
+                takingAnimation(0.5, radius: 5, forKey: "startRecordVideo")
+            }
         case .changed: break
         case .ended:
             videoView.stopVideoRecoding()
@@ -106,18 +101,50 @@ class PublicCameraViewController: BaseViewController {
     }
     
     @objc fileprivate func tapGestureClick() {
-//        print("tapGestureClick")
-        takingView.isHidden = true
-        videoView.startRecordVideo(filePath: PublicCameraStruct.getVideoFileName())
-
-        let animate: CABasicAnimation = CABasicAnimation(keyPath: "lineWidth")
-        animate.isRemovedOnCompletion = false
-        animate.duration = 1
-        animate.fromValue = 7
-        animate.toValue = 30
-        animate.repeatCount = 20
-        animate.autoreverses = true
-        ringShapeLayer.add(animate, forKey: "lineWidthKey")
+        if !videoView.isRecording {
+            if videoView.totleDuration < 15 {
+                videoView.startRecordVideo(filePath: PublicCameraStruct.getVideoFileName())
+                takingAnimation(0.5, radius: 5, forKey: "startRecordVideo")
+            }
+        }else {
+            videoView.stopVideoRecoding()
+        }
+    }
+    
+    @objc fileprivate func deleteButtonClick() {
+        if urlArray.count > 1 {
+            urlArray.remove(at: urlArray.count - 1)
+            print(urlArray)
+        }
+        print("deleteButtonClick")
+    }
+    
+    // 按钮动画
+    fileprivate func takingAnimation(_ scale: CGFloat, radius: CGFloat, forKey: String) {
+        let groupAnimation = CAAnimationGroup()
+        groupAnimation.duration = 0.4
+        groupAnimation.repeatCount = 1
+        groupAnimation.isRemovedOnCompletion = false
+        groupAnimation.fillMode = .forwards
+        
+        let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation.toValue = scale
+        let radiusAnimation = CABasicAnimation(keyPath: "cornerRadius")
+        radiusAnimation.toValue = radius
+        groupAnimation.animations = [scaleAnimation, radiusAnimation]
+        
+        takingView.layer.add(groupAnimation, forKey: forKey)
+    }
+    
+    // 圆环动画
+    fileprivate func ringAnimation() {
+        let scaleAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleAnimation.toValue = 1.2
+        scaleAnimation.isRemovedOnCompletion = false
+        scaleAnimation.fillMode = .forwards
+        ringView.layer.add(scaleAnimation, forKey: "ringView")
+        
+        self.ringView.lineWidth = 20
     }
     
     @objc func buttonClick() {
@@ -135,6 +162,11 @@ class PublicCameraViewController: BaseViewController {
             }
         }
     }
+    
+    // 取消
+    @objc fileprivate func cancleButtonClick() {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
 extension PublicCameraViewController: PublicVideoCameraDelegate {
@@ -146,12 +178,11 @@ extension PublicCameraViewController: PublicVideoCameraDelegate {
     /** 视频录制结束 */
     func publicVideoDidFinishRecording(_ success: Bool, filePathUrl: URL, currentDuration: TimeInterval, totalDuration: TimeInterval, isOverDuration: Bool) {
         print("视频录制结束：\(filePathUrl)" + "当前时间：\(currentDuration), 总时间：\(totalDuration)")
+        takingAnimation(1, radius: 35, forKey: "stopVideoRecoding")
         urlArray.append(filePathUrl)
-        print(urlArray)
         if totalDuration < 15 && success {
             progressView.suspensionProportion()
         }else {
-            ringShapeLayer.removeAllAnimations()
 
             
             

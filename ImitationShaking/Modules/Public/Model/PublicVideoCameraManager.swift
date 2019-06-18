@@ -76,9 +76,14 @@ class PublicVideoCameraView: UIView {
     public var minDuration: TimeInterval = 1
     /** 最大时长 */
     public var maxDuration: TimeInterval = Double.leastNormalMagnitude
+    /** 是否正在录制 */
+    fileprivate(set) var isRecording: Bool = false
+    
     
     fileprivate var waitingForStop: Bool?
     fileprivate var currentDuration: TimeInterval = 0
+    fileprivate var currentDurationArr: Array = [TimeInterval]()
+
     fileprivate var cuontDurTime: Timer?
 
     override init(frame: CGRect) {
@@ -108,7 +113,7 @@ class PublicVideoCameraView: UIView {
             print("获取视频设备失败")
             return
         }
-
+        
         do {
             captureDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
         } catch {
@@ -166,6 +171,7 @@ class PublicVideoCameraView: UIView {
         if totleDuration >= maxDuration {
             return
         }
+        isRecording = true
         let captureConnection = captureMovieFileOutput.connection(with: .video)
         // 如果正在录制，则重新录制，先暂停
         if captureMovieFileOutput.isRecording {
@@ -186,7 +192,13 @@ class PublicVideoCameraView: UIView {
             captureMovieFileOutput.stopRecording()
             videoFilePath = ""
         }
+        isRecording = false
         stopCountDurTimer()
+    }
+    
+    /** 移除视频 */
+    public func removelastVideo() {
+        
     }
     
     // MARK: - notification
@@ -258,6 +270,7 @@ extension PublicVideoCameraView: AVCaptureFileOutputRecordingDelegate {
         waitingForStop = false
         if error == nil {
             let isOverDuration = totleDuration >= maxDuration
+            currentDurationArr.append(currentDuration)
             delegate?.publicVideoDidFinishRecording(true, filePathUrl: outputFileURL, currentDuration: currentDuration, totalDuration: totleDuration, isOverDuration: isOverDuration)
             print("结束录制")
         }else {

@@ -65,6 +65,7 @@
 		CA279F6D22AE4D2200DE3CE8 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA279F6C22AE4D2200DE3CE8 /* RootViewController.swift */; };
 		CA279F7022AE588200DE3CE8 /* PublicShootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA279F6F22AE588200DE3CE8 /* PublicShootViewController.swift */; };
 		CA5063DC22B76EC7002651C0 /* PublicCameraStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5063DB22B76EC7002651C0 /* PublicCameraStruct.swift */; };
+		CA5D71A122B8B3CC0088A125 /* TakingRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA5D71A022B8B3CC0088A125 /* TakingRingView.swift */; };
 		CA93589522B1EC26004C7EFF /* LTitleItemLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA93589422B1EC26004C7EFF /* LTitleItemLayout.swift */; };
 		CA93589B22B20237004C7EFF /* LTitleBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA93589A22B20237004C7EFF /* LTitleBar.swift */; };
 		CA9AAAF322A66E160084B409 /* PublicUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9AAAF222A66E160084B409 /* PublicUserModel.swift */; };
@@ -170,6 +171,7 @@
 		CA279F6C22AE4D2200DE3CE8 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		CA279F6F22AE588200DE3CE8 /* PublicShootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicShootViewController.swift; sourceTree = "<group>"; };
 		CA5063DB22B76EC7002651C0 /* PublicCameraStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCameraStruct.swift; sourceTree = "<group>"; };
+		CA5D71A022B8B3CC0088A125 /* TakingRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakingRingView.swift; sourceTree = "<group>"; };
 		CA93589422B1EC26004C7EFF /* LTitleItemLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTitleItemLayout.swift; sourceTree = "<group>"; };
 		CA93589A22B20237004C7EFF /* LTitleBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTitleBar.swift; sourceTree = "<group>"; };
 		CA9AAAF222A66E160084B409 /* PublicUserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicUserModel.swift; sourceTree = "<group>"; };
@@ -585,6 +587,7 @@
 				CA16AF1F22B37D7F001A5BB5 /* PublicVideoCameraManager.swift */,
 				2AA3413A22A3B3D6005DE559 /* PublicBottomInputView.swift */,
 				2A0DEA6A22B51FEC0059C299 /* PublicVideoProgressView.swift */,
+				CA5D71A022B8B3CC0088A125 /* TakingRingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -938,6 +941,7 @@
 				2AA340E022999698005DE559 /* VideoUpdateViewController.swift in Sources */,
 				2AA3410E229C32AE005DE559 /* UIImage+Extension.swift in Sources */,
 				2AA3413722A38EB3005DE559 /* CommentListModel.swift in Sources */,
+				CA5D71A122B8B3CC0088A125 /* TakingRingView.swift in Sources */,
 				2AA340F8229ABEAA005DE559 /* HomeCollectionViewCell.swift in Sources */,
 				2AA3413222A2D24B005DE559 /* NetConst.swift in Sources */,
 				2AA3412722A16631005DE559 /* Date+Extension.swift in Sources */,

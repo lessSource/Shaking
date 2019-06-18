@@ -23,6 +23,8 @@ class PublicVideoProgressView: UIView {
         return view
     }()
     
+    fileprivate var viewArray: Array = [UIView]()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         clipsToBounds = true
@@ -49,6 +51,7 @@ class PublicVideoProgressView: UIView {
         let view = UIView(frame: CGRect(x: progressView.width - 2, y: 0, width: 2, height: height))
         view.backgroundColor = UIColor.white
         addSubview(view)
+        viewArray.append(view)
     }
     
     fileprivate func progressView(_ proportion: CGFloat) {
