@@ -12,6 +12,7 @@
 		2A0DEA6722B149320059C299 /* LHeaderContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA6622B149320059C299 /* LHeaderContentView.swift */; };
 		2A0DEA6922B27D7C0059C299 /* PublicCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA6822B27D7C0059C299 /* PublicCameraViewController.swift */; };
 		2A0DEA6B22B51FEC0059C299 /* PublicVideoProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA6A22B51FEC0059C299 /* PublicVideoProgressView.swift */; };
+		2A0DEA6D22B927DA0059C299 /* PublicVideoOperationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA6C22B927DA0059C299 /* PublicVideoOperationView.swift */; };
 		2A1026F222A8110B00C31746 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1026F122A8110B00C31746 /* Array+Extension.swift */; };
 		2AA3409E22998E50005DE559 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409D22998E50005DE559 /* AppDelegate.swift */; };
 		2AA340A022998E50005DE559 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409F22998E50005DE559 /* ViewController.swift */; };
@@ -107,6 +108,7 @@
 		2A0DEA6622B149320059C299 /* LHeaderContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LHeaderContentView.swift; sourceTree = "<group>"; };
 		2A0DEA6822B27D7C0059C299 /* PublicCameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCameraViewController.swift; sourceTree = "<group>"; };
 		2A0DEA6A22B51FEC0059C299 /* PublicVideoProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicVideoProgressView.swift; sourceTree = "<group>"; };
+		2A0DEA6C22B927DA0059C299 /* PublicVideoOperationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicVideoOperationView.swift; sourceTree = "<group>"; };
 		2A1026F122A8110B00C31746 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		2AA3409A22998E50005DE559 /* ImitationShaking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImitationShaking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AA3409D22998E50005DE559 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -588,6 +590,7 @@
 				2AA3413A22A3B3D6005DE559 /* PublicBottomInputView.swift */,
 				2A0DEA6A22B51FEC0059C299 /* PublicVideoProgressView.swift */,
 				CA5D71A022B8B3CC0088A125 /* TakingRingView.swift */,
+				2A0DEA6C22B927DA0059C299 /* PublicVideoOperationView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -950,6 +953,7 @@
 				2AA3413022A2CE92005DE559 /* MoyaTargetTypeEx.swift in Sources */,
 				2A1026F222A8110B00C31746 /* Array+Extension.swift in Sources */,
 				CA0D368222A0D68E004F6968 /* UIDevice+Extension.swift in Sources */,
+				2A0DEA6D22B927DA0059C299 /* PublicVideoOperationView.swift in Sources */,
 				2AA3411822A01BC5005DE559 /* PopUpViewManager.swift in Sources */,
 				2AA3412E22A2CE53005DE559 /* MoyaNetworkConfig.swift in Sources */,
 				2AA340F1229AA1D6005DE559 /* Constant.swift in Sources */,

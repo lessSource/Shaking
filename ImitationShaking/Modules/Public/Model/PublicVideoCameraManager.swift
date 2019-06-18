@@ -13,13 +13,13 @@ import AVFoundation
 protocol PublicVideoCameraDelegate: NSObjectProtocol {
     /** 当AVCaptureDevice实例检测到视频主题区域有实质性变化时 */
     func publicVideoCaptureDeviceDidChange()
-    
+
     /** 视频录制结束 */
     func publicVideoDidFinishRecording(_ success: Bool, filePathUrl: URL, currentDuration: TimeInterval, totalDuration: TimeInterval, isOverDuration: Bool)
-    
+
     /** 视频开始录制 */
     func publicVideoDidStartRecording(filePath: String)
-    
+
     /** 视频录制中 */
     func publicVideoDidRecording(filePath: String, currentDuration: TimeInterval, totalDuration: TimeInterval)
 
@@ -27,7 +27,7 @@ protocol PublicVideoCameraDelegate: NSObjectProtocol {
 
 extension PublicVideoCameraDelegate {
     func publicVideoCaptureDeviceDidChange() { }
-    func publicVideoDidFinishRecording(_ success: Bool, filePath: String, currentDuration: TimeInterval, totalDuration: TimeInterval, isOverDuration: Bool) { }
+    func publicVideoDidFinishRecording(_ success: Bool, filePathUrl: URL, currentDuration: TimeInterval, totalDuration: TimeInterval, isOverDuration: Bool) { }
     func publicVideoDidStartRecording(filePath: String) { }
     func publicVideoDidRecording(filePath: String, currentDuration: TimeInterval, totalDuration: TimeInterval) { }
 }
@@ -198,7 +198,12 @@ class PublicVideoCameraView: UIView {
     
     /** 移除视频 */
     public func removelastVideo() {
-        
+        if currentDurationArr.count > 1 {
+            totleDuration -= currentDurationArr.last!
+            currentDurationArr.remove(at: currentDurationArr.count - 1)
+            delegate?.publicVideoDidFinishRecording(false, filePathUrl: URL(fileURLWithPath: videoFilePath), currentDuration: 0, totalDuration: totleDuration, isOverDuration: false)
+
+        }
     }
     
     // MARK: - notification

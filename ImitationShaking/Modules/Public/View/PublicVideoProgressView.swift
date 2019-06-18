@@ -54,6 +54,12 @@ class PublicVideoProgressView: UIView {
         viewArray.append(view)
     }
     
+    public func removeProgressView() {
+        if viewArray.count > 1 {
+            viewArray.last!.removeFromSuperview()
+        }
+    }
+    
     fileprivate func progressView(_ proportion: CGFloat) {
         var pro = proportion
         pro = pro < 0 ? 0 : pro
