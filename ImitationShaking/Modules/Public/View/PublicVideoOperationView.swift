@@ -322,6 +322,14 @@ class PublicVideoOperationView: UIView {
 extension PublicVideoOperationView: OperationButtonDelegate {
     func operationButtonView(_ type: OperationButtonType, buttonView: OperationButtonView) {
         print(type.rawValue)
+        switch type {
+        case .upload:
+            let photosChooseVC = PhotosChooseViewController()
+            let navVC: BaseNavigationController = BaseNavigationController(rootViewController: photosChooseVC)
+            viewController()?.present(navVC, animated: true, completion: nil)
+        default: break
+        }
+        
     }
 }
 

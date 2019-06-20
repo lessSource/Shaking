@@ -13,6 +13,8 @@
 		2A0DEA6922B27D7C0059C299 /* PublicCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA6822B27D7C0059C299 /* PublicCameraViewController.swift */; };
 		2A0DEA6B22B51FEC0059C299 /* PublicVideoProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA6A22B51FEC0059C299 /* PublicVideoProgressView.swift */; };
 		2A0DEA6D22B927DA0059C299 /* PublicVideoOperationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA6C22B927DA0059C299 /* PublicVideoOperationView.swift */; };
+		2A0DEA6F22BBB80F0059C299 /* PhotosChooseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA6E22BBB80F0059C299 /* PhotosChooseViewController.swift */; };
+		2A0DEA7122BBBC470059C299 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA7022BBBC470059C299 /* UIView+Extension.swift */; };
 		2A1026F222A8110B00C31746 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1026F122A8110B00C31746 /* Array+Extension.swift */; };
 		2AA3409E22998E50005DE559 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409D22998E50005DE559 /* AppDelegate.swift */; };
 		2AA340A022998E50005DE559 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409F22998E50005DE559 /* ViewController.swift */; };
@@ -109,6 +111,8 @@
 		2A0DEA6822B27D7C0059C299 /* PublicCameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicCameraViewController.swift; sourceTree = "<group>"; };
 		2A0DEA6A22B51FEC0059C299 /* PublicVideoProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicVideoProgressView.swift; sourceTree = "<group>"; };
 		2A0DEA6C22B927DA0059C299 /* PublicVideoOperationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicVideoOperationView.swift; sourceTree = "<group>"; };
+		2A0DEA6E22BBB80F0059C299 /* PhotosChooseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosChooseViewController.swift; sourceTree = "<group>"; };
+		2A0DEA7022BBBC470059C299 /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		2A1026F122A8110B00C31746 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		2AA3409A22998E50005DE559 /* ImitationShaking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImitationShaking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AA3409D22998E50005DE559 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -505,6 +509,7 @@
 			isa = PBXGroup;
 			children = (
 				2AA34113229ED7B3005DE559 /* UIView+Frame.swift */,
+				2A0DEA7022BBBC470059C299 /* UIView+Extension.swift */,
 			);
 			path = UIView;
 			sourceTree = "<group>";
@@ -627,6 +632,7 @@
 			children = (
 				CA279F6F22AE588200DE3CE8 /* PublicShootViewController.swift */,
 				2A0DEA6822B27D7C0059C299 /* PublicCameraViewController.swift */,
+				2A0DEA6E22BBB80F0059C299 /* PhotosChooseViewController.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -952,6 +958,7 @@
 				CA93589B22B20237004C7EFF /* LTitleBar.swift in Sources */,
 				2AA3413022A2CE92005DE559 /* MoyaTargetTypeEx.swift in Sources */,
 				2A1026F222A8110B00C31746 /* Array+Extension.swift in Sources */,
+				2A0DEA7122BBBC470059C299 /* UIView+Extension.swift in Sources */,
 				CA0D368222A0D68E004F6968 /* UIDevice+Extension.swift in Sources */,
 				2A0DEA6D22B927DA0059C299 /* PublicVideoOperationView.swift in Sources */,
 				2AA3411822A01BC5005DE559 /* PopUpViewManager.swift in Sources */,
@@ -961,6 +968,7 @@
 				CA93589522B1EC26004C7EFF /* LTitleItemLayout.swift in Sources */,
 				2AA3413B22A3B3D6005DE559 /* PublicBottomInputView.swift in Sources */,
 				CA5063DC22B76EC7002651C0 /* PublicCameraStruct.swift in Sources */,
+				2A0DEA6F22BBB80F0059C299 /* PhotosChooseViewController.swift in Sources */,
 				CAA1883E22B0DA8E0077B7AA /* LTitleBarLayout.swift in Sources */,
 				CA9DC16322A4CBC300BF331A /* Int+Extension.swift in Sources */,
 				CA9AAAF522A66E4E0084B409 /* HomeVideoListModel.swift in Sources */,
