@@ -8,6 +8,29 @@
 
 import UIKit
 
+
+enum OperationButtonType: String {
+    case `default`
+    case flip = "翻转"
+    case speed = "快慢速"
+    case filter = "滤镜"
+    case beautify = "美化"
+    case countdown = "倒计时"
+    case shearMusic = "剪音乐"
+    case more = "更多"
+    case props = "道具"
+    case upload = "上传"
+}
+
+
+protocol OperationButtonDelegate: NSObjectProtocol {
+    func operationButtonView(_ type: OperationButtonType, buttonView: OperationButtonView)
+}
+
+extension OperationButtonDelegate {
+    func operationButtonView(_ type: OperationButtonType, buttonView: OperationButtonView) { }
+}
+
 class PublicVideoOperationView: UIView {
     
     // 摄像按钮
@@ -35,38 +58,78 @@ class PublicVideoOperationView: UIView {
     // 翻转
     fileprivate lazy var flipButtonView: OperationButtonView = {
         let buttonView = OperationButtonView()
+        buttonView.delegate = self
+        buttonView.nameLabel.text = OperationButtonType.flip.rawValue
         return buttonView
     }()
     
     // 快慢速
     fileprivate lazy var speedButtonView: OperationButtonView = {
         let buttonView = OperationButtonView()
+        buttonView.delegate = self
+        buttonView.nameLabel.text = OperationButtonType.speed.rawValue
         return buttonView
     }()
     
     // 滤镜
     fileprivate lazy var filterButtonView: OperationButtonView = {
         let buttonView = OperationButtonView()
+        buttonView.delegate = self
+        buttonView.nameLabel.text = OperationButtonType.filter.rawValue
         return buttonView
     }()
     
     // 美化
     fileprivate lazy var beautifyButtonView: OperationButtonView = {
         let buttonView = OperationButtonView()
+        buttonView.delegate = self
+        buttonView.nameLabel.text = OperationButtonType.beautify.rawValue
         return buttonView
     }()
     
     // 倒计时
     fileprivate lazy var countdownButtonView: OperationButtonView = {
         let buttonView = OperationButtonView()
+        buttonView.delegate = self
+        buttonView.nameLabel.text = OperationButtonType.countdown.rawValue
+        return buttonView
+    }()
+    
+    // 剪音乐
+    fileprivate lazy var shearMusicButtonView: OperationButtonView = {
+        let buttonView = OperationButtonView()
+        buttonView.delegate = self
+        buttonView.nameLabel.text = OperationButtonType.shearMusic.rawValue
         return buttonView
     }()
     
     // 更多
     fileprivate lazy var moreButtonView: OperationButtonView = {
         let buttonView = OperationButtonView()
+        buttonView.delegate = self
+        buttonView.nameLabel.text = OperationButtonType.more.rawValue
         return buttonView
     }()
+    
+    // 道具
+    fileprivate lazy var propsButtonView: OperationButtonView = {
+        let buttonView = OperationButtonView()
+        buttonView.delegate = self
+        buttonView.nameLabel.text = OperationButtonType.props.rawValue
+        buttonView.topImage = 10
+        return buttonView
+    }()
+    
+    // 上传
+    fileprivate lazy var uploadButtonView: OperationButtonView = {
+        let buttonView = OperationButtonView()
+        buttonView.delegate = self
+        buttonView.nameLabel.text = OperationButtonType.upload.rawValue
+        buttonView.topImage = 10
+        return buttonView
+    }()
+    
+    fileprivate var stackView: UIStackView!
     
     // 按钮状态
     fileprivate(set) var isTakingState: Bool = false
@@ -90,19 +153,50 @@ class PublicVideoOperationView: UIView {
         addSubview(progressView)
         addSubview(ringView)
         addSubview(takingView)
-        
+        addSubview(propsButtonView)
+        addSubview(uploadButtonView)
+
         let cancleButton = UIButton(frame: CGRect(x: 15, y: progressView.frame.maxY + 20, width: 25, height: 25))
         cancleButton.addTarget(self, action: #selector(cancleButtonClick), for: .touchUpInside)
         cancleButton.setBackgroundImage(R.image.icon_fork(), for: .normal)
         addSubview(cancleButton)
         
-        let stackView: UIStackView = UIStackView(arrangedSubviews: [flipButtonView, speedButtonView, filterButtonView, beautifyButtonView, countdownButtonView, moreButtonView])
-        stackView.frame = CGRect(x: Constant.screenWidth - 60, y: progressView.frame.maxY + 20, width: 50, height: 360)
+        let musicButton: UIButton = UIButton()
+        musicButton.setTitle("选择音乐", for: .normal)
+        musicButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        musicButton.setTitleColor(.white, for: .normal)
+        musicButton.addTarget(self, action: #selector(musicButtonClick), for: .touchUpInside)
+        addSubview(musicButton)
+        musicButton.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(cancleButton)
+        }
+        
+        stackView = UIStackView(arrangedSubviews: [flipButtonView, speedButtonView, filterButtonView, beautifyButtonView, countdownButtonView, moreButtonView])
+        stackView.frame = CGRect(x: Constant.screenWidth - 60, y: progressView.frame.maxY + 20, width: 50, height: 70 * CGFloat(stackView.arrangedSubviews.count))
         stackView.distribution = .fillEqually
         stackView.axis = .vertical
         addSubview(stackView)
 
+        propsButtonView.snp.makeConstraints { (make) in
+            make.centerY.equalTo(takingView).offset(15)
+            make.left.equalTo(60)
+            make.height.equalTo(80)
+            make.width.equalTo(50)
+        }
         
+        uploadButtonView.snp.makeConstraints { (make) in
+            make.centerY.equalTo(takingView).offset(15)
+            make.right.equalTo(-60)
+            make.height.equalTo(80)
+            make.width.equalTo(50)
+        }
+        
+        PublicCameraStruct.getPhotoAlbumAImage { (image) in
+            self.uploadButtonView.iconImage.image = image
+        }
+        
+
     }
     
     // MARK: - GestureRecognizer
@@ -179,6 +273,12 @@ class PublicVideoOperationView: UIView {
         viewController()?.dismiss(animated: true, completion: nil)
     }
     
+    // 选择音乐
+    @objc fileprivate func musicButtonClick() {
+        stackView.insertArrangedSubview(shearMusicButtonView, at: 5)
+        stackView.height = CGFloat(70 * stackView.arrangedSubviews.count)
+    }
+    
     // MARK: - public
     public func takingAnimation() {
         if isTakingState {
@@ -219,8 +319,17 @@ class PublicVideoOperationView: UIView {
     }
 }
 
+extension PublicVideoOperationView: OperationButtonDelegate {
+    func operationButtonView(_ type: OperationButtonType, buttonView: OperationButtonView) {
+        print(type.rawValue)
+    }
+}
+
+
 
 class OperationButtonView: UIView {
+    
+    public weak var delegate: OperationButtonDelegate?
     
     public var iconImage: UIImageView = {
         let image = UIImageView()
@@ -233,6 +342,14 @@ class OperationButtonView: UIView {
         label.textColor = UIColor.white
         return label
     }()
+    
+    public var topImage: CGFloat = 5 {
+        didSet {
+            nameLabel.snp.updateConstraints { (make) in
+                make.top.equalTo(iconImage.snp_bottom).offset(topImage)
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -247,18 +364,27 @@ class OperationButtonView: UIView {
     fileprivate func layoutView() {
         addSubview(iconImage)
         addSubview(nameLabel)
-        iconImage.backgroundColor = .red
-        nameLabel.text = "翻转"
+        
+        iconImage.isUserInteractionEnabled = true
+        let iconImageTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(iconImageClick))
+        iconImage.addGestureRecognizer(iconImageTap)
         
         iconImage.snp.makeConstraints { (make) in
             make.top.equalTo(5)
             make.centerX.equalToSuperview()
-            make.height.width.equalTo(35)
+            make.height.width.equalTo(40)
         }
         
         nameLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalTo(iconImage.snp_bottom).offset(2)
+            make.top.equalTo(iconImage.snp_bottom).offset(topImage)
         }
+    }
+    
+    @objc fileprivate func iconImageClick() {
+        guard let name = nameLabel.text else {
+            return
+        }
+        delegate?.operationButtonView(OperationButtonType(rawValue: name) ?? .`default`, buttonView: self)
     }
 }

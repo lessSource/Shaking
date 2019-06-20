@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import Photos
 
 struct PublicCameraStruct {
     
@@ -138,6 +139,38 @@ struct PublicCameraStruct {
         }
     }
     
+    
+    // 获取相册中图片
+    static func getPhotoAlbumAImage(_ successImage: @escaping (UIImage?) -> ()) {
+        
+        DispatchQueue.global().async {
+            var firstImage: UIImage?
+            
+            // 获取所有资源
+            let allPhotosOptions = PHFetchOptions()
+            // 按照创建时间倒叙
+            allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+            // 只获取图片
+            allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+
+            let assetsFetchResult: PHFetchResult<PHAsset> = PHAsset.fetchAssets(with: .image, options: allPhotosOptions)
+
+            guard let imagePHAsset = assetsFetchResult.firstObject else {
+                firstImage = R.image.icon_fork()
+                return
+            }
+
+            let imageManager: PHCachingImageManager = PHCachingImageManager()
+
+            imageManager.requestImage(for: imagePHAsset, targetSize: CGSize(width: 50, height: 50), contentMode: .aspectFill, options: nil) { (image, dic) in
+                firstImage = image
+            }
+
+            DispatchQueue.main.async {
+                successImage(firstImage)
+            }
+        }
+    }
     
 //    static func getImageByName(name: String) -> UIImage? {
 //        if name.isEmpty { return nil }
