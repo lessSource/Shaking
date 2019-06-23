@@ -12,6 +12,75 @@ import Photos
 
 struct PublicCameraStruct {
     
+    /** 处理速度视频 */
+    static func setSpeedWithVideo(_ url: URL, completed: (() -> ())) {
+        DispatchQueue.global().async {
+            print(Thread.current)
+            // 获取视频
+            let videoAsset = AVURLAsset(url: url, options: nil)
+            // 视频混合
+            let mixComposition: AVMutableComposition = AVMutableComposition()
+            // 视频轨道
+            let compositionVideoTrack = mixComposition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid)
+            // 音频轨道
+            let compositionAudioTrack = mixComposition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
+            // 视频方向
+            guard var videoTransform = videoAsset.tracks(withMediaType: .video).last?.preferredTransform else { return }
+            if videoTransform.a == 0 && videoTransform.b == 1.0 && videoTransform.c == -1.0 && videoTransform.d == 0 {
+                print("垂直拍摄")
+                videoTransform = CGAffineTransform(rotationAngle: CGFloat.pi/2)
+            }else if videoTransform.a == 0 && videoTransform.b == -1.0 && videoTransform.c == 1.0 && videoTransform.d == 0 {
+                print("倒立拍摄")
+                videoTransform = CGAffineTransform(rotationAngle: -CGFloat.pi/2)
+            }else if videoTransform.a == 1.0 && videoTransform.b == 0 && videoTransform.c == 0 && videoTransform.d == 1.0 {
+                print("Home键右侧水平拍摄")
+                videoTransform = CGAffineTransform(rotationAngle: 0)
+            }else if videoTransform.a == -1.0 && videoTransform.b == 0 && videoTransform.c == 0 && videoTransform.d == -1.0 {
+                print("Home键左侧水平拍摄")
+                videoTransform = CGAffineTransform(rotationAngle: CGFloat.pi)
+            }
+            // 根据视频的方向同步视频轨道方向
+            compositionVideoTrack?.preferredTransform = videoTransform
+            compositionVideoTrack?.naturalTimeScale = 600
+            
+            do {
+                // 插入视频轨道
+                try compositionVideoTrack?.insertTimeRange(CMTimeRange(start: .zero, duration: videoAsset.duration), of: videoAsset.tracks(withMediaType: .video).first!, at: .zero)
+                // 插入音频轨道
+                try compositionAudioTrack?.insertTimeRange(CMTimeRange(start: .zero, duration: videoAsset.duration), of: videoAsset.tracks(withMediaType: .audio).first!, at: .zero)
+            } catch {
+                print(error.localizedDescription)
+            }
+            // 适配视频速度比率
+            var scale: Int64 = Int64(1.0)
+            scale = Int64(2.0)
+            
+            // 根据速度比率调节音频和视频
+            compositionVideoTrack?.scaleTimeRange(CMTimeRange(start: .zero, duration: videoAsset.duration), toDuration: CMTimeMake(value: videoAsset.duration.value * scale, timescale: videoAsset.duration.timescale))
+            
+            compositionAudioTrack?.scaleTimeRange(CMTimeRange(start: .zero, duration: videoAsset.duration), toDuration: CMTimeMake(value: videoAsset.duration.value * scale, timescale: videoAsset.duration.timescale))
+            
+            // 配置导出
+            let assetExport: AVAssetExportSession? = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPreset1280x720)
+            // 导出视频的临时保存路径
+            let exportPath = getVideoFileName()
+            let exportUrl = URL(fileURLWithPath: exportPath)
+            
+            // 导出视频的格式 .mp4
+            assetExport?.outputFileType = .mp4
+            assetExport?.outputURL = exportUrl
+            assetExport?.shouldOptimizeForNetworkUse = true
+            
+            assetExport?.exportAsynchronously(completionHandler: {
+                DispatchQueue.main.async {
+                    completed()
+                }
+            })
+
+
+        }
+    }
+    
     
     /**
      视频合成
