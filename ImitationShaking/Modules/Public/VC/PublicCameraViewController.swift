@@ -25,6 +25,7 @@ class PublicCameraViewController: BaseViewController {
     fileprivate lazy var operationView: PublicVideoOperationView = {
         let view = PublicVideoOperationView(frame: CGRect(x: 0, y: 0, width: Constant.screenWidth, height: Constant.screenHeight))
         view.backgroundColor = UIColor(white: 1, alpha: 0)
+//        view.dele
         return view
     }()
     
@@ -67,7 +68,11 @@ class PublicCameraViewController: BaseViewController {
 //
     }
     
-
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        videoView.switchCamera()
+//        videoView.hasToTurnoffTheLights()
+        videoView.changeSpeed()
+    }
     
     
     @objc fileprivate func deleteButtonClick() {

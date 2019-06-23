@@ -206,6 +206,95 @@ class PublicVideoCameraView: UIView {
         }
     }
     
+    /** 切换摄像头 */
+    public func switchCamera() {
+        let newCamara: AVCaptureDevice?
+        let newInput: AVCaptureDeviceInput?
+        // 另一个摄像头位置
+        let position = captureDeviceInput?.device.position
+        if position == .front {
+            newCamara = cameraWithPosition(.back)
+        }else {
+            newCamara = cameraWithPosition(.front)
+        }
+        guard let camara = newCamara else {
+            return
+        }
+        // 生成新的输入
+        do {
+            newInput = try AVCaptureDeviceInput(device: camara)
+        } catch {
+            print(error.localizedDescription)
+            return
+        }
+        captureSession.beginConfiguration()
+        captureSession.removeInput(captureDeviceInput!)
+        if captureSession.canAddInput(newInput!) {
+            captureSession.addInput(newInput!)
+            captureDeviceInput = newInput
+        }else {
+            captureSession.addInput(captureDeviceInput!)
+        }
+        captureSession.commitConfiguration()
+    }
+    
+    // 照明灯
+    public func hasToTurnoffTheLights() {
+        self.captureDevice = cameraWithPosition(.back)
+        if self.captureDevice?.hasTorch == true {
+            do {
+                try captureDevice?.lockForConfiguration()
+            } catch {
+                print(error.localizedDescription)
+            }
+            if captureDevice?.torchMode == .on {
+                captureDevice?.torchMode = .off
+            }else if captureDevice?.torchMode == .off {
+                captureDevice?.torchMode = .on
+            }else if captureDevice?.torchMode == .auto {
+                captureDevice?.torchMode = .off
+            }
+            captureDevice?.unlockForConfiguration()
+        }
+    }
+    
+    // 切换快慢速
+    public func changeSpeed() {
+        guard let deviceVideo = captureDeviceInput?.device else {
+            return
+        }
+        var selectedFormet: AVCaptureDevice.Format?
+        var frameRateRange: AVFrameRateRange?
+        let desiredFPS = 240.0
+        var maxWidth: Int32 = 0
+        for format in deviceVideo.formats {
+            for range in format.videoSupportedFrameRateRanges {
+                let desc = format.formatDescription
+                let dimensions = CMVideoFormatDescriptionGetDimensions(desc)
+                let width: Int32 = dimensions.width
+                if range.minFrameRate <= desiredFPS && desiredFPS <= range.maxFrameRate && width >= maxWidth {
+                    selectedFormet = format
+                    frameRateRange = range
+                    maxWidth = width
+                }
+                
+            }
+        }
+        guard let formet = selectedFormet, let range = frameRateRange else {
+            return
+        }
+        do {
+            try deviceVideo.lockForConfiguration()
+        } catch  {
+            print(error.localizedDescription)
+        }
+        deviceVideo.activeFormat = formet
+        deviceVideo.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: Int32(desiredFPS))
+        deviceVideo.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: Int32(desiredFPS))
+        
+        print(deviceVideo.formats)
+    }
+    
     // MARK: - notification
     fileprivate func addNotification(to captureDevice: AVCaptureDevice) {
         // 注意 添加区域改变捕获通知必须设置设备允许捕获
@@ -256,6 +345,20 @@ class PublicVideoCameraView: UIView {
             self.cuontDurTime = nil
         }
     }
+    
+    // 根据前后位置拿到对应的摄像头
+    fileprivate func cameraWithPosition(_ position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: .video, position: position)
+        for device in discoverySession.devices {
+            if device.position == position {
+                return device
+            }
+        }
+        return nil
+    }
+    
+
+    
 }
 
 

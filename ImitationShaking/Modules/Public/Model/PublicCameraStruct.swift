@@ -172,6 +172,22 @@ struct PublicCameraStruct {
         }
     }
     
+    // 判断是否有摄像头
+    static func isCameraAvailable() -> Bool {
+        return UIImagePickerController.isSourceTypeAvailable(.camera)
+    }
+    
+    // 前摄像头是否可用
+    static func isFrontCameraAvailable() -> Bool {
+        return UIImagePickerController.isCameraDeviceAvailable(.front)
+    }
+    
+    // 后摄像头是否可用
+    static func isRearCameraAvailable() -> Bool {
+        return UIImagePickerController.isCameraDeviceAvailable(.rear)
+    }
+    
+    
 //    static func getImageByName(name: String) -> UIImage? {
 //        if name.isEmpty { return nil }
 //        let image = UIImage(contentsOfFile: filePath(name: name))
