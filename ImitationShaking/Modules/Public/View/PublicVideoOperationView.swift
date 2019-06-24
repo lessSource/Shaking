@@ -129,6 +129,20 @@ class PublicVideoOperationView: UIView {
         return buttonView
     }()
     
+    // 快慢速切换
+    fileprivate lazy var speedSegmented: UISegmentedControl = {
+        let speedSegmented = UISegmentedControl(items: ["极慢","慢","标准","快","极快"])
+        speedSegmented.layer.cornerRadius = 4
+        speedSegmented.frame =  CGRect(x: 30, y: self.ringView.y - 50, width: Constant.screenWidth - 60, height: 40)
+        speedSegmented.backgroundColor = UIColor(white: 0.0, alpha: 0.3)
+        speedSegmented.tintColor = UIColor.white
+        speedSegmented.setBackgroundImage(UIImage.colorCreateImage(UIColor.clear, size: speedSegmented.size), for: .normal, barMetrics: .default)
+        speedSegmented.setBackgroundImage(UIImage.colorCreateImage(UIColor.clear, size: speedSegmented.size), for: .selected, barMetrics: .default)
+        speedSegmented.isHidden = true
+        speedSegmented.setDividerImage(UIImage.colorCreateImage(UIColor.clear, size: CGSize(width: 1, height: speedSegmented.height)), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
+        return speedSegmented
+    }()
+    
     fileprivate var stackView: UIStackView!
     
     // 按钮状态
@@ -155,7 +169,12 @@ class PublicVideoOperationView: UIView {
         addSubview(takingView)
         addSubview(propsButtonView)
         addSubview(uploadButtonView)
-
+        addSubview(speedSegmented)
+        
+        speedSegmented.addTarget(self, action: #selector(speedSegmentedClick(_ :)), for: .valueChanged)
+        changeSegmentedColor(2)
+        speedSegmented.selectedSegmentIndex = 2
+        
         let cancleButton = UIButton(frame: CGRect(x: 15, y: progressView.frame.maxY + 20, width: 25, height: 25))
         cancleButton.addTarget(self, action: #selector(cancleButtonClick), for: .touchUpInside)
         cancleButton.setBackgroundImage(R.image.icon_fork(), for: .normal)
@@ -306,6 +325,11 @@ class PublicVideoOperationView: UIView {
         stackView.height = CGFloat(70 * stackView.arrangedSubviews.count)
     }
     
+    // 快慢速切换
+    @objc fileprivate func speedSegmentedClick(_ segmented: UISegmentedControl) {
+        changeSegmentedColor(segmented.selectedSegmentIndex)
+    }
+    
     // MARK: - public
     public func takingAnimation() {
         if isTakingState {
@@ -341,8 +365,21 @@ class PublicVideoOperationView: UIView {
         scaleAnimation.isRemovedOnCompletion = false
         scaleAnimation.fillMode = .forwards
         ringView.layer.add(scaleAnimation, forKey: "ringView")
-        
         self.ringView.lineWidth = 20
+    }
+    
+    // 切换UISegmented
+    fileprivate func changeSegmentedColor(_ selectIndex: Int) {
+        let itemArray = speedSegmented.subviews.sorted { $0.x < $1.x }
+        print(itemArray)
+        for (i, item) in itemArray.enumerated() {
+            if i == selectIndex {
+                item.backgroundColor = UIColor.white
+                item.layer.cornerRadius = 4
+            }else {
+                item.backgroundColor = UIColor.clear
+            }
+        }
     }
 }
 
@@ -354,6 +391,8 @@ extension PublicVideoOperationView: OperationButtonDelegate {
             let photosChooseVC = PhotosChooseViewController()
             let navVC: BaseNavigationController = BaseNavigationController(rootViewController: photosChooseVC)
             viewController()?.present(navVC, animated: true, completion: nil)
+        case .speed:
+            speedSegmented.isHidden = !speedSegmented.isHidden
         default: break
         }
         
