@@ -18,8 +18,8 @@ class PhotosChooseViewController: BaseViewController {
         magic.magicView.layoutStyle = .divide
         magic.magicView.switchStyle = .default
         magic.magicView.navigationHeight = 40
-        magic.magicView.dataSource = self
-        magic.magicView.delegate = self
+//        magic.magicView.dataSource = self
+//        magic.magicView.delegate = self
         return magic
     }()
     
@@ -72,22 +72,22 @@ class PhotosChooseViewController: BaseViewController {
     }
 }
 
-extension PhotosChooseViewController: VTMagicViewDelegate, VTMagicViewDataSource {
-    func menuTitles(for magicView: VTMagicView) -> [String] {
-        return ["视频", "图片"]
-    }
+//extension PhotosChooseViewController: VTMagicViewDelegate, VTMagicViewDataSource {
+//    func menuTitles(for magicView: VTMagicView) -> [String] {
+//        return ["视频", "图片"]
+//    }
+//
+//    func magicView(_ magicView: VTMagicView, menuItemAt itemIndex: UInt) -> UIButton {
+//        let button: UIButton? = magicView.dequeueReusableItem(withIdentifier: "dddd")
+//        return button!
+//    }
+//
+//    func magicView(_ magicView: VTMagicView, viewControllerAtPage pageIndex: UInt) -> UIViewController {
+//
+//    }
     
-    func magicView(_ magicView: VTMagicView, menuItemAt itemIndex: UInt) -> UIButton {
-        let button: UIButton? = magicView.dequeueReusableItem(withIdentifier: "dddd")
-        return button!
-    }
     
-    func magicView(_ magicView: VTMagicView, viewControllerAtPage pageIndex: UInt) -> UIViewController {
-        <#code#>
-    }
-    
-    
-}
+//}
 
 
 extension PhotosChooseViewController: UICollectionViewDelegate, UICollectionViewDataSource {
