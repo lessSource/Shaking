@@ -97,44 +97,44 @@ class HomeViewController: BaseViewController {
     
     // 测试头像
     fileprivate func requestHeadImage() {
-        var params: Dictionary = [String: Any]()
-        let image = UIImage(named: "icon_music")
-        let str: String = "意大利"
-        let data1 = str.data(using: String.Encoding.utf8)
+//        var params: Dictionary = [String: Any]()
+//        let image = UIImage(named: "icon_music")
+//        let str: String = "意大利"
+//        let data1 = str.data(using: String.Encoding.utf8)
 
         
         
-        if let jsonPath = R.file.provincesDataJson(), let school = R.file.schoolDataJson() {
-            do {
-                let jsonData = try Data(contentsOf: jsonPath)
-                
-                let schoolData = try Data(contentsOf: school)
-                
-                let ddd: String = String()
-                
-                let dd: Int = Int()
-                
-                let dddd: CGFloat = CGFloat()
-                
-//                let array = try JSON(data: jsonData)
-                
-//                let array1 = try JSON(data: schoolData)
-                let image = R.image.icon_music()?.pngData() ?? Data()
-                
-                let data =  Moya.MultipartFormData(provider: .data(image), name: "headImg", fileName: "headImg", mimeType: "png")
-
-                Network.default.request(CommonTargetTypeApi.uploadMultipart(LoginRegisterRequest.headImage, [data], nil), successClosure: { (response) in
-                    print("ddd")
-                }) { (error) in
-                    print("aaaaa")
-                }
-                
-//                print(array, array1)
-                
-            } catch {
-                
-            }
-            
+//        if let jsonPath = R.file.provincesDataJson(), let school = R.file.schoolDataJson() {
+//            do {
+////                let jsonData = try Data(contentsOf: jsonPath)
+//
+////                let schoolData = try Data(contentsOf: school)
+//
+////                let ddd: String = String()
+//
+////                let dd: Int = Int()
+//
+////                let dddd: CGFloat = CGFloat()
+//
+////                let array = try JSON(data: jsonData)
+//
+////                let array1 = try JSON(data: schoolData)
+//                let image = R.image.icon_music()?.pngData() ?? Data()
+//
+//                let data =  Moya.MultipartFormData(provider: .data(image), name: "headImg", fileName: "headImg", mimeType: "png")
+//
+//                Network.default.request(CommonTargetTypeApi.uploadMultipart(LoginRegisterRequest.headImage, [data], nil), successClosure: { (response) in
+//                    print("ddd")
+//                }) { (error) in
+//                    print("aaaaa")
+//                }
+//
+////                print(array, array1)
+//
+//            } catch {
+//
+//            }
+        
         }
         
         
@@ -154,7 +154,7 @@ class HomeViewController: BaseViewController {
 //        }) { (error) in
 //
 //        }
-    }
+//    }
 }
 
 
@@ -192,7 +192,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let loginVC = LoginViewController()
+//        let loginVC = LoginViewController()
         //            loginVC.modalPresentationStyle = .overCurrentContext
         //            self.definesPresentationContext = true
 //        loginVC.modalPresentationStyle = .overCurrentContext

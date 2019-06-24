@@ -139,38 +139,58 @@ struct PublicCameraStruct {
         }
     }
     
-    
-    // 获取相册中图片
-    static func getPhotoAlbumAImage(_ successImage: @escaping (UIImage?) -> ()) {
-        
+    // 获取相册中资源
+    static func getPhotoAlbumResources(_ mediaType: PHAssetMediaType = PHAssetMediaType.unknown, successPHAsset: @escaping (PHFetchResult<PHAsset>) -> ()) {
         DispatchQueue.global().async {
-            var firstImage: UIImage?
+            
+            var mediaTypePHAsset: PHFetchResult<PHAsset> = PHFetchResult()
             
             // 获取所有资源
             let allPhotosOptions = PHFetchOptions()
             // 按照创建时间倒叙
             allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-            // 只获取图片
-            allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-
-            let assetsFetchResult: PHFetchResult<PHAsset> = PHAsset.fetchAssets(with: .image, options: allPhotosOptions)
-
-            guard let imagePHAsset = assetsFetchResult.firstObject else {
-                firstImage = R.image.icon_fork()
-                return
+            // 获取所需资源
+            if mediaType == .unknown {
+                mediaTypePHAsset = PHAsset.fetchAssets(with: allPhotosOptions)
             }
-
-            let imageManager: PHCachingImageManager = PHCachingImageManager()
-
-            imageManager.requestImage(for: imagePHAsset, targetSize: CGSize(width: 50, height: 50), contentMode: .aspectFill, options: nil) { (image, dic) in
-                firstImage = image
-            }
-
+            allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", mediaType.rawValue)
+            
+            mediaTypePHAsset = PHAsset.fetchAssets(with: mediaType, options: allPhotosOptions)
+            
             DispatchQueue.main.async {
-                successImage(firstImage)
+                successPHAsset(mediaTypePHAsset)
             }
         }
     }
+    
+    // 获取相册中第一张图片
+    static func getPhotoAlbumAFristImage(_ successImage: @escaping (UIImage?) -> ()) {
+        getPhotoAlbumResources(.image) { (assetsFetchResult) in
+            
+            guard let imagePHAsset = assetsFetchResult.firstObject else {
+                successImage(R.image.icon_fork())
+                return
+            }
+            
+            let imageManager: PHCachingImageManager = PHCachingImageManager()
+            imageManager.requestImage(for: imagePHAsset, targetSize: CGSize(width: 50, height: 50), contentMode: .aspectFill, options: nil) { (image, dic) in
+                successImage(image)
+            }
+        }
+    }
+    
+    // 获取相册中资源
+    static func getPhotoAlbumMedia(_ mediaType: PHAssetMediaType = PHAssetMediaType.unknown, successPHAsset: @escaping ([PHAsset]) -> ()) {
+        getPhotoAlbumResources(mediaType) { (assetsFetchResult) in
+            var asset = [PHAsset]()
+            assetsFetchResult.enumerateObjects({ (mediaAsset, index, stop) in
+                asset.append(mediaAsset)
+            })
+            successPHAsset(asset)
+        }
+        
+    }
+    
     
 //    static func getImageByName(name: String) -> UIImage? {
 //        if name.isEmpty { return nil }

@@ -192,10 +192,37 @@ class PublicVideoOperationView: UIView {
             make.width.equalTo(50)
         }
         
-        PublicCameraStruct.getPhotoAlbumAImage { (image) in
+        PublicCameraStruct.getPhotoAlbumAFristImage { (image) in
             self.uploadButtonView.iconImage.image = image
         }
         
+        PublicCameraStruct.getPhotoAlbumMedia(.image) { (array) in
+            print("-----------------------")
+            print(array)
+            print(array.count)
+            print("-----------------------")
+        }
+        
+        PublicCameraStruct.getPhotoAlbumMedia(.video) { (array) in
+            print("!!!!!!!!!!!!!!!!!!!!!!!")
+            print(array)
+            print(array.count)
+            print("!!!!!!!!!!!!!!!!!!!!!!!")
+        }
+        
+        PublicCameraStruct.getPhotoAlbumMedia(.audio) { (array) in
+            print("```````````````````````")
+            print(array)
+            print(array.count)
+            print("```````````````````````")
+        }
+        
+        PublicCameraStruct.getPhotoAlbumMedia(.unknown) { (array) in
+            print("///////////////////////")
+            print(array)
+            print(array.count)
+            print("///////////////////////")
+        }
 
     }
     

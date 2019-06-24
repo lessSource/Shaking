@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FHHFPSIndicator
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,6 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             
         }
+        #if DEBUG
+        FHHFPSIndicator.shared()?.show()
+        #endif
         
         print(App.appName)
 
