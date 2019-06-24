@@ -19,6 +19,7 @@ target 'ImitationShaking' do
   pod 'UITextView+Placeholder'
   pod 'MBProgressHUD'
   pod 'FHHFPSIndicator'
+  pod 'VTMagic'
 
 #  pod 'EZPlayer'
 

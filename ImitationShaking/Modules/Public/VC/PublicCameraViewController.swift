@@ -71,7 +71,7 @@ class PublicCameraViewController: BaseViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 //        videoView.switchCamera()
 //        videoView.hasToTurnoffTheLights()
-        videoView.changeSpeed()
+//        videoView.changeSpeed()
     }
     
     

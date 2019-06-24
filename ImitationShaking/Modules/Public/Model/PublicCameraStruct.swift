@@ -13,7 +13,7 @@ import Photos
 struct PublicCameraStruct {
     
     /** 处理速度视频 */
-    static func setSpeedWithVideo(_ url: URL, completed: (() -> ())) {
+    static func setSpeedWithVideo(_ url: URL, completed: @escaping (() -> ())) {
         DispatchQueue.global().async {
             print(Thread.current)
             // 获取视频
@@ -257,6 +257,7 @@ struct PublicCameraStruct {
             })
             successPHAsset(asset)
         }
+    }
         
     // 判断是否有摄像头
     static func isCameraAvailable() -> Bool {

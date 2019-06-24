@@ -8,10 +8,21 @@
 
 import UIKit
 import Photos
+import VTMagic
 
 class PhotosChooseViewController: BaseViewController {
     
-
+    fileprivate lazy var magicVC: VTMagicController = {
+        let magic = VTMagicController()
+        magic.magicView.navigationColor = UIColor.white
+        magic.magicView.layoutStyle = .divide
+        magic.magicView.switchStyle = .default
+        magic.magicView.navigationHeight = 40
+        magic.magicView.dataSource = self
+        magic.magicView.delegate = self
+        return magic
+    }()
+    
     fileprivate lazy var contentView: UIView = {
         let contentView = UIView(frame: CGRect(x: 0, y: Constant.statusHeight, width: Constant.screenWidth, height: Constant.screenHeight - Constant.statusHeight))
         contentView.backgroundColor = UIColor.white
@@ -25,7 +36,7 @@ class PhotosChooseViewController: BaseViewController {
         flowLayout.minimumInteritemSpacing = 1
         flowLayout.itemSize = CGSize(width: (Constant.screenWidth - 3)/4, height: (Constant.screenWidth - 3)/4)
         
-        let collection = UICollectionView(frame: self.contentView.bounds, collectionViewLayout: flowLayout)
+        let collection = UICollectionView(frame: CGRect(x: 0, y: 80, width: contentView.width, height: contentView.height - 80), collectionViewLayout: flowLayout)
         collection.delegate = self
         collection.dataSource = self
         return collection
@@ -61,6 +72,24 @@ class PhotosChooseViewController: BaseViewController {
     }
 }
 
+extension PhotosChooseViewController: VTMagicViewDelegate, VTMagicViewDataSource {
+    func menuTitles(for magicView: VTMagicView) -> [String] {
+        return ["视频", "图片"]
+    }
+    
+    func magicView(_ magicView: VTMagicView, menuItemAt itemIndex: UInt) -> UIButton {
+        let button: UIButton? = magicView.dequeueReusableItem(withIdentifier: "dddd")
+        return button!
+    }
+    
+    func magicView(_ magicView: VTMagicView, viewControllerAtPage pageIndex: UInt) -> UIViewController {
+        <#code#>
+    }
+    
+    
+}
+
+
 extension PhotosChooseViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataArray.count
@@ -94,7 +123,7 @@ extension PhotosChooseViewController: UICollectionViewDelegate, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        dismiss(animated: true, completion: nil)
+//        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -103,6 +132,8 @@ class PhotosCollectionCell: UICollectionViewCell {
     
     fileprivate lazy var imageView: UIImageView = {
         let image = UIImageView()
+        image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
         return image
     }()
     
