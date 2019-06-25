@@ -12,7 +12,8 @@ import Photos
 class PhotosChooseViewController: BaseViewController {
     
     public var mediaType: PHAssetMediaType = PHAssetMediaType.video
-    
+    fileprivate var delegate: ModelAnimationDelegate?
+
     fileprivate lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 1
@@ -38,7 +39,7 @@ class PhotosChooseViewController: BaseViewController {
     
     // MARK: - layoutView
     fileprivate func layoutView() {
-        collectionView.register(PhotosCollectionCell.self, forCellWithReuseIdentifier: PhotosCollectionCell.identifire)
+        collectionView.register(PhotosChooseCollectionViewCell.self, forCellWithReuseIdentifier: PhotosChooseCollectionViewCell.identifire)
         PublicCameraStruct.getPhotoAlbumMedia(mediaType) { (data) in
             self.loadData(data)
         }
@@ -58,55 +59,37 @@ class PhotosChooseViewController: BaseViewController {
 }
 
 
-extension PhotosChooseViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension PhotosChooseViewController: UICollectionViewDelegate, UICollectionViewDataSource, UIViewControllerTransitioningDelegate, ShowImageProtocol {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return mediaType == .image ? imageDataArray.count : videoDataArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: PhotosCollectionCell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCollectionCell.identifire, for: indexPath) as! PhotosCollectionCell
+        let cell: PhotosChooseCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosChooseCollectionViewCell.identifire, for: indexPath) as! PhotosChooseCollectionViewCell
         let imageManager: PHCachingImageManager = PHCachingImageManager()
+        let width = (Constant.screenWidth - 3)/4
         if mediaType == .image {
-            let width = (Constant.screenWidth - 3)/4
             imageManager.requestImage(for: imageDataArray[indexPath.row], targetSize: CGSize(width: width, height: width), contentMode: .aspectFill, options: nil) { (image, dic) in
                 cell.imageView.image = image
             }
         }else {
-            cell.imageView.image = videoDataArray[indexPath.row].image
+            imageManager.requestImage(for: videoDataArray[indexPath.row].asset ?? PHAsset(), targetSize: CGSize(width: width, height: width), contentMode: .aspectFill, options: nil) { (image, dic) in
+                cell.imageView.image = image
+                cell.timeLabel.text = self.videoDataArray[indexPath.row].duration.formatting
+            }
+            
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    }
-}
-
-
-class PhotosCollectionCell: UICollectionViewCell {
-    
-    fileprivate lazy var imageView: UIImageView = {
-        let image = UIImageView()
-        image.contentMode = .scaleAspectFill
-        image.clipsToBounds = true
-        return image
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        layoutView()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: - layoutView
-    fileprivate func layoutView() {
-        contentView.addSubview(imageView)
-        imageView.snp.makeConstraints { (make) in
-            make.center.equalToSuperview()
-            make.top.left.equalToSuperview()
+        if mediaType == .image {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? PhotosChooseCollectionViewCell else { return }
+            delegate = nil
+            delegate = ModelAnimationDelegate(originalView: cell.imageView)
+            showImage(cell.imageView.image, currentIndex: 0, delegate: delegate)
         }
     }
-
 }
+
+

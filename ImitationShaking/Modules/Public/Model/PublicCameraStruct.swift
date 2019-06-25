@@ -288,15 +288,6 @@ struct PublicCameraStruct {
                     model.videoUrl = urlAsset.url
                     model.duration = CMTimeGetSeconds(urlAsset.duration)
                     model.creationData = asset.creationDate
-                    let assetImage = AVAssetImageGenerator(asset: urlAsset)
-                    assetImage.appliesPreferredTrackTransform = true
-                    assetImage.apertureMode = .encodedPixels
-                    do {
-                        let cgImage = try assetImage.copyCGImage(at: CMTime(seconds: 10, preferredTimescale: 50), actualTime: nil)
-                        model.image = UIImage(cgImage: cgImage)
-                    } catch  {
-                        model.image = R.image.icon_btn_add()
-                    }
                     videos.append(model)
                     global.leave()
                 }
@@ -304,11 +295,9 @@ struct PublicCameraStruct {
         }
     
         
-        global.notify(queue: worlingQueue) {
-            let sortingArr = videos.sorted(by: { return $0.creationData ?? Date() < $1.creationData  ?? Date() })
-            DispatchQueue.main.async {
-                successPHAsset(sortingArr)
-            }
+        global.notify(queue: DispatchQueue.main) {
+            let sortingArr = videos.sorted(by: { return $0.creationData ?? Date() > $1.creationData  ?? Date() })
+            successPHAsset(sortingArr)
         }
     }
         
@@ -369,7 +358,7 @@ struct ContestChooseVideo {
     /** 视频封面 */
     var image: UIImage?
     /** 视频时长 */
-    var duration: Double?
+    var duration: Double = 0
     /** 操作信息的对象 */
     var asset: PHAsset?
     /** 视频本地地址 */
