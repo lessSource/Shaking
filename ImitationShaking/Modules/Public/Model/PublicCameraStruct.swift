@@ -258,6 +258,59 @@ struct PublicCameraStruct {
             successPHAsset(asset)
         }
     }
+    
+    // 获取视频封面图和时间
+    static func getVideoCoverImageAndTime(_ avAsset: [PHAsset], successPHAsset: @escaping ([ContestChooseVideo]) -> ()) {
+        
+        var videos: Array = [ContestChooseVideo]()
+        let videoManager: PHCachingImageManager = PHCachingImageManager()
+        let option = PHVideoRequestOptions()
+        option.version = .current
+        option.deliveryMode = .automatic
+        option.isNetworkAccessAllowed = true
+        
+        let global = DispatchGroup()
+        let worlingQueue = DispatchQueue(label: "request_queue")
+        
+        for asset in avAsset {
+            global.enter()
+            worlingQueue.async {
+                videoManager.requestAVAsset(forVideo: asset, options: option) { (videoAsset, audioMix, dic) in
+                    guard let urlAsset: AVURLAsset = videoAsset as? AVURLAsset else {
+                        DispatchQueue.main.async {
+                            successPHAsset(videos)
+                        }
+                        return
+                    }
+                    var model = ContestChooseVideo()
+                    model.asset = asset
+                    model.avSet = videoAsset
+                    model.videoUrl = urlAsset.url
+                    model.duration = CMTimeGetSeconds(urlAsset.duration)
+                    model.creationData = asset.creationDate
+                    let assetImage = AVAssetImageGenerator(asset: urlAsset)
+                    assetImage.appliesPreferredTrackTransform = true
+                    assetImage.apertureMode = .encodedPixels
+                    do {
+                        let cgImage = try assetImage.copyCGImage(at: CMTime(seconds: 10, preferredTimescale: 50), actualTime: nil)
+                        model.image = UIImage(cgImage: cgImage)
+                    } catch  {
+                        model.image = R.image.icon_btn_add()
+                    }
+                    videos.append(model)
+                    global.leave()
+                }
+            }
+        }
+    
+        
+        global.notify(queue: worlingQueue) {
+            let sortingArr = videos.sorted(by: { return $0.creationData ?? Date() < $1.creationData  ?? Date() })
+            DispatchQueue.main.async {
+                successPHAsset(sortingArr)
+            }
+        }
+    }
         
     // 判断是否有摄像头
     static func isCameraAvailable() -> Bool {
@@ -310,4 +363,19 @@ struct PublicCameraStruct {
 //    }
     
  
+}
+
+struct ContestChooseVideo {
+    /** 视频封面 */
+    var image: UIImage?
+    /** 视频时长 */
+    var duration: Double?
+    /** 操作信息的对象 */
+    var asset: PHAsset?
+    /** 视频本地地址 */
+    var videoUrl: URL?
+    /** 剪辑控制 */
+    var avSet: AVAsset?
+    /** 视频创建时间 */
+    var creationData: Date?
 }

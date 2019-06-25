@@ -388,7 +388,7 @@ extension PublicVideoOperationView: OperationButtonDelegate {
         print(type.rawValue)
         switch type {
         case .upload:
-            let photosChooseVC = PhotosChooseViewController()
+            let photosChooseVC = PhotoChooseBaseViewController()
             let navVC: BaseNavigationController = BaseNavigationController(rootViewController: photosChooseVC)
             viewController()?.present(navVC, animated: true, completion: nil)
         case .speed:
