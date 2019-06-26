@@ -85,27 +85,19 @@ extension PhotosChooseViewController: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if mediaType == .image {
             let imageManager: PHCachingImageManager = PHCachingImageManager()
-            imageManager.requestImage(for: imageDataArray[indexPath.row], targetSize: CGSize(width: view.width, height: view.height), contentMode: .aspectFill, options: nil) { (image, dic) in
-//                self.collection(collectionView, indexPath: indexPath, image: image)
-                print("123")
+            var contentImage: UIImage?
+            let option: PHImageRequestOptions = PHImageRequestOptions()
+            option.resizeMode = .fast
+            option.isSynchronous = true
+            option.isNetworkAccessAllowed = true
+            imageManager.requestImage(for: imageDataArray[indexPath.row], targetSize: CGSize(width: view.width, height: view.height), contentMode: .aspectFill, options: option) { (image, dic) in
+                contentImage = image
             }
-//            collection(collectionView, indexPath: indexPath, image: UIImage?)
-            
-            print("456")
-
-            
             guard let cell = collectionView.cellForItem(at: indexPath) as? PhotosChooseCollectionViewCell else { return }
             delegate = nil
             delegate = ModelAnimationDelegate(originalView: cell.imageView)
-            showImage(cell.imageView.image, currentIndex: 0, delegate: delegate)
+            showImage(contentImage, currentIndex: 0, delegate: delegate)
         }
-    }
-    
-    fileprivate func collection(_ collection: UICollectionView, indexPath: IndexPath, image: UIImage?) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? PhotosChooseCollectionViewCell else { return }
-        delegate = nil
-        delegate = ModelAnimationDelegate(originalView: cell.imageView)
-        showImage(image, currentIndex: 0, delegate: delegate)
     }
 }
 

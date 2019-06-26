@@ -23,7 +23,7 @@ extension ShowImageProtocol where Self: UIViewController, Self: UIViewController
 class ModelAnimationDelegate: NSObject, UIViewControllerTransitioningDelegate {
     fileprivate var isPresentAnimatotion: Bool = true
     fileprivate var originalView: UIImageView!
-    fileprivate let animatTime: TimeInterval = 0.5
+    fileprivate let animatTime: TimeInterval = 0.3
     
     init(originalView: UIImageView) {
         self.originalView = originalView
@@ -72,7 +72,7 @@ extension ModelAnimationDelegate {
         // 新建一个imageView添加到目标view之上，做为动画view
         let animateView = UIImageView()
         animateView.image = image
-        animateView.contentMode = .scaleAspectFit
+        animateView.contentMode = .scaleAspectFill
         animateView.clipsToBounds = true
         // 被选中的imageView到目标view上的坐标转换
         guard let window = UIApplication.shared.delegate?.window else {
@@ -123,12 +123,19 @@ extension ModelAnimationDelegate {
         guard let window = UIApplication.shared.delegate?.window else {
             return
         }
-        let originalFrame = cell.currentImage.convert(cell.currentImage.bounds, to: window)
+        let imageSize: CGSize = cell.currentImage.image?.size ?? .zero
+        var height: CGFloat = 0.0
+        if imageSize.width > Constant.screenWidth {
+            height = (Constant.screenWidth / imageSize.width) * imageSize.height
+        }else {
+            height = (imageSize.width / Constant.screenWidth) * imageSize.height
+        }
+        
         // 新建过渡动画imageView
         let animateImageView = UIImageView()
-        animateImageView.frame = originalFrame
+        animateImageView.frame = CGRect(x: 0, y: Constant.screenHeight/2 - height/2, width: Constant.screenWidth, height: height)
         animateImageView.image = image
-        animateImageView.contentMode = .center
+        animateImageView.contentMode = .scaleAspectFill
         animateImageView.clipsToBounds = true
         containerView.addSubview(animateImageView)
 
