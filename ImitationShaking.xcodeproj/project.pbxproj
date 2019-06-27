@@ -21,6 +21,7 @@
 		2A0DEA7C22C268E00059C299 /* ShowImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA7B22C268E00059C299 /* ShowImageViewController.swift */; };
 		2A0DEA7E22C269FF0059C299 /* ShowImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA7D22C269FF0059C299 /* ShowImageCollectionViewCell.swift */; };
 		2A1026F222A8110B00C31746 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1026F122A8110B00C31746 /* Array+Extension.swift */; };
+		2A66463A22C5141A002BF741 /* PublicPictureEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A66463922C5141A002BF741 /* PublicPictureEditViewController.swift */; };
 		2AA3409E22998E50005DE559 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409D22998E50005DE559 /* AppDelegate.swift */; };
 		2AA340A022998E50005DE559 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409F22998E50005DE559 /* ViewController.swift */; };
 		2AA340A322998E50005DE559 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2AA340A122998E50005DE559 /* Main.storyboard */; };
@@ -125,6 +126,7 @@
 		2A0DEA7B22C268E00059C299 /* ShowImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImageViewController.swift; sourceTree = "<group>"; };
 		2A0DEA7D22C269FF0059C299 /* ShowImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		2A1026F122A8110B00C31746 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
+		2A66463922C5141A002BF741 /* PublicPictureEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicPictureEditViewController.swift; sourceTree = "<group>"; };
 		2AA3409A22998E50005DE559 /* ImitationShaking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImitationShaking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AA3409D22998E50005DE559 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2AA3409F22998E50005DE559 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -667,6 +669,7 @@
 				2A0DEA6822B27D7C0059C299 /* PublicCameraViewController.swift */,
 				2A0DEA6E22BBB80F0059C299 /* PhotosChooseViewController.swift */,
 				CA49A8A822C1B163009A6A96 /* PhotoChooseBaseViewController.swift */,
+				2A66463922C5141A002BF741 /* PublicPictureEditViewController.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -1030,6 +1033,7 @@
 				2AA34114229ED7B3005DE559 /* UIView+Frame.swift in Sources */,
 				CA049CE522A8B04A0058A55E /* UserCacheModel.swift in Sources */,
 				2AA34111229ED6D9005DE559 /* UIButton+Extension.swift in Sources */,
+				2A66463A22C5141A002BF741 /* PublicPictureEditViewController.swift in Sources */,
 				2A0DEA6B22B51FEC0059C299 /* PublicVideoProgressView.swift in Sources */,
 				2AA3412422A1621D005DE559 /* String+Extension.swift in Sources */,
 				CA9DC15E22A4B90A00BF331A /* MBAlertUtil.swift in Sources */,

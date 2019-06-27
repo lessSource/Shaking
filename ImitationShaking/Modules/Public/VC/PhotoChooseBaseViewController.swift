@@ -31,6 +31,14 @@ class PhotoChooseBaseViewController: BaseViewController {
         return contentView
     }()
     
+    fileprivate lazy var nextButton: UIButton = {
+        let button: UIButton = UIButton(type: .custom)
+        button.setTitle("下一歩", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        button.setTitleColor(UIColor.red, for: .normal)
+        return button
+    }()
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
@@ -63,6 +71,12 @@ class PhotoChooseBaseViewController: BaseViewController {
         allPhoto.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(15)
+        }
+        
+        contentView.addSubview(nextButton)
+        nextButton.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().offset(-15)
+            make.centerY.equalTo(allPhoto)
         }
         
     }
