@@ -16,7 +16,7 @@ class PublicCameraViewController: BaseViewController {
     fileprivate lazy var videoView: PublicVideoCameraView = {
         let videoView = PublicVideoCameraView(frame: CGRect(x: 0, y: 0, width: Constant.screenWidth, height: Constant.screenHeight))
         videoView.delegate = self
-        videoView.setUpSession()
+//        videoView.setUpSession()
         videoView.maxDuration = 15
         return videoView
     }()

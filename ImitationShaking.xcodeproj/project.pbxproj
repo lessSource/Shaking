@@ -22,6 +22,9 @@
 		2A0DEA7E22C269FF0059C299 /* ShowImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA7D22C269FF0059C299 /* ShowImageCollectionViewCell.swift */; };
 		2A1026F222A8110B00C31746 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1026F122A8110B00C31746 /* Array+Extension.swift */; };
 		2A66463A22C5141A002BF741 /* PublicPictureEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A66463922C5141A002BF741 /* PublicPictureEditViewController.swift */; };
+		2A66463C22C6595C002BF741 /* PublicReleaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A66463B22C6595C002BF741 /* PublicReleaseViewController.swift */; };
+		2A66463F22C667C6002BF741 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A66463E22C667C6002BF741 /* UIViewController+Extension.swift */; };
+		2A66464122C6699F002BF741 /* UIView+Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A66464022C6699F002BF741 /* UIView+Placeholder.swift */; };
 		2AA3409E22998E50005DE559 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409D22998E50005DE559 /* AppDelegate.swift */; };
 		2AA340A022998E50005DE559 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AA3409F22998E50005DE559 /* ViewController.swift */; };
 		2AA340A322998E50005DE559 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2AA340A122998E50005DE559 /* Main.storyboard */; };
@@ -127,6 +130,9 @@
 		2A0DEA7D22C269FF0059C299 /* ShowImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		2A1026F122A8110B00C31746 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		2A66463922C5141A002BF741 /* PublicPictureEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicPictureEditViewController.swift; sourceTree = "<group>"; };
+		2A66463B22C6595C002BF741 /* PublicReleaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicReleaseViewController.swift; sourceTree = "<group>"; };
+		2A66463E22C667C6002BF741 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		2A66464022C6699F002BF741 /* UIView+Placeholder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Placeholder.swift"; sourceTree = "<group>"; };
 		2AA3409A22998E50005DE559 /* ImitationShaking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImitationShaking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AA3409D22998E50005DE559 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2AA3409F22998E50005DE559 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -281,6 +287,14 @@
 				2A1026F122A8110B00C31746 /* Array+Extension.swift */,
 			);
 			path = Array;
+			sourceTree = "<group>";
+		};
+		2A66463D22C66780002BF741 /* UIViewController */ = {
+			isa = PBXGroup;
+			children = (
+				2A66463E22C667C6002BF741 /* UIViewController+Extension.swift */,
+			);
+			path = UIViewController;
 			sourceTree = "<group>";
 		};
 		2AA3409122998E50005DE559 = {
@@ -499,6 +513,7 @@
 		2AA34108229C28D4005DE559 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				2A66463D22C66780002BF741 /* UIViewController */,
 				2A0DEA7522C253D90059C299 /* Double */,
 				2A1026F022A810F400C31746 /* Array */,
 				CA9DC16122A4CB9400BF331A /* Int */,
@@ -543,6 +558,7 @@
 			children = (
 				2AA34113229ED7B3005DE559 /* UIView+Frame.swift */,
 				2A0DEA7022BBBC470059C299 /* UIView+Extension.swift */,
+				2A66464022C6699F002BF741 /* UIView+Placeholder.swift */,
 			);
 			path = UIView;
 			sourceTree = "<group>";
@@ -670,6 +686,7 @@
 				2A0DEA6E22BBB80F0059C299 /* PhotosChooseViewController.swift */,
 				CA49A8A822C1B163009A6A96 /* PhotoChooseBaseViewController.swift */,
 				2A66463922C5141A002BF741 /* PublicPictureEditViewController.swift */,
+				2A66463B22C6595C002BF741 /* PublicReleaseViewController.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -1001,6 +1018,7 @@
 				CA0D368222A0D68E004F6968 /* UIDevice+Extension.swift in Sources */,
 				2A0DEA6D22B927DA0059C299 /* PublicVideoOperationView.swift in Sources */,
 				2AA3411822A01BC5005DE559 /* PopUpViewManager.swift in Sources */,
+				2A66463F22C667C6002BF741 /* UIViewController+Extension.swift in Sources */,
 				2AA3412E22A2CE53005DE559 /* MoyaNetworkConfig.swift in Sources */,
 				2AA340F1229AA1D6005DE559 /* Constant.swift in Sources */,
 				2AA340F2229AA1D6005DE559 /* AboutApp.swift in Sources */,
@@ -1010,6 +1028,7 @@
 				2A0DEA6F22BBB80F0059C299 /* PhotosChooseViewController.swift in Sources */,
 				CAA1883E22B0DA8E0077B7AA /* LTitleBarLayout.swift in Sources */,
 				2A0DEA7A22C267030059C299 /* ShowImage.swift in Sources */,
+				2A66464122C6699F002BF741 /* UIView+Placeholder.swift in Sources */,
 				CA9DC16322A4CBC300BF331A /* Int+Extension.swift in Sources */,
 				CA9AAAF522A66E4E0084B409 /* HomeVideoListModel.swift in Sources */,
 				2AA340FD229ACBB7005DE559 /* HomeVideoOperationView.swift in Sources */,
@@ -1032,6 +1051,7 @@
 				CA9AAAF322A66E160084B409 /* PublicUserModel.swift in Sources */,
 				2AA34114229ED7B3005DE559 /* UIView+Frame.swift in Sources */,
 				CA049CE522A8B04A0058A55E /* UserCacheModel.swift in Sources */,
+				2A66463C22C6595C002BF741 /* PublicReleaseViewController.swift in Sources */,
 				2AA34111229ED6D9005DE559 /* UIButton+Extension.swift in Sources */,
 				2A66463A22C5141A002BF741 /* PublicPictureEditViewController.swift in Sources */,
 				2A0DEA6B22B51FEC0059C299 /* PublicVideoProgressView.swift in Sources */,

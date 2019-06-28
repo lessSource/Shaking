@@ -20,6 +20,8 @@ enum OperationButtonType: String {
     case more = "更多"
     case props = "道具"
     case upload = "上传"
+    case tailoring = "旋转裁剪"
+    case expression = "表情"
 }
 
 
