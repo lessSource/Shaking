@@ -19,6 +19,7 @@ class PublicPictureEditViewController: BaseViewController {
         let buttonView = OperationButtonView()
         buttonView.delegate = self
         buttonView.nameLabel.text = OperationButtonType.tailoring.rawValue
+        buttonView.iconImage.image = R.image.icon_tailoring()
         return buttonView
     }()
     
@@ -27,6 +28,7 @@ class PublicPictureEditViewController: BaseViewController {
         let buttonView = OperationButtonView()
         buttonView.delegate = self
         buttonView.nameLabel.text = OperationButtonType.filter.rawValue
+        buttonView.iconImage.image = R.image.icon_filter()
         return buttonView
     }()
     
@@ -35,6 +37,7 @@ class PublicPictureEditViewController: BaseViewController {
         let buttonView = OperationButtonView()
         buttonView.delegate = self
         buttonView.nameLabel.text = OperationButtonType.expression.rawValue
+        buttonView.iconImage.image = R.image.icon_expression()
         return buttonView
     }()
     
@@ -69,6 +72,17 @@ class PublicPictureEditViewController: BaseViewController {
         currentImage.contentMode = .scaleAspectFit
         view.addSubview(currentImage)
         
+        let bottomView = UIView(frame: CGRect(x: 0, y: Constant.screenHeight - Constant.bottomBarHeight - 60, width: Constant.screenWidth, height: Constant.bottomBarHeight + 60))
+        view.addSubview(bottomView)
+        
+        let gradientLayer: CAGradientLayer = CAGradientLayer()
+        gradientLayer.colors = [UIColor.withHex(hexString: "#FFFFFF", alpha: 0.0).cgColor,UIColor.withHex(hexString: "#000000", alpha: 0.6).cgColor]
+        gradientLayer.locations = [0.1, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 1.0, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.frame = bottomView.frame
+        bottomView.layer.insertSublayer(gradientLayer, above: gradientLayer)
+
         let stackView: UIStackView = UIStackView(arrangedSubviews: [tailoringButtonView, filterButtonView, expressionButtonView])
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
