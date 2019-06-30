@@ -26,7 +26,7 @@ class PhotosChooseCollectionViewCell: UICollectionViewCell {
     
     public lazy var selectButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor.red
+        button.setBackgroundImage(R.image.iocn_album_nor(), for: .normal)
         return button
     }()
     
@@ -56,9 +56,9 @@ class PhotosChooseCollectionViewCell: UICollectionViewCell {
         }
         
         selectButton.snp.makeConstraints { (make) in
-            make.height.width.equalTo(22)
-            make.top.equalTo(8)
-            make.right.equalToSuperview().offset(-8)
+            make.height.width.equalTo(30)
+            make.top.equalTo(3)
+            make.right.equalToSuperview().offset(-5)
         }
     }
 }

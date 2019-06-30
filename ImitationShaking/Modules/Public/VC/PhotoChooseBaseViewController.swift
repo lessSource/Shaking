@@ -59,7 +59,7 @@ class PhotoChooseBaseViewController: BaseViewController {
         magicVC.magicView.reloadData()
         
         let cancleButton = UIButton(frame: CGRect(x: 15, y: 15, width: 40, height: 40))
-        cancleButton.backgroundColor = UIColor.red
+        cancleButton.setImage(R.image.icon_pic_cancle(), for: .normal)
         cancleButton.addTarget(self, action: #selector(cancleButtonClick), for: .touchUpInside)
         contentView.addSubview(cancleButton)
         

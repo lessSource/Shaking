@@ -62,6 +62,7 @@ class PublicVideoOperationView: UIView {
         let buttonView = OperationButtonView()
         buttonView.delegate = self
         buttonView.nameLabel.text = OperationButtonType.flip.rawValue
+        buttonView.iconImage.image = R.image.icon_flip()
         return buttonView
     }()
     
@@ -70,6 +71,7 @@ class PublicVideoOperationView: UIView {
         let buttonView = OperationButtonView()
         buttonView.delegate = self
         buttonView.nameLabel.text = OperationButtonType.speed.rawValue
+        buttonView.iconImage.image = R.image.icon_speed()
         return buttonView
     }()
     
@@ -78,6 +80,7 @@ class PublicVideoOperationView: UIView {
         let buttonView = OperationButtonView()
         buttonView.delegate = self
         buttonView.nameLabel.text = OperationButtonType.filter.rawValue
+        buttonView.iconImage.image = R.image.icon_filter()
         return buttonView
     }()
     
@@ -86,6 +89,7 @@ class PublicVideoOperationView: UIView {
         let buttonView = OperationButtonView()
         buttonView.delegate = self
         buttonView.nameLabel.text = OperationButtonType.beautify.rawValue
+        buttonView.iconImage.image = R.image.icon_beautify()
         return buttonView
     }()
     
@@ -94,6 +98,7 @@ class PublicVideoOperationView: UIView {
         let buttonView = OperationButtonView()
         buttonView.delegate = self
         buttonView.nameLabel.text = OperationButtonType.countdown.rawValue
+        buttonView.iconImage.image = R.image.icon_countdown()
         return buttonView
     }()
     
@@ -110,6 +115,7 @@ class PublicVideoOperationView: UIView {
         let buttonView = OperationButtonView()
         buttonView.delegate = self
         buttonView.nameLabel.text = OperationButtonType.more.rawValue
+        buttonView.iconImage.image = R.image.icon_more()
         return buttonView
     }()
     
@@ -119,6 +125,8 @@ class PublicVideoOperationView: UIView {
         buttonView.delegate = self
         buttonView.nameLabel.text = OperationButtonType.props.rawValue
         buttonView.topImage = 10
+        buttonView.iconImage.image = R.image.icon_props()
+        buttonView.iconImage.contentMode = .scaleAspectFill
         return buttonView
     }()
     
@@ -128,6 +136,7 @@ class PublicVideoOperationView: UIView {
         buttonView.delegate = self
         buttonView.nameLabel.text = OperationButtonType.upload.rawValue
         buttonView.topImage = 10
+        buttonView.iconImage.contentMode = .scaleAspectFill
         return buttonView
     }()
     
@@ -443,7 +452,10 @@ class OperationButtonView: UIView {
         
         iconImage.isUserInteractionEnabled = true
         let iconImageTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(iconImageClick))
+        iconImage.contentMode = .center
+        iconImage.clipsToBounds = true
         iconImage.addGestureRecognizer(iconImageTap)
+        iconImage.layer.cornerRadius = 5
         
         iconImage.snp.makeConstraints { (make) in
             make.top.equalTo(5)
