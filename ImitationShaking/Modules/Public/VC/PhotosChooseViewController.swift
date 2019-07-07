@@ -84,23 +84,23 @@ extension PhotosChooseViewController: UICollectionViewDelegate, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if mediaType == .image {
-            let pictureEditVC = PublicPictureEditViewController()
-            pictureEditVC.imageAsset = imageDataArray[indexPath.row]
-            navigationController?.pushViewController(pictureEditVC, animated: true)
+//            let pictureEditVC = PublicPictureEditViewController()
+//            pictureEditVC.imageAsset = imageDataArray[indexPath.row]
+//            navigationController?.pushViewController(pictureEditVC, animated: true)
             
-//            let imageManager: PHCachingImageManager = PHCachingImageManager()
-//            var contentImage: UIImage?
-//            let option: PHImageRequestOptions = PHImageRequestOptions()
-//            option.resizeMode = .fast
-//            option.isSynchronous = true
-//            option.isNetworkAccessAllowed = true
-//            imageManager.requestImage(for: imageDataArray[indexPath.row], targetSize: CGSize(width: view.width, height: view.height), contentMode: .aspectFill, options: option) { (image, dic) in
-//                contentImage = image
-//            }
-//            guard let cell = collectionView.cellForItem(at: indexPath) as? PhotosChooseCollectionViewCell else { return }
-//            delegate = nil
-//            delegate = ModelAnimationDelegate(originalView: cell.imageView)
-//            showImage(contentImage, currentIndex: 0, delegate: delegate)
+            let imageManager: PHCachingImageManager = PHCachingImageManager()
+            var contentImage: UIImage?
+            let option: PHImageRequestOptions = PHImageRequestOptions()
+            option.resizeMode = .fast
+            option.isSynchronous = true
+            option.isNetworkAccessAllowed = true
+            imageManager.requestImage(for: imageDataArray[indexPath.row], targetSize: CGSize(width: view.width, height: view.height), contentMode: .aspectFill, options: option) { (image, dic) in
+                contentImage = image
+            }
+            guard let cell = collectionView.cellForItem(at: indexPath) as? PhotosChooseCollectionViewCell else { return }
+            delegate = nil
+            delegate = ModelAnimationDelegate(originalView: cell.imageView)
+            showImage(contentImage, currentIndex: 0, delegate: delegate)
         }
     }
 }
