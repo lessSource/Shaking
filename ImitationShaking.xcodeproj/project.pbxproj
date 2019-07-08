@@ -1181,7 +1181,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CustomProductName = "预发布";
-				DEVELOPMENT_TEAM = 63JB5EXBJ6;
+				DEVELOPMENT_TEAM = 5P2JD4K827;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ImitationShaking/Common/Tool/ThirdParty",
@@ -1368,7 +1368,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CustomProductName = "测试环境";
-				DEVELOPMENT_TEAM = 63JB5EXBJ6;
+				DEVELOPMENT_TEAM = 5P2JD4K827;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ImitationShaking/Common/Tool/ThirdParty",
@@ -1396,7 +1396,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CustomProductName = "正式环境";
-				DEVELOPMENT_TEAM = 63JB5EXBJ6;
+				DEVELOPMENT_TEAM = 5P2JD4K827;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/ImitationShaking/Common/Tool/ThirdParty",
