@@ -68,6 +68,7 @@
 		2AA3414822A57774005DE559 /* schoolData.json in Resources */ = {isa = PBXBuildFile; fileRef = 2AA3414722A57774005DE559 /* schoolData.json */; };
 		2AA3414A22A57810005DE559 /* provincesData.json in Resources */ = {isa = PBXBuildFile; fileRef = 2AA3414922A57810005DE559 /* provincesData.json */; };
 		2AA3414C22A583E9005DE559 /* 抖腿短视频.md in Resources */ = {isa = PBXBuildFile; fileRef = 2AA3414B22A583E9005DE559 /* 抖腿短视频.md */; };
+		2ACFE6A022D23283006BE789 /* PublicPropsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACFE69F22D23283006BE789 /* PublicPropsView.swift */; };
 		A898C693F6C9DAC437E5F805 /* Pods_ImitationShakingTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB8A21A8546AA41F2552136E /* Pods_ImitationShakingTests.framework */; };
 		B75EF6A506F8566F6FE679EC /* Pods_ImitationShakingUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAB9AE47C95E48072E6C02FF /* Pods_ImitationShakingUITests.framework */; };
 		CA049CE522A8B04A0058A55E /* UserCacheModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA049CE422A8B04A0058A55E /* UserCacheModel.swift */; };
@@ -183,6 +184,7 @@
 		2AA3414722A57774005DE559 /* schoolData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = schoolData.json; sourceTree = "<group>"; };
 		2AA3414922A57810005DE559 /* provincesData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = provincesData.json; sourceTree = "<group>"; };
 		2AA3414B22A583E9005DE559 /* 抖腿短视频.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "抖腿短视频.md"; sourceTree = "<group>"; };
+		2ACFE69F22D23283006BE789 /* PublicPropsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicPropsView.swift; sourceTree = "<group>"; };
 		2B3195471830D35CFF51399B /* Pods-ImitationShakingUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingUITests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingUITests/Pods-ImitationShakingUITests.release.xcconfig"; sourceTree = "<group>"; };
 		5457946FEA70142C825F89DA /* Pods-ImitationShakingUITests.pre-release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingUITests.pre-release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingUITests/Pods-ImitationShakingUITests.pre-release.xcconfig"; sourceTree = "<group>"; };
 		7EE59D65078068B2C29A0012 /* Pods-ImitationShakingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingTests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingTests/Pods-ImitationShakingTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -647,6 +649,7 @@
 				CA5D71A022B8B3CC0088A125 /* TakingRingView.swift */,
 				2A0DEA6C22B927DA0059C299 /* PublicVideoOperationView.swift */,
 				2A0DEA7222C2509C0059C299 /* PhotosChooseCollectionViewCell.swift */,
+				2ACFE69F22D23283006BE789 /* PublicPropsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1004,6 +1007,7 @@
 				2AA34103229AE959005DE559 /* R.generated.swift in Sources */,
 				2AA340E022999698005DE559 /* VideoUpdateViewController.swift in Sources */,
 				2AA3410E229C32AE005DE559 /* UIImage+Extension.swift in Sources */,
+				2ACFE6A022D23283006BE789 /* PublicPropsView.swift in Sources */,
 				2AA3413722A38EB3005DE559 /* CommentListModel.swift in Sources */,
 				CA5D71A122B8B3CC0088A125 /* TakingRingView.swift in Sources */,
 				2AA340F8229ABEAA005DE559 /* HomeCollectionViewCell.swift in Sources */,

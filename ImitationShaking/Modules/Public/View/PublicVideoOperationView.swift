@@ -154,10 +154,18 @@ class PublicVideoOperationView: UIView {
         return speedSegmented
     }()
     
+    fileprivate var propsView: PublicPropsView = {
+        let propsView: PublicPropsView = PublicPropsView(frame: CGRect(x: 0, y: Constant.screenHeight, width: Constant.screenWidth, height: 200))
+        return propsView
+    }()
+    
     fileprivate var stackView: UIStackView!
     
     // 按钮状态
     fileprivate(set) var isTakingState: Bool = false
+    
+    // 按钮View
+    fileprivate var viewArray = [UIView]()
     
     deinit {
         print("PublicVideoOperationView + 释放")
@@ -181,6 +189,7 @@ class PublicVideoOperationView: UIView {
         addSubview(propsButtonView)
         addSubview(uploadButtonView)
         addSubview(speedSegmented)
+        addSubview(propsView)
         
         speedSegmented.addTarget(self, action: #selector(speedSegmentedClick(_ :)), for: .valueChanged)
         changeSegmentedColor(2)
@@ -202,7 +211,8 @@ class PublicVideoOperationView: UIView {
             make.centerY.equalTo(cancleButton)
         }
         
-        stackView = UIStackView(arrangedSubviews: [flipButtonView, speedButtonView, filterButtonView, beautifyButtonView, countdownButtonView, moreButtonView])
+        viewArray = [flipButtonView, speedButtonView, filterButtonView, beautifyButtonView, countdownButtonView, moreButtonView]
+        stackView = UIStackView(arrangedSubviews: viewArray)
         stackView.frame = CGRect(x: Constant.screenWidth - 60, y: progressView.frame.maxY + 20, width: 50, height: 70 * CGFloat(stackView.arrangedSubviews.count))
         stackView.distribution = .fillEqually
         stackView.axis = .vertical
@@ -404,6 +414,11 @@ extension PublicVideoOperationView: OperationButtonDelegate {
             viewController()?.present(navVC, animated: true, completion: nil)
         case .speed:
             speedSegmented.isHidden = !speedSegmented.isHidden
+        case .props:
+            UIView.animate(withDuration: 0.5) {
+                self.propsView.y = Constant.screenHeight - 200
+            }
+        case .flip: break
         default: break
         }
         
