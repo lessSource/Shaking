@@ -180,8 +180,8 @@ extension Network {
     ///   - parameters: 参数
     ///   - successClosure: 成功回调
     ///   - failureClosure: 失败回调
-    public func post(_ urlPath: String, parameters: [String: Any]? = nil, successClosure: @escaping (JSON) -> Void, failureClosure: @escaping (Error) -> Void) -> Void {
-        Network.default.request(CommonTargetTypeApi.postRequest(urlPath, parameters), successClosure: successClosure, failureClosure: failureClosure)
+    public func post(_ urlPath: String, parameters: [String: Any]? = nil, way: ParametersPositionType = .body, successClosure: @escaping (JSON) -> Void, failureClosure: @escaping (Error) -> Void) -> Void {
+        Network.default.request(CommonTargetTypeApi.postRequest(urlPath, parameters, way), successClosure: successClosure, failureClosure: failureClosure)
     }
     
     // MARK: PromiseKit 方式
@@ -223,9 +223,9 @@ extension Network {
     ///   - urlPath: url path
     ///   - parameters: 参数
     /// - Returns: Promise<JSON>
-    public func post(_ urlPath: String, parameters: [String: Any]? = nil) -> Promise<JSON> {
+    public func post(_ urlPath: String, parameters: [String: Any]? = nil, way: ParametersPositionType = .body) -> Promise<JSON> {
         return Promise { seal in
-            Network.default.request(CommonTargetTypeApi.postRequest(urlPath, parameters), successClosure: { (json) in
+            Network.default.request(CommonTargetTypeApi.postRequest(urlPath, parameters, way), successClosure: { (json) in
                 seal.fulfill(json)
             }, failureClosure: { (err) in
                 seal.reject(err)

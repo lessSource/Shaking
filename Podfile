@@ -11,7 +11,7 @@ target 'ImitationShaking' do
   pod 'Moya/RxSwift'
   pod 'MJRefresh'
   pod 'PromiseKit/UIKit'
-  pod 'HandyJSON', '~> 5.0.0-beta.1'
+  pod 'HandyJSON'
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'SwiftyJSON'

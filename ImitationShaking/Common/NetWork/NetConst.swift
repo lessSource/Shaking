@@ -12,7 +12,7 @@ import UIKit
 struct LoginRegisterRequest {
     /** 登录 */
     static let login = "api/auth/login"
-    /** 跟新头像 */
+    /** 更新头像 */
     static let headImage = "api/personal/headImg"
 }
 

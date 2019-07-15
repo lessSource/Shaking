@@ -12,7 +12,7 @@ struct CommentRequestStruct {
     
     /** 评论点赞 */
     static func requestCommentsPraise(_ commentId: String, success: @escaping (() -> ())) {
-        Network.default.request(CommonTargetTypeApi.postRequest(CommentsRequest.praise + commentId, nil), successClosure: { (response) in
+        Network.default.request(CommonTargetTypeApi.postRequest(CommentsRequest.praise + commentId, nil, .query), successClosure: { (response) in
             success()
         }) { (error) in
             
@@ -30,7 +30,7 @@ struct CommentRequestStruct {
     
     /** 视频点赞 */
     static func requestVideoPraise(_ commentId: String, success: @escaping (() -> ())) {
-        Network.default.request(CommonTargetTypeApi.postRequest(VideoRequest.praise + commentId, nil), successClosure: { (response) in
+        Network.default.request(CommonTargetTypeApi.postRequest(VideoRequest.praise + commentId, nil, .query), successClosure: { (response) in
             success()
         }) { (error) in
             

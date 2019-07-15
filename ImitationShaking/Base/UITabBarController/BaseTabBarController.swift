@@ -62,7 +62,7 @@ extension BaseTabBarController: UITabBarControllerDelegate, BaseTabBarDelegate {
             let loginVC = LoginViewController()
             loginVC.view.backgroundColor = UIColor(white: 0, alpha: 0.9)
             self.definesPresentationContext = true
-            loginVC.modalPresentationStyle = .overCurrentContext
+
             present(loginVC, animated: true, completion: nil)
             return false
         }

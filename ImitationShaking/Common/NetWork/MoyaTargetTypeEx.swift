@@ -11,6 +11,12 @@ import Moya
 import Alamofire
 import SwiftyJSON
 
+public enum ParametersPositionType {
+    case body
+    case query
+}
+
+
 /// 通用请求TargetType
 ///
 /// - getRequest: get请求   urlPath   Parameters
@@ -22,15 +28,9 @@ import SwiftyJSON
 /// - download: 下载请求   urlPath   下载完成后保存
 /// - downloadWithParams: 带有参数的下载请求   urlPath   Parameters   下载完成后保存
 
-protocol RequestData { }
-
-extension Array: RequestData { }
-
-extension Dictionary: RequestData { }
-
 enum CommonTargetTypeApi {
     case getRequest(String, [String: Any]?)
-    case postRequest(String, [String: Any]?)
+    case postRequest(String, [String: Any]?, ParametersPositionType)
     case deleteRequest(String, [String: Any]?)
     case putRequest(String, [String: Any]?)
     case uploadMultipart(String, [Moya.MultipartFormData], [String: Any]?)
@@ -55,7 +55,7 @@ extension CommonTargetTypeApi: TargetType {
         switch self {
         case .getRequest(let urlPath, _):
             return urlPath
-        case .postRequest(let urlPath, _):
+        case .postRequest(let urlPath, _, _):
             return urlPath
         case .deleteRequest(let urlPath, _):
             return urlPath
@@ -76,7 +76,7 @@ extension CommonTargetTypeApi: TargetType {
         switch self {
         case .getRequest(_, _):
             return .get
-        case .postRequest(_, _):
+        case .postRequest(_, _, _):
             return .post
         case .deleteRequest(_, _):
             return .delete
@@ -100,13 +100,12 @@ extension CommonTargetTypeApi: TargetType {
                 return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
             }
             return .requestPlain
-        case .postRequest(let url, let param):
+        case .postRequest(_, let param, let requestWay):
             if let param = param {
-                switch url {
-                case "222":
+                if requestWay == .body {
                     let jsonData = jsonToData(json: param)
                     return .requestData(jsonData!)
-                default:
+                }else {
                     return .requestParameters(parameters: param, encoding: URLEncoding.queryString)
                 }
             }
@@ -152,9 +151,12 @@ extension CommonTargetTypeApi: TargetType {
         }
         //利用自带的json库转换成Data
         //如果设置options为JSONSerialization.WritingOptions.prettyPrinted，则打印格式更好阅读
-        let data = try? JSONSerialization.data(withJSONObject: json, options: [])
+        guard let data = try? JSONSerialization.data(withJSONObject: json, options: []) else {
+            print("is not a valid json object")
+            return nil
+        }
         // Data转换成String打印输出
-        let str = String(data: data ?? Data(), encoding: String.Encoding.utf8)
+        let str = String(data: data , encoding: String.Encoding.utf8)
         // 输出json字符串
         print("Json Str:\(str ?? "")")
         return data

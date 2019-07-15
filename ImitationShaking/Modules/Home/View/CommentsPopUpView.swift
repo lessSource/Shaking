@@ -314,7 +314,7 @@ class CommentsPopUpView: PopUpContentView {
         if !currentComment.parentId.isEmpty {
             params.updateValue(currentComment.parentId, forKey: "parentId")
         }
-        Network.default.request(CommonTargetTypeApi.postRequest(CommentsRequest.submit, params), successClosure: { (response) in
+        Network.default.request(CommonTargetTypeApi.postRequest(CommentsRequest.submit, params,.query), successClosure: { (response) in
             self.endEditing(true)
             MBAlertUtil.alertManager.showPromptInfo("评论成功", in: self)
             guard let model = CommentListModel.deserialize(from: response.dictionaryObject) else { return }

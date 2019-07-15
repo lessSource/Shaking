@@ -2,7 +2,7 @@ PODS:
   - Alamofire (4.8.2)
   - FHHFPSIndicator (1.0.2)
   - HandyJSON (5.0.0)
-  - Kingfisher (4.10.1)
+  - Kingfisher (5.6.0)
   - MBProgressHUD (1.1.0)
   - MJRefresh (3.2.0)
   - Moya/Core (13.0.1):
@@ -11,8 +11,8 @@ PODS:
   - Moya/RxSwift (13.0.1):
     - Moya/Core
     - RxSwift (~> 4.0)
-  - PromiseKit/CorePromise (6.8.4)
-  - PromiseKit/UIKit (6.8.4):
+  - PromiseKit/CorePromise (6.9.0)
+  - PromiseKit/UIKit (6.9.0):
     - PromiseKit/CorePromise
   - R.swift (5.0.3):
     - R.swift.Library (~> 5.0.0)
@@ -21,9 +21,9 @@ PODS:
   - RxCocoa (4.5.0):
     - RxSwift (>= 4.4.2, ~> 4.4)
   - RxSwift (4.5.0)
-  - SnapKit (4.2.0)
+  - SnapKit (5.0.0)
   - SwiftyJSON (5.0.0)
-  - Then (2.4.0)
+  - Then (2.5.0)
   - "UITextView+Placeholder (1.2.1)"
   - VTMagic (1.2.4):
     - VTMagic/Core (= 1.2.4)
@@ -31,7 +31,7 @@ PODS:
 
 DEPENDENCIES:
   - FHHFPSIndicator
-  - HandyJSON (~> 5.0.0-beta.1)
+  - HandyJSON
   - Kingfisher
   - MBProgressHUD
   - MJRefresh
@@ -71,22 +71,22 @@ SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   FHHFPSIndicator: 29d986402ea729a941a3cda184e3635d1def69ae
   HandyJSON: 992f2d661716d6a91de82d0056927bc7813b5770
-  Kingfisher: c148cd7b47ebde9989f6bc7c27dcaa79d81279a0
+  Kingfisher: 1a50df6880a60bae26f3e21a0df3d17b892f5e0b
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
   Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
-  PromiseKit: 51794a832647e7b819336dc2279039ce9f1cc49b
+  PromiseKit: 97397236f9e9c443d5b70a941d49cad25160af7a
   R.swift: f5a87643b91ea569d23d6afb3eee9c743edde239
   R.swift.Library: cfe85d569d9bae6cb262922db130e7c3a7a5fad1
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   RxCocoa: cbf70265dc65a981d4ac982e513c10cf23df24a0
   RxSwift: f172070dfd1a93d70a9ab97a5a01166206e1c575
-  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
+  SnapKit: fd22d10eb9aff484d79a8724eab922c1ddf89bcf
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
-  Then: 71866660c7af35a7343831f7668e7cd2b62ee0f2
+  Then: 0157115e883545c77967b452fe74a1d25fb796e1
   "UITextView+Placeholder": 0c3efd97f37ea64bde7f34cc6e90fe02e87b3909
   VTMagic: b49e5f456dbcbfd9a3588ba92417233a105bc193
 
-PODFILE CHECKSUM: 5f068af49e215dce18b3c7bd4e01f2ae6410459c
+PODFILE CHECKSUM: 5666ec81e416751b5515db53ae9c00ec18cf3b76
 
 COCOAPODS: 1.7.0.beta.2

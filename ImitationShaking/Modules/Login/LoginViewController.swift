@@ -141,7 +141,7 @@ class LoginViewController: BaseViewController {
         var params: Dictionary = [String: Any]()
         params.updateValue(phoneTextField.text!, forKey: "phone")
         params.updateValue(passwordTextField.text!, forKey: "password")
-        Network.default.request(CommonTargetTypeApi.postRequest(LoginRegisterRequest.login, params), successClosure: { (response) in
+        Network.default.request(CommonTargetTypeApi.postRequest(LoginRegisterRequest.login, params,.query), successClosure: { (response) in
             if let model = UserCacheModel.deserialize(from: response.dictionaryObject) {
                 LCacheModel.shareInstance.save(model)
                 self.dismiss(animated: true, completion: nil)

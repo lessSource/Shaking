@@ -40,11 +40,6 @@ public class ReLoginPlugin: PluginType {
     public func didReceive(_ result: Result<Response, MoyaError>, target: TargetType) {
         switch result {
         case .success( _):
-            //            let json = JSON(res.data)
-            //            let code = json["code"].intValue
-            //            let errmsg = json["msg"].string
-            
-            // error code 800n 998 need repeat login
             break
         default: break
         }
