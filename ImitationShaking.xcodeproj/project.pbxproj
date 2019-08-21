@@ -69,6 +69,7 @@
 		2AA3414A22A57810005DE559 /* provincesData.json in Resources */ = {isa = PBXBuildFile; fileRef = 2AA3414922A57810005DE559 /* provincesData.json */; };
 		2AA3414C22A583E9005DE559 /* 抖腿短视频.md in Resources */ = {isa = PBXBuildFile; fileRef = 2AA3414B22A583E9005DE559 /* 抖腿短视频.md */; };
 		2ACFE6A022D23283006BE789 /* PublicPropsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACFE69F22D23283006BE789 /* PublicPropsView.swift */; };
+		2AF15E84230D93B20029B818 /* LImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF15E83230D93B20029B818 /* LImagePickerController.swift */; };
 		A898C693F6C9DAC437E5F805 /* Pods_ImitationShakingTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB8A21A8546AA41F2552136E /* Pods_ImitationShakingTests.framework */; };
 		B75EF6A506F8566F6FE679EC /* Pods_ImitationShakingUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CAB9AE47C95E48072E6C02FF /* Pods_ImitationShakingUITests.framework */; };
 		CA049CE522A8B04A0058A55E /* UserCacheModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA049CE422A8B04A0058A55E /* UserCacheModel.swift */; };
@@ -185,6 +186,7 @@
 		2AA3414922A57810005DE559 /* provincesData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = provincesData.json; sourceTree = "<group>"; };
 		2AA3414B22A583E9005DE559 /* 抖腿短视频.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "抖腿短视频.md"; sourceTree = "<group>"; };
 		2ACFE69F22D23283006BE789 /* PublicPropsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicPropsView.swift; sourceTree = "<group>"; };
+		2AF15E83230D93B20029B818 /* LImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LImagePickerController.swift; sourceTree = "<group>"; };
 		2B3195471830D35CFF51399B /* Pods-ImitationShakingUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingUITests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingUITests/Pods-ImitationShakingUITests.release.xcconfig"; sourceTree = "<group>"; };
 		5457946FEA70142C825F89DA /* Pods-ImitationShakingUITests.pre-release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingUITests.pre-release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingUITests/Pods-ImitationShakingUITests.pre-release.xcconfig"; sourceTree = "<group>"; };
 		7EE59D65078068B2C29A0012 /* Pods-ImitationShakingTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingTests.release.xcconfig"; path = "Target Support Files/Pods-ImitationShakingTests/Pods-ImitationShakingTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -291,6 +293,38 @@
 			path = Array;
 			sourceTree = "<group>";
 		};
+		2A56FA82230D904800B0A264 /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				2A56FA85230D906E00B0A264 /* Model */,
+				2A56FA84230D906900B0A264 /* View */,
+				2A56FA83230D906500B0A264 /* VC */,
+			);
+			path = Public;
+			sourceTree = "<group>";
+		};
+		2A56FA83230D906500B0A264 /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				2AF15E83230D93B20029B818 /* LImagePickerController.swift */,
+			);
+			path = VC;
+			sourceTree = "<group>";
+		};
+		2A56FA84230D906900B0A264 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2A56FA85230D906E00B0A264 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		2A66463D22C66780002BF741 /* UIViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -324,6 +358,7 @@
 		2AA3409C22998E50005DE559 /* ImitationShaking */ = {
 			isa = PBXGroup;
 			children = (
+				2A56FA82230D904800B0A264 /* Public */,
 				2AA340E9229AA199005DE559 /* Common */,
 				2AA340CB22999076005DE559 /* Base */,
 				2AA340D522999528005DE559 /* Modules */,
@@ -1015,6 +1050,7 @@
 				2AA3413222A2D24B005DE559 /* NetConst.swift in Sources */,
 				2AA3412722A16631005DE559 /* Date+Extension.swift in Sources */,
 				2AA340FB229ACA75005DE559 /* HomeHeaderView.swift in Sources */,
+				2AF15E84230D93B20029B818 /* LImagePickerController.swift in Sources */,
 				CA93589B22B20237004C7EFF /* LTitleBar.swift in Sources */,
 				2AA3413022A2CE92005DE559 /* MoyaTargetTypeEx.swift in Sources */,
 				2A1026F222A8110B00C31746 /* Array+Extension.swift in Sources */,

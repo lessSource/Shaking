@@ -52,7 +52,7 @@ class HomeViewController: BaseViewController {
 
         // Do any additional setup after loading the view.
         collectionView.register(HomeCollectionViewCell.self, forCellWithReuseIdentifier: HomeCollectionViewCell.identifire)
-        view.addSubview(collectionView)
+//        view.addSubview(collectionView)
         
         view.addSubview(hedaerView)
         
@@ -81,6 +81,11 @@ class HomeViewController: BaseViewController {
         requestVideoList()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let photoVC = LImagePickerController()
+        present(photoVC, animated: true, completion: nil)
+    }
+    
     
     // MARK:- request
     fileprivate func requestVideoList() {
@@ -90,7 +95,7 @@ class HomeViewController: BaseViewController {
             }
             self.collectionView.reloadData()
         }) { (error) in
-            
+            print(error)
         }
     }
     
