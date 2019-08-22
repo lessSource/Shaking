@@ -34,7 +34,7 @@ class PromptView: UIView {
     }()
     
     private lazy var imageView: UIImageView = {
-        let imageView = UIImageView(frame: CGRect(x: (bounds.width - 150)/2, y: 150, width: 150, height: 120))
+        let imageView = UIImageView(frame: CGRect(x: (bounds.width - 120)/2, y: 150, width: 120, height: 120))
         imageView.image = UIImage(named: "follow_empty_icon")
         imageView.clipsToBounds = true
         imageView.contentMode = .center
@@ -42,11 +42,12 @@ class PromptView: UIView {
         return imageView
     }()
     
-    private lazy var titleLabel: UILabel = {
+    public lazy var titleLabel: UILabel = {
         let title = UILabel(frame: CGRect(x: 15, y: imageView.frame.maxY + 10, width: bounds.width - 30, height: 30))
         title.font = UIFont.systemFont(ofSize: 14)
         title.textColor = UIColor.withHex(hexString: "#666666")
         title.text = "暂无数据"
+        title.numberOfLines = 0
         title.textAlignment = .center
         return title
     }()

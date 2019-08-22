@@ -16,14 +16,30 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
   
-  /// This `R.file` struct is generated, and contains static references to 3 files.
+  /// This `R.file` struct is generated, and contains static references to 5 files.
   struct file {
+    /// Resource file `icon_permissions@2x.png`.
+    static let icon_permissions2xPng = Rswift.FileResource(bundle: R.hostingBundle, name: "icon_permissions@2x", pathExtension: "png")
+    /// Resource file `icon_permissions@3x.png`.
+    static let icon_permissions3xPng = Rswift.FileResource(bundle: R.hostingBundle, name: "icon_permissions@3x", pathExtension: "png")
     /// Resource file `provincesData.json`.
     static let provincesDataJson = Rswift.FileResource(bundle: R.hostingBundle, name: "provincesData", pathExtension: "json")
     /// Resource file `schoolData.json`.
     static let schoolDataJson = Rswift.FileResource(bundle: R.hostingBundle, name: "schoolData", pathExtension: "json")
     /// Resource file `抖腿短视频.md`.
     static let 抖腿短视频Md = Rswift.FileResource(bundle: R.hostingBundle, name: "抖腿短视频", pathExtension: "md")
+    
+    /// `bundle.url(forResource: "icon_permissions@2x", withExtension: "png")`
+    static func icon_permissions2xPng(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.icon_permissions2xPng
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+    
+    /// `bundle.url(forResource: "icon_permissions@3x", withExtension: "png")`
+    static func icon_permissions3xPng(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.icon_permissions3xPng
+      return fileResource.bundle.url(forResource: fileResource)
+    }
     
     /// `bundle.url(forResource: "provincesData", withExtension: "json")`
     static func provincesDataJson(_: Void = ()) -> Foundation.URL? {
@@ -46,7 +62,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
   
-  /// This `R.image` struct is generated, and contains static references to 24 images.
+  /// This `R.image` struct is generated, and contains static references to 25 images.
   struct image {
     /// Image `IMG_4A7DFD335A96-1`.
     static let img_4A7DFD335A961 = Rswift.ImageResource(bundle: R.hostingBundle, name: "IMG_4A7DFD335A96-1")
@@ -82,6 +98,8 @@ struct R: Rswift.Validatable {
     static let icon_music = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_music")
     /// Image `icon_notes`.
     static let icon_notes = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_notes")
+    /// Image `icon_permissions`.
+    static let icon_permissions = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_permissions")
     /// Image `icon_pic_cancle`.
     static let icon_pic_cancle = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_pic_cancle")
     /// Image `icon_props`.
@@ -180,6 +198,11 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "icon_notes", bundle: ..., traitCollection: ...)`
     static func icon_notes(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.icon_notes, compatibleWith: traitCollection)
+    }
+    
+    /// `UIImage(named: "icon_permissions", bundle: ..., traitCollection: ...)`
+    static func icon_permissions(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_permissions, compatibleWith: traitCollection)
     }
     
     /// `UIImage(named: "icon_pic_cancle", bundle: ..., traitCollection: ...)`

@@ -92,6 +92,10 @@
 		CA9DC16A22A51DAE00BF331A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9DC16922A51DAE00BF331A /* LoginViewController.swift */; };
 		CAA1883E22B0DA8E0077B7AA /* LTitleBarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA1883D22B0DA8E0077B7AA /* LTitleBarLayout.swift */; };
 		CAA1884022B0E3E30077B7AA /* LPagesCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA1883F22B0E3E30077B7AA /* LPagesCache.swift */; };
+		CAE4A618230E38E00034FEE8 /* LImagePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE4A617230E38E00034FEE8 /* LImagePickerManager.swift */; };
+		CAE4A61C230E752F0034FEE8 /* icon_permissions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CAE4A61A230E752F0034FEE8 /* icon_permissions@2x.png */; };
+		CAE4A61D230E752F0034FEE8 /* icon_permissions@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = CAE4A61B230E752F0034FEE8 /* icon_permissions@3x.png */; };
+		CAE4A61F230E85D30034FEE8 /* LImagePickerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE4A61E230E85D30034FEE8 /* LImagePickerCell.swift */; };
 		DE6D9C7FB035F84F517874DC /* Pods_ImitationShaking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 240A2BF843BF79AF9245642C /* Pods_ImitationShaking.framework */; };
 /* End PBXBuildFile section */
 
@@ -214,6 +218,10 @@
 		CAA1883D22B0DA8E0077B7AA /* LTitleBarLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTitleBarLayout.swift; sourceTree = "<group>"; };
 		CAA1883F22B0E3E30077B7AA /* LPagesCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LPagesCache.swift; sourceTree = "<group>"; };
 		CAB9AE47C95E48072E6C02FF /* Pods_ImitationShakingUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImitationShakingUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAE4A617230E38E00034FEE8 /* LImagePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LImagePickerManager.swift; sourceTree = "<group>"; };
+		CAE4A61A230E752F0034FEE8 /* icon_permissions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_permissions@2x.png"; sourceTree = "<group>"; };
+		CAE4A61B230E752F0034FEE8 /* icon_permissions@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_permissions@3x.png"; sourceTree = "<group>"; };
+		CAE4A61E230E85D30034FEE8 /* LImagePickerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LImagePickerCell.swift; sourceTree = "<group>"; };
 		DD792A7AC2491788E8E060C0 /* Pods-ImitationShakingUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImitationShakingUITests.debug.xcconfig"; path = "Target Support Files/Pods-ImitationShakingUITests/Pods-ImitationShakingUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -296,6 +304,7 @@
 		2A56FA82230D904800B0A264 /* Public */ = {
 			isa = PBXGroup;
 			children = (
+				CAE4A619230E750E0034FEE8 /* icon */,
 				2A56FA85230D906E00B0A264 /* Model */,
 				2A56FA84230D906900B0A264 /* View */,
 				2A56FA83230D906500B0A264 /* VC */,
@@ -307,6 +316,8 @@
 			isa = PBXGroup;
 			children = (
 				2AF15E83230D93B20029B818 /* LImagePickerController.swift */,
+				CAE4A617230E38E00034FEE8 /* LImagePickerManager.swift */,
+				CAE4A61E230E85D30034FEE8 /* LImagePickerCell.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -763,6 +774,15 @@
 			path = Login;
 			sourceTree = "<group>";
 		};
+		CAE4A619230E750E0034FEE8 /* icon */ = {
+			isa = PBXGroup;
+			children = (
+				CAE4A61A230E752F0034FEE8 /* icon_permissions@2x.png */,
+				CAE4A61B230E752F0034FEE8 /* icon_permissions@3x.png */,
+			);
+			path = icon;
+			sourceTree = "<group>";
+		};
 		F534CFEC6FD39B4FEAF33187 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -890,10 +910,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AA3414822A57774005DE559 /* schoolData.json in Resources */,
+				CAE4A61D230E752F0034FEE8 /* icon_permissions@3x.png in Resources */,
 				2AA340A822998E52005DE559 /* LaunchScreen.storyboard in Resources */,
 				2AA3414C22A583E9005DE559 /* 抖腿短视频.md in Resources */,
 				2AA3414A22A57810005DE559 /* provincesData.json in Resources */,
 				2AA340A522998E52005DE559 /* Assets.xcassets in Resources */,
+				CAE4A61C230E752F0034FEE8 /* icon_permissions@2x.png in Resources */,
 				2AA340A322998E50005DE559 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1086,6 +1108,7 @@
 				2AA340CF2299910C005DE559 /* BaseNavigationController.swift in Sources */,
 				2A0DEA7C22C268E00059C299 /* ShowImageViewController.swift in Sources */,
 				CA279F6D22AE4D2200DE3CE8 /* RootViewController.swift in Sources */,
+				CAE4A61F230E85D30034FEE8 /* LImagePickerCell.swift in Sources */,
 				CAA1884022B0E3E30077B7AA /* LPagesCache.swift in Sources */,
 				2AA340DC2299967D005DE559 /* HomeViewController.swift in Sources */,
 				CA9AAAF322A66E160084B409 /* PublicUserModel.swift in Sources */,
@@ -1096,6 +1119,7 @@
 				2A66463A22C5141A002BF741 /* PublicPictureEditViewController.swift in Sources */,
 				2A0DEA6B22B51FEC0059C299 /* PublicVideoProgressView.swift in Sources */,
 				2AA3412422A1621D005DE559 /* String+Extension.swift in Sources */,
+				CAE4A618230E38E00034FEE8 /* LImagePickerManager.swift in Sources */,
 				CA9DC15E22A4B90A00BF331A /* MBAlertUtil.swift in Sources */,
 				2AA340E4229996AD005DE559 /* MineViewController.swift in Sources */,
 			);

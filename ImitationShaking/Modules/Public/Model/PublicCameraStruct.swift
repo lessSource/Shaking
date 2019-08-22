@@ -253,6 +253,7 @@ struct PublicCameraStruct {
         getPhotoAlbumResources(mediaType) { (assetsFetchResult) in
             var asset = [PHAsset]()
             assetsFetchResult.enumerateObjects({ (mediaAsset, index, stop) in
+//                mediaAsset.mediaType == .audio
                 asset.append(mediaAsset)
             })
             successPHAsset(asset)
