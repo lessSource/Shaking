@@ -28,7 +28,7 @@ extension String {
     
     /** 密码验证 6-12为字母和数字组合 */
     var isPasswordRuler: Bool {
-        let passwordRule = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,12}$"
+        let passwordRule = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$"
         let regexPassword = NSPredicate(format: "SELF MATCHES %@", passwordRule)
         return regexPassword.evaluate(with: self)
     }
