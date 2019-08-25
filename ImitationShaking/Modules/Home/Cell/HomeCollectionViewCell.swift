@@ -67,7 +67,7 @@ class HomeCollectionViewCell: UICollectionViewCell {
         operationView.snp.makeConstraints { (make) in
             make.top.equalTo(Constant.navbarAndStatusBar)
             make.left.right.equalToSuperview()
-            make.bottom.equalTo(contentView.snp_bottom).offset(-Constant.bottomBarHeight)
+            make.bottom.equalTo(contentView.snp.bottom).offset(-Constant.bottomBarHeight)
         }
     }
     

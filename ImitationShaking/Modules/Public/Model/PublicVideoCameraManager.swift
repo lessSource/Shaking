@@ -280,7 +280,7 @@ class PublicVideoCameraView: UIView {
                 
             }
         }
-        guard let formet = selectedFormet, let range = frameRateRange else {
+        guard let formet = selectedFormet, let _ = frameRateRange else {
             return
         }
         do {

@@ -125,24 +125,24 @@ class CommentsHeaderView: UIView {
 
         timeLabel.snp.makeConstraints { (make) in
             make.left.equalTo(headImage.snp.right).offset(4)
-            make.top.equalTo(nameLabel.snp_bottom).offset(2)
+            make.top.equalTo(nameLabel.snp.bottom).offset(2)
         }
 
         contentLabel.snp.makeConstraints { (make) in
             make.left.equalTo(headImage.snp.right).offset(4)
-            make.top.equalTo(timeLabel.snp_bottom).offset(2)
-            make.right.equalTo(self.snp_right).offset(-60)
+            make.top.equalTo(timeLabel.snp.bottom).offset(2)
+            make.right.equalTo(self.snp.right).offset(-60)
         }
 
         praiseImage.snp.makeConstraints { (make) in
-            make.right.equalTo(self.snp_right).offset(-20)
+            make.right.equalTo(self.snp.right).offset(-20)
             make.width.height.equalTo(20)
             make.top.equalToSuperview()
         }
         
         praiselabel.snp.makeConstraints { (make) in
             make.centerX.equalTo(praiseImage)
-            make.top.equalTo(praiseImage.snp_bottom).offset(2)
+            make.top.equalTo(praiseImage.snp.bottom).offset(2)
             make.right.equalTo(-5)
         }
         
@@ -157,7 +157,7 @@ class CommentsHeaderView: UIView {
         addSubview(userButton)
         userButton.snp.makeConstraints { (make) in
             make.left.top.bottom.equalTo(headImage)
-            make.right.equalTo(nameLabel.snp_right)
+            make.right.equalTo(nameLabel.snp.right)
         }
         
     }

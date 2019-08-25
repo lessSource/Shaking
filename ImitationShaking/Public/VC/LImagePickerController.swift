@@ -11,13 +11,25 @@ import Photos
 
 class LImagePickerController: UINavigationController {
     
+    fileprivate var animationDelegate: ModelAnimationDelegate?
+    
+
+    
+//    public var isViewSele
+    
+    fileprivate lazy var navView: LImageNavView = {
+        let navView = LImageNavView(frame: CGRect(x: 0, y: 0, width: Constant.screenWidth, height: Constant.navbarAndStatusBar))
+        navView.backgroundColor = UIColor.red
+        return navView
+    }()
+    
     fileprivate lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 1
         flowLayout.minimumInteritemSpacing = 1
         flowLayout.itemSize = CGSize(width: (Constant.screenWidth - 3)/4, height: (Constant.screenWidth - 3)/4)
 
-        let collectionView = UICollectionView(frame: self.view.bounds, collectionViewLayout: flowLayout)
+        let collectionView = UICollectionView(frame: CGRect(x: 0, y: self.navView.height, width: Constant.screenWidth, height: Constant.screenHeight - self.navView.height), collectionViewLayout: flowLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = UIColor.white
@@ -26,17 +38,26 @@ class LImagePickerController: UINavigationController {
     
     fileprivate var dataArray = [PHAsset]()
 
+    deinit {
+        print(self, "+++++释放")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         setNavigationBarHidden(true, animated: true)
         reuquetsPhotosAuthorization()
+        view.addSubview(navView)
         view.addSubview(collectionView)
         collectionView.register(LImagePickerCell.self, forCellWithReuseIdentifier: LImagePickerCell.identifire)
-        
+        loadData()
+
+    }
+    
+    func loadData() {
         LImagePickerManager.shared.getPhotoAlbumMedia() { (data) in
             self.dataArray = data
+            self.navView.titleLabel.text = "所有图片(\(data.count))"
             self.collectionView.reloadData()
         }
     }
@@ -56,7 +77,7 @@ class LImagePickerController: UINavigationController {
 }
 
 
-extension LImagePickerController: PromptViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+extension LImagePickerController: PromptViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource,UIViewControllerTransitioningDelegate, ShowImageProtocol {
     func promptViewImageClick(_ promptView: PromptView) {
         if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -74,7 +95,20 @@ extension LImagePickerController: PromptViewDelegate, UICollectionViewDelegate, 
         LImagePickerManager.shared.getPhotoWithAsset(dataArray[indexPath.item], photoWidth: width) { (image, dic) in
             cell.imageView.image = image
         }
+        cell.backView.isHidden = dataArray[indexPath.row].mediaType == .image
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if dataArray[indexPath.item].mediaType == .image {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
+            animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
+//            animationDelegate = ModelAnimationDelegate(superView: cell.superview, currentIndex: indexPath.item)
+            showImage(dataArray, currentIndex: indexPath.item, delegate: animationDelegate)
+        }
+    }
+    
+    
+    
     
 }

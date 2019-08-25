@@ -42,7 +42,9 @@ extension LImagePickerManager {
         getPhotoAlbumResources(mediaType) { (assetsFetchResult) in
             var asset = [PHAsset]()
             assetsFetchResult.enumerateObjects({ (mediaAsset, index, stop) in
-                asset.append(mediaAsset)
+                if mediaAsset.mediaType != .audio {
+                    asset.append(mediaAsset)
+                }
             })
             successPHAsset(asset)
         }
@@ -74,16 +76,43 @@ extension LImagePickerManager {
         }
     }
     
-    // 获取图片
+//    // 获取图片
+//    @discardableResult
+//    func getPhotoWithAsset(asset: PHAsset, photoWidth: CGFloat, networkAccessAllowed: Bool, completion: (_ photo: UIImage, _ info: [AnyHashable: Any], _ isDegraded: Bool) -> (), progressHandler: (_ progress: Double, _ error: Error, _ stop: Bool, _ info: [AnyHashable: Any]) -> ()) -> PHImageRequestID {
+//        
+//        var image: UIImage?
+//        let option: PHImageRequestOptions = PHImageRequestOptions()
+//        option.resizeMode = .fast
+//        let imageRequestID = PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: photoWidth, height: photoWidth), contentMode: .aspectFill, options: option) { (result, info) in
+//            image = result
+//            let downloadFinined = ((info?[PHImageCancelledKey]) != nil) && ((info?[PHImageErrorKey]) != nil)
+//            if downloadFinined && (result != nil) {
+//                image = result?.fixOrientation()
+//                completion(image!, info!, ((info?[PHImageResultIsDegradedKey]) != nil))
+//            }
+//            
+//            if (info![PHImageResultIsInCloudKey] != nil) && result != nil && networkAccessAllowed {
+//                let options: PHImageRequestOptions = PHImageRequestOptions()
+////                options.progressHandler = { progress, error, stop, info in
+////                    DispatchQueue.main.async {
+////                        progressHandler(progress, error, stop, info)
+////                    }
+////                }
+//                options.isNetworkAccessAllowed = true
+//                options.resizeMode = .fast
+//                PHImageManager.default().requestImageData(for: asset, options: options) { (data, dataUTI, orientation, info) in
+//                    
+//                }
+//            }
+//        }
+//        
+//    }
+    
     @discardableResult
     func getPhotoWithAsset(_ asset: PHAsset, photoWidth: CGFloat, completion: @escaping (UIImage?, [AnyHashable: Any]?) -> ()) -> PHImageRequestID {
         let option = PHImageRequestOptions()
         option.resizeMode = .fast
         let imageRequestId = PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: photoWidth, height: photoWidth), contentMode: .aspectFill, options: option) { (image, info) in
-            
-//            let downloadFinined = info?[PHImageCancelledKey]
-            
-            
             completion(image, info)
         }
         return imageRequestId

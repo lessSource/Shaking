@@ -446,7 +446,7 @@ class OperationButtonView: UIView {
     public var topImage: CGFloat = 5 {
         didSet {
             nameLabel.snp.updateConstraints { (make) in
-                make.top.equalTo(iconImage.snp_bottom).offset(topImage)
+                make.top.equalTo(iconImage.snp.bottom).offset(topImage)
             }
         }
     }
@@ -480,7 +480,7 @@ class OperationButtonView: UIView {
         
         nameLabel.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalTo(iconImage.snp_bottom).offset(topImage)
+            make.top.equalTo(iconImage.snp.bottom).offset(topImage)
         }
     }
     

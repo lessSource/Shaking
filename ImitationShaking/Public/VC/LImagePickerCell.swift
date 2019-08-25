@@ -18,9 +18,16 @@ class LImagePickerCell: UICollectionViewCell {
     
     public lazy var timeLabel: UILabel = {
         let label = UILabel()
+        label.text = "12:00"
         label.textColor = UIColor.white
-        label.font = UIFont.systemFont(ofSize: 11)
+        label.font = UIFont.systemFont(ofSize: 10)
         return label
+    }()
+    
+    public lazy var backView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.7)
+        return view
     }()
     
 //    public lazy var selectButton: UIButton = {
@@ -41,17 +48,18 @@ class LImagePickerCell: UICollectionViewCell {
     // MARK: - layoutView
     fileprivate func layoutView() {
         contentView.addSubview(imageView)
-        contentView.addSubview(timeLabel)
 //        contentView.addSubview(selectButton)
-        
+        contentView.addSubview(backView)
+        backView.addSubview(timeLabel)
+
         imageView.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
             make.top.left.equalToSuperview()
         }
         
         timeLabel.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview().offset(-8)
-            make.right.equalToSuperview().offset(-8)
+            make.centerY.equalToSuperview()
+            make.left.equalTo(10)
         }
         
 //        selectButton.snp.makeConstraints { (make) in
@@ -59,5 +67,10 @@ class LImagePickerCell: UICollectionViewCell {
 //            make.top.equalTo(3)
 //            make.right.equalToSuperview().offset(-5)
 //        }
+        
+        backView.snp.makeConstraints { (make) in
+            make.height.equalTo(18)
+            make.left.right.bottom.equalToSuperview()
+        }
     }
 }

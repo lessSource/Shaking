@@ -83,7 +83,7 @@ class LoginViewController: BaseViewController {
         view.addSubview(phoneTextField)
         phoneTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalTo(promptLabel.snp_bottom).offset(15)
+            make.top.equalTo(promptLabel.snp.bottom).offset(15)
             make.left.equalTo(45)
             make.height.equalTo(45)
         }
@@ -91,7 +91,7 @@ class LoginViewController: BaseViewController {
         view.addSubview(passwordTextField)
         passwordTextField.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalTo(phoneTextField.snp_bottom).offset(5)
+            make.top.equalTo(phoneTextField.snp.bottom).offset(5)
             make.left.equalTo(45)
             make.height.equalTo(45)
         }
@@ -104,7 +104,7 @@ class LoginViewController: BaseViewController {
         view.addSubview(loginButton)
         loginButton.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
-            make.top.equalTo(passwordTextField.snp_bottom).offset(30)
+            make.top.equalTo(passwordTextField.snp.bottom).offset(30)
             make.left.equalTo(45)
             make.height.equalTo(45)
         }

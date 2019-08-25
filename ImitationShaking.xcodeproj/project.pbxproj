@@ -21,6 +21,7 @@
 		2A0DEA7C22C268E00059C299 /* ShowImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA7B22C268E00059C299 /* ShowImageViewController.swift */; };
 		2A0DEA7E22C269FF0059C299 /* ShowImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0DEA7D22C269FF0059C299 /* ShowImageCollectionViewCell.swift */; };
 		2A1026F222A8110B00C31746 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A1026F122A8110B00C31746 /* Array+Extension.swift */; };
+		2A3950C8230EE43A00D253D3 /* LImageNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3950C7230EE43A00D253D3 /* LImageNavView.swift */; };
 		2A66463A22C5141A002BF741 /* PublicPictureEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A66463922C5141A002BF741 /* PublicPictureEditViewController.swift */; };
 		2A66463C22C6595C002BF741 /* PublicReleaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A66463B22C6595C002BF741 /* PublicReleaseViewController.swift */; };
 		2A66463F22C667C6002BF741 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A66463E22C667C6002BF741 /* UIViewController+Extension.swift */; };
@@ -135,6 +136,7 @@
 		2A0DEA7B22C268E00059C299 /* ShowImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImageViewController.swift; sourceTree = "<group>"; };
 		2A0DEA7D22C269FF0059C299 /* ShowImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		2A1026F122A8110B00C31746 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
+		2A3950C7230EE43A00D253D3 /* LImageNavView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LImageNavView.swift; sourceTree = "<group>"; };
 		2A66463922C5141A002BF741 /* PublicPictureEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicPictureEditViewController.swift; sourceTree = "<group>"; };
 		2A66463B22C6595C002BF741 /* PublicReleaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicReleaseViewController.swift; sourceTree = "<group>"; };
 		2A66463E22C667C6002BF741 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
@@ -325,6 +327,7 @@
 		2A56FA84230D906900B0A264 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2A3950C7230EE43A00D253D3 /* LImageNavView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1121,6 +1124,7 @@
 				2AA3412422A1621D005DE559 /* String+Extension.swift in Sources */,
 				CAE4A618230E38E00034FEE8 /* LImagePickerManager.swift in Sources */,
 				CA9DC15E22A4B90A00BF331A /* MBAlertUtil.swift in Sources */,
+				2A3950C8230EE43A00D253D3 /* LImageNavView.swift in Sources */,
 				2AA340E4229996AD005DE559 /* MineViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -132,7 +132,7 @@ class HomeVideoOperationView: UIView {
         addSubview(musicLabel)
         musicLabel.snp.makeConstraints { (make) in
             make.centerY.equalTo(notesImage)
-            make.left.equalTo(notesImage.snp_right).offset(2)
+            make.left.equalTo(notesImage.snp.right).offset(2)
             make.width.equalTo(Constant.screenWidth/2)
         }
         
@@ -153,7 +153,7 @@ class HomeVideoOperationView: UIView {
         addSubview(shareButtonView)
         shareButtonView.button.addTarget(self, action: #selector(shareButtonClick), for: .touchUpInside)
         shareButtonView.snp.makeConstraints { (make) in
-            make.bottom.equalTo(musicImage.snp_top).offset(-25)
+            make.bottom.equalTo(musicImage.snp.top).offset(-25)
             make.height.width.equalTo(50)
             make.centerX.equalTo(musicImage)
         }
@@ -161,7 +161,7 @@ class HomeVideoOperationView: UIView {
         addSubview(commentsButtonView)
         commentsButtonView.button.addTarget(self, action: #selector(commentsButtonClick), for: .touchUpInside)
         commentsButtonView.snp.makeConstraints { (make) in
-            make.bottom.equalTo(shareButtonView.snp_top).offset(-25)
+            make.bottom.equalTo(shareButtonView.snp.top).offset(-25)
             make.height.width.equalTo(50)
             make.centerX.equalTo(musicImage)
         }
@@ -169,7 +169,7 @@ class HomeVideoOperationView: UIView {
         addSubview(givelikeButtonView)
         givelikeButtonView.button.addTarget(self, action: #selector(givelikeButtonClick), for: .touchUpInside)
         givelikeButtonView.snp.makeConstraints { (make) in
-            make.bottom.equalTo(commentsButtonView.snp_top).offset(-25)
+            make.bottom.equalTo(commentsButtonView.snp.top).offset(-25)
             make.height.width.equalTo(50)
             make.centerX.equalTo(musicImage)
         }
@@ -178,21 +178,21 @@ class HomeVideoOperationView: UIView {
         headerImage.snp.makeConstraints { (make) in
             make.width.height.equalTo(48)
             make.centerX.equalTo(givelikeButtonView)
-            make.bottom.equalTo(givelikeButtonView.snp_top).offset(-30)
+            make.bottom.equalTo(givelikeButtonView.snp.top).offset(-30)
         }
         
         addSubview(contentLabel)
         contentLabel.snp.makeConstraints { (make) in
             make.left.equalTo(15)
-            make.right.equalTo(shareButtonView.snp_left).offset(-5)
-            make.bottom.equalTo(musicLabel.snp_top).offset(-10)
+            make.right.equalTo(shareButtonView.snp.left).offset(-5)
+            make.bottom.equalTo(musicLabel.snp.top).offset(-10)
         }
         
         addSubview(nameLabel)
         nameLabel.snp.makeConstraints { (make) in
             make.left.equalTo(15)
             make.right.equalToSuperview().offset(-100)
-            make.bottom.equalTo(contentLabel.snp_top).offset(-10)
+            make.bottom.equalTo(contentLabel.snp.top).offset(-10)
         }
 
     }

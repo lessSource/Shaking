@@ -6,13 +6,25 @@
 //  Copyright © 2019 study. All rights reserved.
 //
 
+
 import UIKit
+import Photos
+
+protocol ImageDataProtocol { }
+
+extension UIImage: ImageDataProtocol { }
+
+extension String: ImageDataProtocol { }
+
+extension PHAsset: ImageDataProtocol { }
 
 private let cellMargin: CGFloat = 20
 
 class ShowImageViewController: UICollectionViewController {
     fileprivate var imageArray: UIImage?
     fileprivate var currentIndex: Int = 0
+    
+    fileprivate var dataArray: Array = [ImageDataProtocol]()
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
@@ -33,6 +45,21 @@ class ShowImageViewController: UICollectionViewController {
         self.currentIndex = currentIndex
     }
     
+    convenience init(dataArray: [ImageDataProtocol], currentIndex: Int) {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: Constant.screenWidth + cellMargin, height: Constant.screenHeight)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        layout.scrollDirection = .horizontal
+        self.init(collectionViewLayout: layout)
+        self.dataArray = dataArray
+        self.currentIndex = currentIndex
+    }
+    
+    deinit {
+        print(self, "+++++释放")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutView()
@@ -45,7 +72,7 @@ class ShowImageViewController: UICollectionViewController {
         collectionView?.isPagingEnabled = true
         collectionView?.showsHorizontalScrollIndicator = false
         collectionView?.register(ShowImageCollectionViewCell.self, forCellWithReuseIdentifier: ShowImageCollectionViewCell.identifire)
-        collectionView?.scrollToItem(at: IndexPath(item: currentIndex, section: 0), at: .left, animated: false)
+        collectionView?.scrollToItem(at: IndexPath(item: 0, section: currentIndex), at: .left, animated: false)
     }
     
     fileprivate func imageClick(_ cell: ShowImageCollectionViewCell, cellForItemAt indexPath: IndexPath, type: ShowImageCollectionViewCell.ActionEnum) {
@@ -59,7 +86,7 @@ class ShowImageViewController: UICollectionViewController {
 // MARK: UICollectionViewDataSource
 extension ShowImageViewController {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return dataArray.count
     }
     
     
@@ -69,7 +96,7 @@ extension ShowImageViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShowImageCollectionViewCell.identifire, for: indexPath) as! ShowImageCollectionViewCell
-        cell.currentImage.image = imageArray
+        cell.updateImage(imageProtocol: dataArray[indexPath.section])
         cell.imageClick(action: { [weak self] (type) in
             self?.imageClick(cell, cellForItemAt: indexPath, type: type)
         })
@@ -83,5 +110,8 @@ extension ShowImageViewController {
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         currentIndex = Int(scrollView.contentOffset.x / scrollView.width)
+        
+        print("/////////\(currentIndex)/////////")
     }
+    
 }

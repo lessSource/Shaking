@@ -100,18 +100,39 @@ extension UIImage {
             return self
         }
         
-        let ctx = CGContext(data: nil, width: Int(self.size.width), height: Int(self.size.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: cgImage.bitmapInfo.rawValue)
-    
-        ctx?.concatenate(transform)
+        guard let ctx = CGContext(data: nil, width: Int(self.size.width), height: Int(self.size.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: colorSpace, bitmapInfo: cgImage.bitmapInfo.rawValue) else {
+            return self
+        }
+        
+        ctx.concatenate(transform)
         
         switch self.imageOrientation {
         case .left, .leftMirrored, .right, .rightMirrored:
-            ctx?.draw(cgImage, in: CGRect(x: 0, y: 0, width: self.size.height, height: self.size.width))
-            
+            ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: self.size.height, height: self.size.width))
         default:
-            <#code#>
+            ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+            break
+        }
+        guard let cgimg = ctx.makeImage() else {
+            return self
+        }
+        let image = UIImage(cgImage: cgimg)
+        return image
+    }
+    
+    // 给图片添加图片水印
+    func drawImageInImage(_ watermarkImage: UIImage?, watermarkImageRect: CGRect) -> UIImage {
+        guard let image = watermarkImage else {
+            return self
         }
         
+        UIGraphicsBeginImageContextWithOptions(self.size, false, 0)
+        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        
+        image.draw(in: watermarkImageRect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage ?? self
     }
     
 }
