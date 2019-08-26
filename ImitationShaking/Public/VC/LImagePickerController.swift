@@ -13,13 +13,9 @@ class LImagePickerController: UINavigationController {
     
     fileprivate var animationDelegate: ModelAnimationDelegate?
     
-
-    
-//    public var isViewSele
-    
     fileprivate lazy var navView: LImageNavView = {
         let navView = LImageNavView(frame: CGRect(x: 0, y: 0, width: Constant.screenWidth, height: Constant.navbarAndStatusBar))
-        navView.backgroundColor = UIColor.red
+        navView.backgroundColor = UIColor.white
         return navView
     }()
     
@@ -42,15 +38,50 @@ class LImagePickerController: UINavigationController {
         print(self, "+++++释放")
     }
     
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        let homeVC = HomeViewController()
+//        pushViewController(homeVC, animated: true)
+//    }
+    
+    convenience init() {
+        let mineVC = MineViewController()
+        mineVC.view.backgroundColor = UIColor.green
+        self.init(rootViewController: mineVC)
+    }
+    
+    override init(rootViewController: UIViewController) {
+//        let homeVC = HomeViewController()
+
+        
+        super.init(rootViewController: rootViewController)
+        
+//        self.navigationController
+        
+        let homeVC = FriendsViewController()
+        homeVC.view.backgroundColor = UIColor.red
+        pushViewController(homeVC, animated: true)
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.white
-        setNavigationBarHidden(true, animated: true)
-        reuquetsPhotosAuthorization()
-        view.addSubview(navView)
-        view.addSubview(collectionView)
-        collectionView.register(LImagePickerCell.self, forCellWithReuseIdentifier: LImagePickerCell.identifire)
-        loadData()
+    
+        
+//        view.backgroundColor = UIColor.white
+//        setNavigationBarHidden(true, animated: true)
+//        reuquetsPhotosAuthorization()
+//        view.addSubview(navView)
+//        view.addSubview(collectionView)
+//        collectionView.register(LImagePickerCell.self, forCellWithReuseIdentifier: LImagePickerCell.identifire)
+//        loadData()
 
     }
     
@@ -100,12 +131,19 @@ extension LImagePickerController: PromptViewDelegate, UICollectionViewDelegate, 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if dataArray[indexPath.item].mediaType == .image {
-            guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
-            animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
-//            animationDelegate = ModelAnimationDelegate(superView: cell.superview, currentIndex: indexPath.item)
-            showImage(dataArray, currentIndex: indexPath.item, delegate: animationDelegate)
+        navView.allNumber = 1
+        DispatchQueue.main.async {
+            let homeVC = HomeViewController()
+            self.pushViewController(homeVC, animated: true)
         }
+        
+
+//        if dataArray[indexPath.item].mediaType == .image {
+//            guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
+//            animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
+////            animationDelegate = ModelAnimationDelegate(superView: cell.superview, currentIndex: indexPath.item)
+//            showImage(dataArray, currentIndex: indexPath.item, delegate: animationDelegate)
+//        }
     }
     
     

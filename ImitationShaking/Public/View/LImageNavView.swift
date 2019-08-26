@@ -10,6 +10,25 @@ import UIKit
 
 class LImageNavView: UIView {
     
+    public var maxNumber: Int = 1
+    
+    public var allNumber: Int = 0
+//    {
+//        didSet {
+//            if self.allNumber == 0 {
+//                completeButton.setTitleColor(UIColor(white: 0.0, alpha: 0.3), for: .normal)
+//                completeButton.isUserInteractionEnabled = false
+//                completeButton.setTitle("完成", for: .normal)
+//            }else {
+//                completeButton.setTitleColor(UIColor(white: 0.0, alpha: 1.0), for: .normal)
+//                completeButton.isUserInteractionEnabled = true
+//                completeButton.setTitle("完成(\(self.allNumber)/\(maxNumber))", for: .normal)
+//            }
+//            completeButton.width = CGFloat.minimum(completeButton.titleLabel?.intrinsicContentSize.width ?? 60, 120)
+//            completeButton.x = Constant.screenWidth - completeButton.width - 15
+//        }
+//    }
+    
     public lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.frame = CGRect(x: 100, y: Constant.statusHeight, width: Constant.screenWidth - 200, height: Constant.topBarHeight)
@@ -30,9 +49,9 @@ class LImageNavView: UIView {
         return button
     }()
     
-    public lazy var completeButton: UIButton = {
+    public lazy var cancleButton: UIButton = {
         let button = UIButton()
-        button.setTitle("完成", for: .normal)
+        button.setTitle("取消", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         button.setTitleColor(UIColor.black, for: .normal)
         button.contentHorizontalAlignment = .right
@@ -45,7 +64,8 @@ class LImageNavView: UIView {
         super.init(frame: frame)
         addSubview(titleLabel)
         addSubview(backButton)
-        addSubview(completeButton)
+        addSubview(cancleButton)
+        maxNumber = 2
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -54,11 +74,10 @@ class LImageNavView: UIView {
     
     // MARK:- Event
     @objc fileprivate func backButtonClick() {
-        getControllerFromView()?.dismiss(animated: true, completion: nil)
     }
     
     @objc fileprivate func completeButtonClick() {
-        
+        getControllerFromView()?.dismiss(animated: true, completion: nil)
     }
     
 }

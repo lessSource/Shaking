@@ -53,7 +53,8 @@ extension UIImageView : CurrentViewProtocol {
             size = PHImageManagerMaximumSize
         }
         PHCachingImageManager().requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: option) { (image, dic) in
-            self.image = image?.drawImageInImage(R.image.icon_music(), watermarkImageRect: CGRect(x: 0, y: 0, width: 40, height: 40))
+//            self.image = image?.drawImageInImage(R.image.icon_music(), watermarkImageRect: CGRect(x: 0, y: 0, width: 40, height: 40))
+            self.image = image
         }
     }
 }
