@@ -7,60 +7,27 @@
 //
 
 import UIKit
-import Photos
 
 class LImagePickerController: UINavigationController {
-    
-    fileprivate var animationDelegate: ModelAnimationDelegate?
-    
-    fileprivate lazy var navView: LImageNavView = {
-        let navView = LImageNavView(frame: CGRect(x: 0, y: 0, width: Constant.screenWidth, height: Constant.navbarAndStatusBar))
-        navView.backgroundColor = UIColor.white
-        return navView
-    }()
-    
-    fileprivate lazy var collectionView: UICollectionView = {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumLineSpacing = 1
-        flowLayout.minimumInteritemSpacing = 1
-        flowLayout.itemSize = CGSize(width: (Constant.screenWidth - 3)/4, height: (Constant.screenWidth - 3)/4)
-
-        let collectionView = UICollectionView(frame: CGRect(x: 0, y: self.navView.height, width: Constant.screenWidth, height: Constant.screenHeight - self.navView.height), collectionViewLayout: flowLayout)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.backgroundColor = UIColor.white
-        return collectionView
-    }()
-    
-    fileprivate var dataArray = [PHAsset]()
 
     deinit {
         print(self, "+++++释放")
     }
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        let homeVC = HomeViewController()
-//        pushViewController(homeVC, animated: true)
-//    }
-    
     convenience init() {
-        let mineVC = MineViewController()
-        mineVC.view.backgroundColor = UIColor.green
-        self.init(rootViewController: mineVC)
+        let albumPickerVC = LAlbumPickerController()
+        self.init(rootViewController: albumPickerVC)
     }
     
     override init(rootViewController: UIViewController) {
-//        let homeVC = HomeViewController()
-
-        
         super.init(rootViewController: rootViewController)
+        delegate = self
+        if self.responds(to: #selector(getter: interactivePopGestureRecognizer)) {
+            self.interactivePopGestureRecognizer?.delegate = self
+        }
         
-//        self.navigationController
-        
-        let homeVC = FriendsViewController()
-        homeVC.view.backgroundColor = UIColor.red
-        pushViewController(homeVC, animated: true)
+        let photoPicker = LPhotoPickerController()
+        pushViewController(photoPicker, animated: true)
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -71,82 +38,43 @@ class LImagePickerController: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var childForStatusBarStyle: UIViewController? {
+        return self.visibleViewController
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        
-//        view.backgroundColor = UIColor.white
-//        setNavigationBarHidden(true, animated: true)
-//        reuquetsPhotosAuthorization()
-//        view.addSubview(navView)
-//        view.addSubview(collectionView)
-//        collectionView.register(LImagePickerCell.self, forCellWithReuseIdentifier: LImagePickerCell.identifire)
-//        loadData()
-
-    }
-    
-    func loadData() {
-        LImagePickerManager.shared.getPhotoAlbumMedia() { (data) in
-            self.dataArray = data
-            self.navView.titleLabel.text = "所有图片(\(data.count))"
-            self.collectionView.reloadData()
-        }
-    }
-    
-    private func reuquetsPhotosAuthorization() {
-        if !LImagePickerManager.shared.reuquetsPhotosAuthorization() {
-            collectionView.placeholderShow(true) { (promptView) in
-                promptView.imageName(R.image.icon_permissions.name)
-                promptView.title("请在iPhone的\'设置-隐私-照片'选项中\r允许\(App.appName)访问你的手机相册")
-                promptView.titleLabel.height = 60
-                promptView.imageTop(Constant.screenHeight/2 - 150)
-                promptView.delegate = self
-            }
-        }
+        setNavigationBarHidden(true, animated: true)
     }
     
 }
 
 
-extension LImagePickerController: PromptViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource,UIViewControllerTransitioningDelegate, ShowImageProtocol {
-    func promptViewImageClick(_ promptView: PromptView) {
-        if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+extension LImagePickerController: UIGestureRecognizerDelegate, UINavigationControllerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if navigationController?.viewControllers.count == 1 {
+            return false
+        }else {
+            return true
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataArray.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: LImagePickerCell = collectionView.dequeueReusableCell(withReuseIdentifier: LImagePickerCell.identifire, for: indexPath) as! LImagePickerCell
-        cell.backgroundColor = UIColor.orange
-        let width = (Constant.screenWidth - 3)/4
-        LImagePickerManager.shared.getPhotoWithAsset(dataArray[indexPath.item], photoWidth: width) { (image, dic) in
-            cell.imageView.image = image
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        if navigationController.responds(to: #selector(getter: interactivePopGestureRecognizer)) {
+            navigationController.interactivePopGestureRecognizer?.isEnabled = true
         }
-        cell.backView.isHidden = dataArray[indexPath.row].mediaType == .image
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        navView.allNumber = 1
-        DispatchQueue.main.async {
-            let homeVC = HomeViewController()
-            self.pushViewController(homeVC, animated: true)
+        if navigationController.viewControllers.count == 1 {
+            navigationController.interactivePopGestureRecognizer?.isEnabled = false
+            navigationController.interactivePopGestureRecognizer?.delegate = nil
         }
-        
-
-//        if dataArray[indexPath.item].mediaType == .image {
-//            guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
-//            animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
-////            animationDelegate = ModelAnimationDelegate(superView: cell.superview, currentIndex: indexPath.item)
-//            showImage(dataArray, currentIndex: indexPath.item, delegate: animationDelegate)
-//        }
     }
     
-    
-    
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        if self.responds(to: #selector(getter: interactivePopGestureRecognizer)) {
+            self.interactivePopGestureRecognizer?.isEnabled = false
+        }
+        super.pushViewController(viewController, animated: true)
+    }
     
 }
+

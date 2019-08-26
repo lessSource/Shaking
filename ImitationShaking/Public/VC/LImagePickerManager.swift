@@ -54,7 +54,7 @@ extension LImagePickerManager {
     // 获取相册中资源
     private func getPhotoAlbumResources(_ mediaType: PHAssetMediaType = PHAssetMediaType.unknown, successPHAsset: @escaping (PHFetchResult<PHAsset>) -> ()) {
         DispatchQueue.global().async {
-            
+            self.getAllAlbum()
             var mediaTypePHAsset: PHFetchResult<PHAsset> = PHFetchResult()
             
             // 获取所有资源
@@ -74,6 +74,32 @@ extension LImagePickerManager {
                 successPHAsset(mediaTypePHAsset)
             }
         }
+    }
+    
+    private func getAllAlbum() {
+        let options = PHFetchOptions()
+        let smartAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: options)
+        for i in 0..<smartAlbums.count {
+            let collection: PHCollection = smartAlbums[i];
+            if collection is PHAssetCollection {
+                let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: collection as! PHAssetCollection, options: nil)
+                if fetchResult.count > 0 {
+                    print(collection.localizedTitle ?? "", fetchResult.count)
+                }
+            }
+        }
+        
+        let user = PHCollectionList.fetchTopLevelUserCollections(with: options)        
+        for i in 0..<user.count {
+            let collection: PHCollection = user[i];
+            if collection is PHAssetCollection {
+                let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: collection as! PHAssetCollection, options: nil)
+                if fetchResult.count > 0 {
+                    print(collection.localizedTitle ?? "", fetchResult.count )
+                }
+            }
+        }
+        
     }
     
 //    // 获取图片

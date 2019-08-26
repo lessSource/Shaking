@@ -10,29 +10,11 @@ import UIKit
 
 class LImageNavView: UIView {
     
-    public var maxNumber: Int = 1
-    
     public var allNumber: Int = 0
-//    {
-//        didSet {
-//            if self.allNumber == 0 {
-//                completeButton.setTitleColor(UIColor(white: 0.0, alpha: 0.3), for: .normal)
-//                completeButton.isUserInteractionEnabled = false
-//                completeButton.setTitle("完成", for: .normal)
-//            }else {
-//                completeButton.setTitleColor(UIColor(white: 0.0, alpha: 1.0), for: .normal)
-//                completeButton.isUserInteractionEnabled = true
-//                completeButton.setTitle("完成(\(self.allNumber)/\(maxNumber))", for: .normal)
-//            }
-//            completeButton.width = CGFloat.minimum(completeButton.titleLabel?.intrinsicContentSize.width ?? 60, 120)
-//            completeButton.x = Constant.screenWidth - completeButton.width - 15
-//        }
-//    }
     
     public lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.frame = CGRect(x: 100, y: Constant.statusHeight, width: Constant.screenWidth - 200, height: Constant.topBarHeight)
-        label.text = "所有图片"
         label.font = UIFont.systemFont(ofSize: 15)
         label.textAlignment = .center
         return label
@@ -65,7 +47,6 @@ class LImageNavView: UIView {
         addSubview(titleLabel)
         addSubview(backButton)
         addSubview(cancleButton)
-        maxNumber = 2
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -74,6 +55,7 @@ class LImageNavView: UIView {
     
     // MARK:- Event
     @objc fileprivate func backButtonClick() {
+        getControllerFromView()?.navigationController?.popViewController(animated: true)
     }
     
     @objc fileprivate func completeButtonClick() {
