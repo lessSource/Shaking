@@ -26,7 +26,7 @@ class PhotosChooseCollectionViewCell: UICollectionViewCell {
     
     public lazy var selectButton: UIButton = {
         let button = UIButton()
-        button.setBackgroundImage(R.image.iocn_album_nor(), for: .normal)
+        button.setBackgroundImage(R.image.icon_album_nor(), for: .normal)
         return button
     }()
     

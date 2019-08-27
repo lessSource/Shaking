@@ -9,7 +9,6 @@
 import UIKit
 
 class LAlbumPickerController: UIViewController {
-
     
     fileprivate lazy var navView: LImageNavView = {
         let navView = LImageNavView(frame: CGRect(x: 0, y: 0, width: Constant.screenWidth, height: Constant.navbarAndStatusBar))
@@ -38,17 +37,37 @@ class LAlbumPickerController: UIViewController {
     
     fileprivate lazy var dataArray: Array = [LAlbumPickerModel]()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        LImagePickerManager.shared.getAlbumResources { array in
+            self.dataArray = array
+            self.loadData()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         view.addSubview(navView)
         view.addSubview(tableView)
         tableView.register(LAlbumPickerTableViewCell.self, forCellReuseIdentifier: LAlbumPickerTableViewCell.identifire)
-        
-        LImagePickerManager.shared.getAlbumResources { array in
-            self.dataArray = array
-            self.tableView.reloadData()
+    }
+    
+    fileprivate func loadData() {
+        guard let navVC = navigationController as? LImagePickerController else {
+            tableView.reloadData()
+            return
         }
+        for i in 0..<dataArray.count {
+            var selectCount: Int = 0
+            for asset in navVC.selectArray {
+                if dataArray[i].fetchResult?.contains(asset.asset) == true {
+                    selectCount += 1
+                }
+            }
+            dataArray[i].selectCount = selectCount
+        }
+        tableView.reloadData()
     }
 }
 

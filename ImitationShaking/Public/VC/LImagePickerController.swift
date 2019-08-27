@@ -13,13 +13,14 @@ protocol LImagePickerDelegate: NSObjectProtocol {
     
 }
 
-
 class LImagePickerController: UINavigationController {
 
     private weak var imageDelagete: LImagePickerDelegate?
     
     private var maxSelectCount: Int = 0
     
+    public var selectArray = [LAssetModel]()
+
     deinit {
         print(self, "+++++释放")
     }

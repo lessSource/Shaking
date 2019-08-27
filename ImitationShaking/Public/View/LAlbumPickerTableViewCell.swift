@@ -13,6 +13,7 @@ class LAlbumPickerTableViewCell: UITableViewCell {
     public var albumModel: LAlbumPickerModel = LAlbumPickerModel() {
         didSet {
             nameLabel.text = "\(albumModel.title)(\(albumModel.count))"
+            numberLabel.text = "\(albumModel.selectCount)"
             if let asset = albumModel.asset {
                 LImagePickerManager.shared.getPhotoWithAsset(asset, photoWidth: 60) { (image, dic) in
                     self.coverImage.image = image
@@ -42,6 +43,13 @@ class LAlbumPickerTableViewCell: UITableViewCell {
         return label
     }()
     
+    fileprivate lazy var numberLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor.red
+        label.textAlignment = .right
+        label.font = UIFont.systemFont(ofSize: 15)
+        return label
+    }()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -71,7 +79,8 @@ class LAlbumPickerTableViewCell: UITableViewCell {
         
         coverImage.frame = CGRect(x: 0, y: 0, width: bounds.height, height: bounds.height - 1)
         lineView.frame = CGRect(x: coverImage.frame.maxX, y: coverImage.height, width: Constant.screenWidth - coverImage.width, height: 1)
-        nameLabel.frame = CGRect(x: coverImage.width + 10, y: 20, width: contentView.width - coverImage.width - 20, height: bounds.height - 40)
+        nameLabel.frame = CGRect(x: coverImage.width + 10, y: 20, width: contentView.width - coverImage.width - 60, height: bounds.height - 40)
+        numberLabel.frame = CGRect(x: nameLabel.frame.maxX, y: 20, width: 50, height: bounds.height - 40)
     }
     
     // MARK:- layoutView
@@ -79,7 +88,6 @@ class LAlbumPickerTableViewCell: UITableViewCell {
         contentView.addSubview(coverImage)
         contentView.addSubview(lineView)
         contentView.addSubview(nameLabel)
-        coverImage.backgroundColor = UIColor.red
-        
+        contentView.addSubview(numberLabel)
     }
 }

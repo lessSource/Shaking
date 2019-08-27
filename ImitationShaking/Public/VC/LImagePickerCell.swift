@@ -18,7 +18,7 @@ class LImagePickerCell: UICollectionViewCell {
         didSet {
             guard let model = assetModel else {  return }
             selectButton.isSelected  = model.isSelect
-            selectImageView.image = model.isSelect ? R.image.iocn_album_sel() : R.image.iocn_album_nor()
+            selectImageView.image = model.isSelect ? R.image.icon_album_sel() : R.image.icon_album_nor()
             let width = (Constant.screenWidth - 3)/4
             LImagePickerManager.shared.getPhotoWithAsset(model.asset, photoWidth: width) { (image, dic) in
                 self.imageView.image = image
@@ -38,7 +38,7 @@ class LImagePickerCell: UICollectionViewCell {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
-        image.image = R.image.iocn_album_nor()
+        image.image = R.image.icon_album_nor()
         return image
     }()
     
@@ -110,7 +110,7 @@ class LImagePickerCell: UICollectionViewCell {
     
     // MARK:- Event
      @objc fileprivate func selectButtonClick(_ sender: UIButton) {
-        selectImageView.image = sender.isSelected ? R.image.iocn_album_nor() : R.image.iocn_album_sel()
+        selectImageView.image = sender.isSelected ? R.image.icon_album_nor() : R.image.icon_album_sel()
         sender.isSelected = !sender.isSelected
         if sender.isSelected {
             selectImageView.showOscillatoryAnimation()

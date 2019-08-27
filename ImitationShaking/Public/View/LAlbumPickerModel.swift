@@ -18,6 +18,8 @@ struct LAlbumPickerModel {
     var fetchResult: PHFetchResult<PHAsset>?
     /** 数量 */
     var count: Int = 0
+    /** 选中数量 */
+    var selectCount: Int = 0
     
 }
 

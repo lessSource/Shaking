@@ -43,7 +43,9 @@ class LPhotoPickerController: UIViewController {
     
     fileprivate var dataArray = [LAssetModel]()
     
-    fileprivate var selectArray = [LAssetModel]()
+    deinit {
+        print("++++++++释放", self)
+    }
 
     
     override func viewDidLoad() {
@@ -64,16 +66,36 @@ class LPhotoPickerController: UIViewController {
             }else {
                 self.navView.titleLabel.text = "相机胶卷(\(data.count))"
             }
+            self.checkSelectedModels()
             self.collectionView.reloadData()
+            self.collectionView.scrollToItem(at: IndexPath(item: data.count - 1, section: 0), at: .bottom, animated: false)
         }
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+    
+    fileprivate func checkSelectedModels() {
+        guard let navVC = navigationController as? LImagePickerController else { return }
+        dataArray = dataArray.map {
+            var model = $0
+            model.isSelect = navVC.selectArray.contains(where: {$0.asset == model.asset})
+            return model
+        }
+    }
+    
+    
     fileprivate func didSelectCellButton(_ isSelect: Bool, indexPath: IndexPath) {
         dataArray[indexPath.item].isSelect = isSelect
+        guard let navVC = navigationController as? LImagePickerController else {
+            return
+        }
+        
         if isSelect {
-            selectArray.append(dataArray[indexPath.item])
+            navVC.selectArray.append(dataArray[indexPath.item])
         }else {
-            selectArray.removeAll(where: { $0.asset.localIdentifier == dataArray[indexPath.item].asset.localIdentifier })
+            navVC.selectArray.removeAll(where: { $0.asset.localIdentifier == dataArray[indexPath.item].asset.localIdentifier })
         }
     }
 }

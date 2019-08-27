@@ -75,7 +75,7 @@ extension LImagePickerManager {
             // 获取所有资源
             let allPhotosOptions = PHFetchOptions()
             // 按照创建时间倒叙
-            allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+//            allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             // 获取所需资源
             if mediaType == .unknown {
                 mediaTypePHAsset = PHAsset.fetchAssets(with: allPhotosOptions)
@@ -105,7 +105,7 @@ extension LImagePickerManager {
                 if smartAlbums[i].assetCollectionSubtype.rawValue == 1000000201 { continue } // [最近删除] 相册
 
                 if fetchResult.count > 0 {
-                    let model = LAlbumPickerModel(title: smartAlbums[i].localizedTitle ?? "", asset: fetchResult.lastObject, fetchResult: fetchResult, count: fetchResult.count)
+                    let model = LAlbumPickerModel(title: smartAlbums[i].localizedTitle ?? "", asset: fetchResult.lastObject, fetchResult: fetchResult, count: fetchResult.count, selectCount: 0)
                     if smartAlbums[i].assetCollectionSubtype == .smartAlbumUserLibrary {
                         array.insert(model, at: 0)
                     }else {
@@ -120,7 +120,7 @@ extension LImagePickerManager {
                     allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
                     let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: collection, options: allPhotosOptions)
                     if fetchResult.count > 0 {
-                        let model = LAlbumPickerModel(title: collection.localizedTitle ?? "", asset: fetchResult.lastObject,fetchResult: fetchResult, count: fetchResult.count)
+                        let model = LAlbumPickerModel(title: collection.localizedTitle ?? "", asset: fetchResult.lastObject,fetchResult: fetchResult, count: fetchResult.count, selectCount: 0)
                         array.append(model)
                     }
                 }
