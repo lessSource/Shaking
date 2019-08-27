@@ -20,41 +20,56 @@ final class LImagePickerManager  {
 extension LImagePickerManager {
     // 获取相册权限
     func reuquetsPhotosAuthorization() -> Bool {
-        let status = PHPhotoLibrary.authorizationStatus()
+        var status = PHPhotoLibrary.authorizationStatus()
         if status == .notDetermined {
-            requestAuthorizationWithCompletion(nil)
+            let semaphore = DispatchSemaphore(value: 0)
+            self.requestAuthorizationWithCompletion { (authorizationStatus) in
+                status = authorizationStatus
+                semaphore.signal()
+            }
+            semaphore.wait()
+            return status == .authorized
+        }else {
+            return status == .authorized
         }
-        return status == .authorized
     }
     
     func requestAuthorizationWithCompletion(_ completion: ((PHAuthorizationStatus) -> ())?) {
         PHPhotoLibrary.requestAuthorization { (status) in
-            DispatchQueue.main.async {
-                if let closure = completion {
-                    closure(status)
-                }
+            if let closure = completion {
+                closure(status)
             }
         }
     }
     
     // 获取相册中资源
-    func getPhotoAlbumMedia(_ mediaType: PHAssetMediaType = PHAssetMediaType.unknown, successPHAsset: @escaping ([PHAsset]) -> ()) {
-        getPhotoAlbumResources(mediaType) { (assetsFetchResult) in
-            var asset = [PHAsset]()
-            assetsFetchResult.enumerateObjects({ (mediaAsset, index, stop) in
+    func getPhotoAlbumMedia(_ mediaType: PHAssetMediaType = PHAssetMediaType.unknown, fetchResult: PHFetchResult<PHAsset>?, successPHAsset: @escaping ([LAssetModel]) -> () ) {
+        var asset = [LAssetModel]()
+        if let result = fetchResult {
+            result.enumerateObjects({ (mediaAsset, index, stop) in
                 if mediaAsset.mediaType != .audio {
-                    asset.append(mediaAsset)
+                    let model = LAssetModel(asset: mediaAsset)
+                    asset.append(model)
                 }
             })
+            
             successPHAsset(asset)
+        }else {
+            getPhotoAlbumResources(mediaType) { (assetsFetchResult) in
+                assetsFetchResult.enumerateObjects({ (mediaAsset, index, stop) in
+                    if mediaAsset.mediaType != .audio {
+                        let model = LAssetModel(asset: mediaAsset)
+                        asset.append(model)
+                    }
+                })
+                successPHAsset(asset)
+            }
         }
     }
-    
     
     // 获取相册中资源
     private func getPhotoAlbumResources(_ mediaType: PHAssetMediaType = PHAssetMediaType.unknown, successPHAsset: @escaping (PHFetchResult<PHAsset>) -> ()) {
         DispatchQueue.global().async {
-            self.getAllAlbum()
             var mediaTypePHAsset: PHFetchResult<PHAsset> = PHFetchResult()
             
             // 获取所有资源
@@ -76,30 +91,44 @@ extension LImagePickerManager {
         }
     }
     
-    private func getAllAlbum() {
-        let options = PHFetchOptions()
-        let smartAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: options)
-        for i in 0..<smartAlbums.count {
-            let collection: PHCollection = smartAlbums[i];
-            if collection is PHAssetCollection {
-                let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: collection as! PHAssetCollection, options: nil)
+    public func getAlbumResources(_ complete: @escaping (_ dataArray: [LAlbumPickerModel]) -> ()) {
+        DispatchQueue.global().async {
+            var array: Array = [LAlbumPickerModel]()
+            let options = PHFetchOptions()
+            
+            let smartAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: options)
+            for i in 0..<smartAlbums.count {
+                let allPhotosOptions = PHFetchOptions()
+                allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+                let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: smartAlbums[i], options: allPhotosOptions)
+                if smartAlbums[i].assetCollectionSubtype == .smartAlbumAllHidden { continue }
+                if smartAlbums[i].assetCollectionSubtype.rawValue == 1000000201 { continue } // [最近删除] 相册
+
                 if fetchResult.count > 0 {
-                    print(collection.localizedTitle ?? "", fetchResult.count)
+                    let model = LAlbumPickerModel(title: smartAlbums[i].localizedTitle ?? "", asset: fetchResult.lastObject, fetchResult: fetchResult, count: fetchResult.count)
+                    if smartAlbums[i].assetCollectionSubtype == .smartAlbumUserLibrary {
+                        array.insert(model, at: 0)
+                    }else {
+                        array.append(model)
+                    }
                 }
             }
-        }
-        
-        let user = PHCollectionList.fetchTopLevelUserCollections(with: options)        
-        for i in 0..<user.count {
-            let collection: PHCollection = user[i];
-            if collection is PHAssetCollection {
-                let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: collection as! PHAssetCollection, options: nil)
-                if fetchResult.count > 0 {
-                    print(collection.localizedTitle ?? "", fetchResult.count )
+            let userAlbums = PHCollectionList.fetchTopLevelUserCollections(with: options)
+            for i in 0..<userAlbums.count {
+                if let collection = userAlbums[i] as? PHAssetCollection {
+                    let allPhotosOptions = PHFetchOptions()
+                    allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+                    let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: collection, options: allPhotosOptions)
+                    if fetchResult.count > 0 {
+                        let model = LAlbumPickerModel(title: collection.localizedTitle ?? "", asset: fetchResult.lastObject,fetchResult: fetchResult, count: fetchResult.count)
+                        array.append(model)
+                    }
                 }
             }
+            DispatchQueue.main.async {
+                complete(array)
+            }
         }
-        
     }
     
 //    // 获取图片

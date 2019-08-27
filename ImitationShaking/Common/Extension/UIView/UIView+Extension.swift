@@ -50,4 +50,18 @@ extension UIView {
         return nil
     }
     
+    func showOscillatoryAnimation() {
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.beginFromCurrentState, .curveEaseInOut], animations: {
+            self.layer.setValue(0.92, forKeyPath: "transform.scale")
+        }) { (finished) in
+            UIView.animate(withDuration: 0.15, delay: 0, options: [.beginFromCurrentState, .curveEaseInOut], animations: {
+                self.layer.setValue(0.92, forKeyPath: "transform.scale")
+            }) { (finished) in
+                UIView.animate(withDuration: 0.1, delay: 0, options: [.beginFromCurrentState, .curveEaseInOut], animations: {
+                    self.layer.setValue(1.0, forKeyPath: "transform.scale")
+                }, completion: nil)
+            }
+        }
+    }
+    
 }

@@ -7,27 +7,41 @@
 //
 
 import UIKit
+import Photos
+
+protocol LImagePickerDelegate: NSObjectProtocol {
+    
+}
+
 
 class LImagePickerController: UINavigationController {
 
+    private weak var imageDelagete: LImagePickerDelegate?
+    
+    private var maxSelectCount: Int = 0
+    
     deinit {
         print(self, "+++++释放")
     }
     
-    convenience init() {
+    convenience init(withMaxImage count: Int, delegate: LImagePickerDelegate?) {
         let albumPickerVC = LAlbumPickerController()
         self.init(rootViewController: albumPickerVC)
+        self.imageDelagete = delegate
+        self.maxSelectCount = count
     }
     
-    override init(rootViewController: UIViewController) {
+    
+    private override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
         delegate = self
         if self.responds(to: #selector(getter: interactivePopGestureRecognizer)) {
             self.interactivePopGestureRecognizer?.delegate = self
         }
-        
-        let photoPicker = LPhotoPickerController()
-        pushViewController(photoPicker, animated: true)
+        if PHPhotoLibrary.authorizationStatus() == .authorized {
+            let photoPicker = LPhotoPickerController()
+            self.pushViewController(photoPicker, animated: true)
+        }
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -45,6 +59,18 @@ class LImagePickerController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavigationBarHidden(true, animated: true)
+    }
+    
+    private func reuquetsPhotosAuthorization() {
+        if !LImagePickerManager.shared.reuquetsPhotosAuthorization() {
+            view.placeholderShow(true) { (promptView) in
+                promptView.imageName(R.image.icon_permissions.name)
+                promptView.title("请在iPhone的\'设置-隐私-照片'选项中\r允许\(App.appName)访问你的手机相册")
+                promptView.titleLabel.height = 60
+                promptView.imageTop(Constant.screenHeight/2 - 150)
+//                promptView.delegate = self
+            }
+        }
     }
     
 }

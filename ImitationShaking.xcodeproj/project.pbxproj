@@ -95,6 +95,11 @@
 		CA9DC16A22A51DAE00BF331A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9DC16922A51DAE00BF331A /* LoginViewController.swift */; };
 		CAA1883E22B0DA8E0077B7AA /* LTitleBarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA1883D22B0DA8E0077B7AA /* LTitleBarLayout.swift */; };
 		CAA1884022B0E3E30077B7AA /* LPagesCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA1883F22B0E3E30077B7AA /* LPagesCache.swift */; };
+		CAC16FB62314C22A00ABC224 /* LImageTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC16FB52314C22A00ABC224 /* LImageTabBarView.swift */; };
+		CAC16FB82314D6B700ABC224 /* LAlbumPickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC16FB72314D6B700ABC224 /* LAlbumPickerTableViewCell.swift */; };
+		CAC16FBA2315000700ABC224 /* LAlbumPickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC16FB92315000700ABC224 /* LAlbumPickerModel.swift */; };
+		CAC16FBD2315280200ABC224 /* iocn_album_nor@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CAC16FBB2315280200ABC224 /* iocn_album_nor@2x.png */; };
+		CAC16FBE2315280200ABC224 /* iocn_album_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CAC16FBC2315280200ABC224 /* iocn_album_sel@2x.png */; };
 		CAE4A618230E38E00034FEE8 /* LImagePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE4A617230E38E00034FEE8 /* LImagePickerManager.swift */; };
 		CAE4A61C230E752F0034FEE8 /* icon_permissions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CAE4A61A230E752F0034FEE8 /* icon_permissions@2x.png */; };
 		CAE4A61D230E752F0034FEE8 /* icon_permissions@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = CAE4A61B230E752F0034FEE8 /* icon_permissions@3x.png */; };
@@ -224,6 +229,11 @@
 		CAA1883D22B0DA8E0077B7AA /* LTitleBarLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LTitleBarLayout.swift; sourceTree = "<group>"; };
 		CAA1883F22B0E3E30077B7AA /* LPagesCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LPagesCache.swift; sourceTree = "<group>"; };
 		CAB9AE47C95E48072E6C02FF /* Pods_ImitationShakingUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImitationShakingUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CAC16FB52314C22A00ABC224 /* LImageTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LImageTabBarView.swift; sourceTree = "<group>"; };
+		CAC16FB72314D6B700ABC224 /* LAlbumPickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LAlbumPickerTableViewCell.swift; sourceTree = "<group>"; };
+		CAC16FB92315000700ABC224 /* LAlbumPickerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LAlbumPickerModel.swift; path = ImitationShaking/Public/View/LAlbumPickerModel.swift; sourceTree = SOURCE_ROOT; };
+		CAC16FBB2315280200ABC224 /* iocn_album_nor@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iocn_album_nor@2x.png"; sourceTree = "<group>"; };
+		CAC16FBC2315280200ABC224 /* iocn_album_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iocn_album_sel@2x.png"; sourceTree = "<group>"; };
 		CAE4A617230E38E00034FEE8 /* LImagePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LImagePickerManager.swift; sourceTree = "<group>"; };
 		CAE4A61A230E752F0034FEE8 /* icon_permissions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_permissions@2x.png"; sourceTree = "<group>"; };
 		CAE4A61B230E752F0034FEE8 /* icon_permissions@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_permissions@3x.png"; sourceTree = "<group>"; };
@@ -334,6 +344,8 @@
 			isa = PBXGroup;
 			children = (
 				2A3950C7230EE43A00D253D3 /* LImageNavView.swift */,
+				CAC16FB52314C22A00ABC224 /* LImageTabBarView.swift */,
+				CAC16FB72314D6B700ABC224 /* LAlbumPickerTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -341,6 +353,7 @@
 		2A56FA85230D906E00B0A264 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CAC16FB92315000700ABC224 /* LAlbumPickerModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -788,6 +801,8 @@
 			children = (
 				CAE4A61A230E752F0034FEE8 /* icon_permissions@2x.png */,
 				CAE4A61B230E752F0034FEE8 /* icon_permissions@3x.png */,
+				CAC16FBB2315280200ABC224 /* iocn_album_nor@2x.png */,
+				CAC16FBC2315280200ABC224 /* iocn_album_sel@2x.png */,
 			);
 			path = icon;
 			sourceTree = "<group>";
@@ -919,12 +934,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				2AA3414822A57774005DE559 /* schoolData.json in Resources */,
+				CAC16FBD2315280200ABC224 /* iocn_album_nor@2x.png in Resources */,
 				CAE4A61D230E752F0034FEE8 /* icon_permissions@3x.png in Resources */,
 				2AA340A822998E52005DE559 /* LaunchScreen.storyboard in Resources */,
 				2AA3414C22A583E9005DE559 /* 抖腿短视频.md in Resources */,
 				2AA3414A22A57810005DE559 /* provincesData.json in Resources */,
 				2AA340A522998E52005DE559 /* Assets.xcassets in Resources */,
 				CAE4A61C230E752F0034FEE8 /* icon_permissions@2x.png in Resources */,
+				CAC16FBE2315280200ABC224 /* iocn_album_sel@2x.png in Resources */,
 				2AA340A322998E50005DE559 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1082,6 +1099,7 @@
 				CA49A8A922C1B163009A6A96 /* PhotoChooseBaseViewController.swift in Sources */,
 				2AA3413222A2D24B005DE559 /* NetConst.swift in Sources */,
 				2AA3412722A16631005DE559 /* Date+Extension.swift in Sources */,
+				CAC16FB82314D6B700ABC224 /* LAlbumPickerTableViewCell.swift in Sources */,
 				2AA340FB229ACA75005DE559 /* HomeHeaderView.swift in Sources */,
 				2AF15E84230D93B20029B818 /* LImagePickerController.swift in Sources */,
 				CA93589B22B20237004C7EFF /* LTitleBar.swift in Sources */,
@@ -1092,6 +1110,7 @@
 				2A0DEA6D22B927DA0059C299 /* PublicVideoOperationView.swift in Sources */,
 				2AA3411822A01BC5005DE559 /* PopUpViewManager.swift in Sources */,
 				2A66463F22C667C6002BF741 /* UIViewController+Extension.swift in Sources */,
+				CAC16FBA2315000700ABC224 /* LAlbumPickerModel.swift in Sources */,
 				2AA3412E22A2CE53005DE559 /* MoyaNetworkConfig.swift in Sources */,
 				2AA340F1229AA1D6005DE559 /* Constant.swift in Sources */,
 				2AA340F2229AA1D6005DE559 /* AboutApp.swift in Sources */,
@@ -1110,6 +1129,7 @@
 				2AA3411A22A01C74005DE559 /* CommentsPopUpView.swift in Sources */,
 				2AA3411E22A160A4005DE559 /* CommentsReplyTableViewCell.swift in Sources */,
 				CA9DC16022A4C15700BF331A /* CommentsReplyMoreTableViewCell.swift in Sources */,
+				CAC16FB62314C22A00ABC224 /* LImageTabBarView.swift in Sources */,
 				2AA3409E22998E50005DE559 /* AppDelegate.swift in Sources */,
 				2AA340DE2299968B005DE559 /* FriendsViewController.swift in Sources */,
 				2A0DEA6722B149320059C299 /* LHeaderContentView.swift in Sources */,

@@ -170,21 +170,13 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         let start = CACurrentMediaTime()
         print("1")
         livePhoto.isHidden = true
-//        currentImage.isHidden = true
+        //        currentImage.isHidden = true
         if let image = imageProtocol as? UIImage {
             currentImage.image = image
         }else if let asset = imageProtocol as? PHAsset {
             self.currentImage.loadImage(asset)
-
-//            currentImage.image = nil
-//            livePhoto.livePhoto = nil
-//            if asset.mediaSubtypes == .photoLive {
-//                livePhoto.isHidden = false
-//                self.livePhoto.loadImage(asset)
-//            }else {
-//                currentImage.isHidden = false
-//                self.currentImage.loadImage(asset)
-//            }
+        }else if let asset = imageProtocol as? LAssetModel {
+            self.currentImage.loadImage(asset.asset)
         }else if let string = imageProtocol as? String {
             print(string)
         }

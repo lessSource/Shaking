@@ -18,6 +18,8 @@ extension String: ImageDataProtocol { }
 
 extension PHAsset: ImageDataProtocol { }
 
+extension LAssetModel: ImageDataProtocol { }
+
 private let cellMargin: CGFloat = 20
 
 class ShowImageViewController: UICollectionViewController {

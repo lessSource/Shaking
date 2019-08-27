@@ -82,7 +82,7 @@ class HomeViewController: BaseViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let photoVC = LImagePickerController()
+        let photoVC = LImagePickerController(withMaxImage: 9, delegate: self)
         present(photoVC, animated: true, completion: nil)
     }
     
@@ -160,6 +160,10 @@ class HomeViewController: BaseViewController {
 //
 //        }
 //    }
+}
+
+extension HomeViewController: LImagePickerDelegate {
+    
 }
 
 

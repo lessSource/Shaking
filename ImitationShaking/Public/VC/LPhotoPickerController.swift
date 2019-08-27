@@ -13,11 +13,19 @@ class LPhotoPickerController: UIViewController {
 
     fileprivate var animationDelegate: ModelAnimationDelegate?
     
+    public var pickerModel: LAlbumPickerModel?
+    
     fileprivate lazy var navView: LImageNavView = {
         let navView = LImageNavView(frame: CGRect(x: 0, y: 0, width: Constant.screenWidth, height: Constant.navbarAndStatusBar))
         navView.titleLabel.text = "相机胶卷"
         navView.backgroundColor = UIColor.white
         return navView
+    }()
+    
+    fileprivate lazy var tabBarView: LImageTabBarView = {
+        let barView: LImageTabBarView = LImageTabBarView(frame: CGRect(x: 0, y: self.collectionView.frame.maxY, width: Constant.screenHeight, height: Constant.bottomBarHeight))
+        barView.backgroundColor = UIColor.white
+        return barView
     }()
     
     fileprivate lazy var collectionView: UICollectionView = {
@@ -26,42 +34,46 @@ class LPhotoPickerController: UIViewController {
         flowLayout.minimumInteritemSpacing = 1
         flowLayout.itemSize = CGSize(width: (Constant.screenWidth - 3)/4, height: (Constant.screenWidth - 3)/4)
         
-        let collectionView = UICollectionView(frame: CGRect(x: 0, y: self.navView.height, width: Constant.screenWidth, height: Constant.screenHeight - self.navView.height), collectionViewLayout: flowLayout)
+        let collectionView = UICollectionView(frame: CGRect(x: 0, y: Constant.navbarAndStatusBar, width: Constant.screenWidth, height: Constant.screenHeight - Constant.navbarAndStatusBar - Constant.bottomBarHeight), collectionViewLayout: flowLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = UIColor.white
         return collectionView
     }()
     
-    fileprivate var dataArray = [PHAsset]()
+    fileprivate var dataArray = [LAssetModel]()
+    
+    fileprivate var selectArray = [LAssetModel]()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-        reuquetsPhotosAuthorization()
         view.addSubview(navView)
         view.addSubview(collectionView)
+        view.addSubview(tabBarView)
         collectionView.register(LImagePickerCell.self, forCellWithReuseIdentifier: LImagePickerCell.identifire)
         loadData()
     }
     
     func loadData() {
-        LImagePickerManager.shared.getPhotoAlbumMedia() { (data) in
+        LImagePickerManager.shared.getPhotoAlbumMedia(fetchResult: pickerModel?.fetchResult) { (data) in
             self.dataArray = data
-            self.navView.titleLabel.text = "相机胶卷(\(data.count))"
+            if let model = self.pickerModel {
+                self.navView.titleLabel.text = "\(model.title)(\(data.count))"
+            }else {
+                self.navView.titleLabel.text = "相机胶卷(\(data.count))"
+            }
             self.collectionView.reloadData()
         }
     }
     
-    private func reuquetsPhotosAuthorization() {
-        if !LImagePickerManager.shared.reuquetsPhotosAuthorization() {
-            collectionView.placeholderShow(true) { (promptView) in
-                promptView.imageName(R.image.icon_permissions.name)
-                promptView.title("请在iPhone的\'设置-隐私-照片'选项中\r允许\(App.appName)访问你的手机相册")
-                promptView.titleLabel.height = 60
-                promptView.imageTop(Constant.screenHeight/2 - 150)
-                promptView.delegate = self
-            }
+    fileprivate func didSelectCellButton(_ isSelect: Bool, indexPath: IndexPath) {
+        dataArray[indexPath.item].isSelect = isSelect
+        if isSelect {
+            selectArray.append(dataArray[indexPath.item])
+        }else {
+            selectArray.removeAll(where: { $0.asset.localIdentifier == dataArray[indexPath.item].asset.localIdentifier })
         }
     }
 }
@@ -79,18 +91,16 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: LImagePickerCell = collectionView.dequeueReusableCell(withReuseIdentifier: LImagePickerCell.identifire, for: indexPath) as! LImagePickerCell
-        cell.backgroundColor = UIColor.orange
-        let width = (Constant.screenWidth - 3)/4
-        LImagePickerManager.shared.getPhotoWithAsset(dataArray[indexPath.item], photoWidth: width) { (image, dic) in
-            cell.imageView.image = image
+        cell.assetModel = dataArray[indexPath.item]
+        cell.didSelectButtonClosure = { [weak self] select in
+            self?.didSelectCellButton(select, indexPath: indexPath)
         }
-        cell.backView.isHidden = dataArray[indexPath.row].mediaType == .image
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         navView.allNumber = 1
-        if dataArray[indexPath.item].mediaType == .image {
+        if dataArray[indexPath.item].asset.mediaType == .image {
             guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
             animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
             //            animationDelegate = ModelAnimationDelegate(superView: cell.superview, currentIndex: indexPath.item)
