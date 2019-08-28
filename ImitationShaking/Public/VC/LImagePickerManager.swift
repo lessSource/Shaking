@@ -52,7 +52,6 @@ extension LImagePickerManager {
                     asset.append(model)
                 }
             })
-            
             successPHAsset(asset)
         }else {
             getPhotoAlbumResources(mediaType) { (assetsFetchResult) in

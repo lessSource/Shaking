@@ -120,7 +120,7 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         currentImage.addGestureRecognizer(tapGesture)
 //        livePhoto.addGestureRecognizer(tapGesture)
 
-        let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(longAction))
+        let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(longGestureClick(_ :)))
         currentImage.addGestureRecognizer(longGesture)
         
         let doubleGesture = UITapGestureRecognizer(target: self, action: #selector(ShowImageCollectionViewCell.doubleGestureClick(_ :)))
@@ -149,9 +149,11 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         action(.tap)
     }
     /** 长按 */
-    @objc func longAction() {
+    @objc func longGestureClick(_ gestureRecognizer: UILongPressGestureRecognizer) {
         guard let action = action else { return }
-        action(.long)
+        if gestureRecognizer.state == .began {
+            action(.long)
+        }
     }
     /** 双击 */
     @objc func doubleGestureClick(_ gestureRecognizer: UITapGestureRecognizer) {

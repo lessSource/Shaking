@@ -100,6 +100,8 @@
 		CAC16FB62314C22A00ABC224 /* LImageTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC16FB52314C22A00ABC224 /* LImageTabBarView.swift */; };
 		CAC16FB82314D6B700ABC224 /* LAlbumPickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC16FB72314D6B700ABC224 /* LAlbumPickerTableViewCell.swift */; };
 		CAC16FBA2315000700ABC224 /* LAlbumPickerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC16FB92315000700ABC224 /* LAlbumPickerModel.swift */; };
+		CAC35D572316804D00C9C2AD /* icon_nav_back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CAC35D562316804D00C9C2AD /* icon_nav_back@2x.png */; };
+		CAC35D5B2316835A00C9C2AD /* ShowVideoPlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC35D5A2316835A00C9C2AD /* ShowVideoPlayViewController.swift */; };
 		CAE4A618230E38E00034FEE8 /* LImagePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE4A617230E38E00034FEE8 /* LImagePickerManager.swift */; };
 		CAE4A61C230E752F0034FEE8 /* icon_permissions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CAE4A61A230E752F0034FEE8 /* icon_permissions@2x.png */; };
 		CAE4A61D230E752F0034FEE8 /* icon_permissions@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = CAE4A61B230E752F0034FEE8 /* icon_permissions@3x.png */; };
@@ -234,6 +236,8 @@
 		CAC16FB52314C22A00ABC224 /* LImageTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LImageTabBarView.swift; sourceTree = "<group>"; };
 		CAC16FB72314D6B700ABC224 /* LAlbumPickerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LAlbumPickerTableViewCell.swift; sourceTree = "<group>"; };
 		CAC16FB92315000700ABC224 /* LAlbumPickerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LAlbumPickerModel.swift; path = ImitationShaking/Public/View/LAlbumPickerModel.swift; sourceTree = SOURCE_ROOT; };
+		CAC35D562316804D00C9C2AD /* icon_nav_back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_nav_back@2x.png"; sourceTree = "<group>"; };
+		CAC35D5A2316835A00C9C2AD /* ShowVideoPlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowVideoPlayViewController.swift; sourceTree = "<group>"; };
 		CAE4A617230E38E00034FEE8 /* LImagePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LImagePickerManager.swift; sourceTree = "<group>"; };
 		CAE4A61A230E752F0034FEE8 /* icon_permissions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_permissions@2x.png"; sourceTree = "<group>"; };
 		CAE4A61B230E752F0034FEE8 /* icon_permissions@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_permissions@3x.png"; sourceTree = "<group>"; };
@@ -305,6 +309,7 @@
 				2A0DEA7922C267030059C299 /* ShowImage.swift */,
 				2A0DEA7B22C268E00059C299 /* ShowImageViewController.swift */,
 				2A0DEA7D22C269FF0059C299 /* ShowImageCollectionViewCell.swift */,
+				CAC35D5A2316835A00C9C2AD /* ShowVideoPlayViewController.swift */,
 			);
 			path = ShowImage;
 			sourceTree = "<group>";
@@ -799,6 +804,7 @@
 		CAE4A619230E750E0034FEE8 /* icon */ = {
 			isa = PBXGroup;
 			children = (
+				CAC35D562316804D00C9C2AD /* icon_nav_back@2x.png */,
 				2A5FE99F2315641E0005C10D /* icon_album_nor@2x.png */,
 				2A5FE9A02315641E0005C10D /* icon_album_sel@2x.png */,
 				CAE4A61A230E752F0034FEE8 /* icon_permissions@2x.png */,
@@ -942,6 +948,7 @@
 				2AA340A522998E52005DE559 /* Assets.xcassets in Resources */,
 				CAE4A61C230E752F0034FEE8 /* icon_permissions@2x.png in Resources */,
 				2A5FE9A22315641E0005C10D /* icon_album_sel@2x.png in Resources */,
+				CAC35D572316804D00C9C2AD /* icon_nav_back@2x.png in Resources */,
 				2AA340A322998E50005DE559 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1150,6 +1157,7 @@
 				2A66463A22C5141A002BF741 /* PublicPictureEditViewController.swift in Sources */,
 				2A0DEA6B22B51FEC0059C299 /* PublicVideoProgressView.swift in Sources */,
 				2AA3412422A1621D005DE559 /* String+Extension.swift in Sources */,
+				CAC35D5B2316835A00C9C2AD /* ShowVideoPlayViewController.swift in Sources */,
 				CAE4A618230E38E00034FEE8 /* LImagePickerManager.swift in Sources */,
 				CA9DC15E22A4B90A00BF331A /* MBAlertUtil.swift in Sources */,
 				2A3950C8230EE43A00D253D3 /* LImageNavView.swift in Sources */,

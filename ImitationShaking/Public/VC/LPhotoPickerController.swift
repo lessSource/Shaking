@@ -25,6 +25,7 @@ class LPhotoPickerController: UIViewController {
     fileprivate lazy var tabBarView: LImageTabBarView = {
         let barView: LImageTabBarView = LImageTabBarView(frame: CGRect(x: 0, y: self.collectionView.frame.maxY, width: Constant.screenHeight, height: Constant.bottomBarHeight))
         barView.backgroundColor = UIColor.white
+        barView.delegate = self
         return barView
     }()
     
@@ -32,7 +33,8 @@ class LPhotoPickerController: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.minimumLineSpacing = 1
         flowLayout.minimumInteritemSpacing = 1
-        flowLayout.itemSize = CGSize(width: (Constant.screenWidth - 3)/4, height: (Constant.screenWidth - 3)/4)
+        flowLayout.itemSize = CGSize(width: (Constant.screenWidth - 13)/4, height: (Constant.screenWidth - 13)/4)
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
         
         let collectionView = UICollectionView(frame: CGRect(x: 0, y: Constant.navbarAndStatusBar, width: Constant.screenWidth, height: Constant.screenHeight - Constant.navbarAndStatusBar - Constant.bottomBarHeight), collectionViewLayout: flowLayout)
         collectionView.delegate = self
@@ -72,12 +74,11 @@ class LPhotoPickerController: UIViewController {
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-    
     fileprivate func checkSelectedModels() {
         guard let navVC = navigationController as? LImagePickerController else { return }
+        tabBarView.maxCount = navVC.maxSelectCount
+        tabBarView.currentCount = navVC.selectArray.count
+        if navVC.selectArray.count == 0 { return }
         dataArray = dataArray.map {
             var model = $0
             model.isSelect = navVC.selectArray.contains(where: {$0.asset == model.asset})
@@ -85,22 +86,28 @@ class LPhotoPickerController: UIViewController {
         }
     }
     
-    
-    fileprivate func didSelectCellButton(_ isSelect: Bool, indexPath: IndexPath) {
-        dataArray[indexPath.item].isSelect = isSelect
-        guard let navVC = navigationController as? LImagePickerController else {
-            return
-        }
-        
-        if isSelect {
-            navVC.selectArray.append(dataArray[indexPath.item])
+    fileprivate func didSelectCellButton(_ isSelect: Bool, indexPath: IndexPath) -> Bool {
+        guard let navVC = navigationController as? LImagePickerController else { return false }
+        if !isSelect {
+            if navVC.selectArray.count < navVC.maxSelectCount {
+                navVC.selectArray.append(dataArray[indexPath.item])
+                dataArray[indexPath.item].isSelect = !isSelect
+                tabBarView.currentCount = navVC.selectArray.count
+                return true
+            }else {
+                navVC.showAlertWithTitle("最多只能选择\(navVC.maxSelectCount)张照片")
+                return false
+            }
         }else {
             navVC.selectArray.removeAll(where: { $0.asset.localIdentifier == dataArray[indexPath.item].asset.localIdentifier })
+            dataArray[indexPath.item].isSelect = !isSelect
+            tabBarView.currentCount = navVC.selectArray.count
+            return true
         }
     }
 }
 
-extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource,UIViewControllerTransitioningDelegate, ShowImageProtocol {
+extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource,UIViewControllerTransitioningDelegate, ShowImageProtocol, ImageTabBarViewDelegate {
     func promptViewImageClick(_ promptView: PromptView) {
         if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -115,7 +122,7 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
         let cell: LImagePickerCell = collectionView.dequeueReusableCell(withReuseIdentifier: LImagePickerCell.identifire, for: indexPath) as! LImagePickerCell
         cell.assetModel = dataArray[indexPath.item]
         cell.didSelectButtonClosure = { [weak self] select in
-            self?.didSelectCellButton(select, indexPath: indexPath)
+            return self?.didSelectCellButton(select, indexPath: indexPath) == true
         }
         return cell
     }
@@ -124,9 +131,20 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
         navView.allNumber = 1
         if dataArray[indexPath.item].asset.mediaType == .image {
             guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
+//            animationDelegate = nil
             animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
             //            animationDelegate = ModelAnimationDelegate(superView: cell.superview, currentIndex: indexPath.item)
             showImage(dataArray, currentIndex: indexPath.item, delegate: animationDelegate)
         }
     }
+    
+    func imageTabBarViewButton(_ buttonType: ImageTabBarButtonType) {
+        guard let navVC = navigationController as? LImagePickerController else { return }
+        if buttonType == .preview {
+//            animationDelegate = nil
+            animationDelegate = ModelAnimationDelegate(superView: nil, currentIndex: 0)
+            showImage(navVC.selectArray, currentIndex: 0, delegate: animationDelegate)
+        }
+    }
+    
 }

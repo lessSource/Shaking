@@ -14,6 +14,7 @@ class LAlbumPickerTableViewCell: UITableViewCell {
         didSet {
             nameLabel.text = "\(albumModel.title)(\(albumModel.count))"
             numberLabel.text = "\(albumModel.selectCount)"
+            numberLabel.isHidden = albumModel.selectCount == 0
             if let asset = albumModel.asset {
                 LImagePickerManager.shared.getPhotoWithAsset(asset, photoWidth: 60) { (image, dic) in
                     self.coverImage.image = image
@@ -21,7 +22,6 @@ class LAlbumPickerTableViewCell: UITableViewCell {
             }
         }
     }
-    
     
     fileprivate lazy var coverImage: UIImageView = {
         let image = UIImageView()
@@ -45,9 +45,13 @@ class LAlbumPickerTableViewCell: UITableViewCell {
     
     fileprivate lazy var numberLabel: UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.red
+        label.textColor = UIColor.white
+        label.backgroundColor = UIColor.green
         label.textAlignment = .right
         label.font = UIFont.systemFont(ofSize: 15)
+        label.layer.cornerRadius = 12
+        label.clipsToBounds = true
+        label.textAlignment = .center
         return label
     }()
     
@@ -76,11 +80,12 @@ class LAlbumPickerTableViewCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         coverImage.frame = CGRect(x: 0, y: 0, width: bounds.height, height: bounds.height - 1)
         lineView.frame = CGRect(x: coverImage.frame.maxX, y: coverImage.height, width: Constant.screenWidth - coverImage.width, height: 1)
         nameLabel.frame = CGRect(x: coverImage.width + 10, y: 20, width: contentView.width - coverImage.width - 60, height: bounds.height - 40)
-        numberLabel.frame = CGRect(x: nameLabel.frame.maxX, y: 20, width: 50, height: bounds.height - 40)
+        let width = CGFloat.maximum(numberLabel.intrinsicContentSize.width + 8, 24)
+        numberLabel.frame = CGRect(x: nameLabel.frame.maxX + 50 - width, y: bounds.height/2 - 12, width: width, height: 24)
     }
     
     // MARK:- layoutView

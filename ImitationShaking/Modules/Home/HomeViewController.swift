@@ -84,6 +84,21 @@ class HomeViewController: BaseViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let photoVC = LImagePickerController(withMaxImage: 9, delegate: self)
         present(photoVC, animated: true, completion: nil)
+        
+//        let alertVC = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+//                    let cancelAction = UIAlertAction(title: "取消", style: .default, handler: nil)
+//                    alertVC.addAction(cancelAction)
+//        //            alertVC.view.removeConstraint(alertVC.view.constraints[4])
+//        //            alertVC.view.constraints
+//        //            alertVC.view.removeConstraint(T##constraint: NSLayoutConstraint##NSLayoutConstraint)
+//        //            alertVC.view.constraintsAffectingLayout(for: NSLayoutConstraint.Axis)
+//        if let popver = alertVC.popoverPresentationController {
+//            popver.sourceView = view
+//            popver.sourceRect = view.bounds
+//            popver.permittedArrowDirections = .any
+//        }
+        
+//        present(alertVC, animated: true, completion: nil)
     }
     
     
@@ -211,3 +226,4 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
 //        present(loginVC, animated: true, completion: nil)
     }
 }
+

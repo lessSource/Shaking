@@ -23,10 +23,28 @@ extension LAssetModel: ImageDataProtocol { }
 private let cellMargin: CGFloat = 20
 
 class ShowImageViewController: UICollectionViewController {
-    fileprivate var imageArray: UIImage?
-    fileprivate var currentIndex: Int = 0
     
+    fileprivate var imageArray: UIImage?
+    
+    /**  */
+    fileprivate var currentIndex: Int = 0
+    /** 数据 */
     fileprivate var dataArray: Array = [ImageDataProtocol]()
+    /** 是否显示导航栏 */
+    fileprivate var isNavHidden: Bool = false
+    
+    fileprivate lazy var navView: ShowImageNavView = {
+        let navView = ShowImageNavView(frame: CGRect(x: 0, y: -Constant.navbarAndStatusBar, width: Constant.screenWidth, height: Constant.navbarAndStatusBar))
+        return navView
+    }()
+    
+    
+    
+    fileprivate lazy var tabBarView: ShowImageTabBarView = {
+        let barView: ShowImageTabBarView = ShowImageTabBarView(frame: CGRect(x: 0, y: Constant.screenHeight, width: Constant.screenHeight, height: Constant.bottomBarHeight))
+        return barView
+    }()
+    
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
@@ -65,6 +83,8 @@ class ShowImageViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutView()
+        view.addSubview(tabBarView)
+        view.addSubview(navView)
     }
 
     fileprivate func layoutView() {
@@ -74,12 +94,29 @@ class ShowImageViewController: UICollectionViewController {
         collectionView?.isPagingEnabled = true
         collectionView?.showsHorizontalScrollIndicator = false
         collectionView?.register(ShowImageCollectionViewCell.self, forCellWithReuseIdentifier: ShowImageCollectionViewCell.identifire)
-        collectionView?.scrollToItem(at: IndexPath(item: 0, section: currentIndex), at: .left, animated: false)
+        assert(dataArray.count != 0, "数据不能为空！！！！！")
+        if dataArray.count > 0 {
+            collectionView?.scrollToItem(at: IndexPath(item: 0, section: currentIndex > dataArray.count - 1 ? 0 : currentIndex), at: .left, animated: false)
+        }
     }
     
     fileprivate func imageClick(_ cell: ShowImageCollectionViewCell, cellForItemAt indexPath: IndexPath, type: ShowImageCollectionViewCell.ActionEnum) {
         switch type {
-        case .tap: dismiss(animated: true, completion: nil)
+        case .tap:
+//            UIView.animate(withDuration: 0.15, animations: {
+//                self.tabBarView.y = self.isNavHidden ? Constant.screenHeight : Constant.screenHeight - self.tabBarView.height
+//                self.navView.y = self.isNavHidden ? -Constant.navbarAndStatusBar : 0
+//            }) { finish in
+//                if finish { self.isNavHidden = !self.isNavHidden }
+//            }
+            if let model = dataArray[indexPath.item] as? PHAsset, model.mediaType == .video {
+                let showVideoPlayVC = ShowVideoPlayViewController()
+                showVideoPlayVC.modalPresentationStyle = .custom
+//                showVideoPlayVC.asset = model.v
+                present(showVideoPlayVC, animated: false, completion: nil)
+            }
+            
+
         case .long: break
         }
     }
@@ -110,6 +147,11 @@ extension ShowImageViewController {
         showImageCell.scrollView.zoomScale = 1.0
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(indexPath.item)
+    }
+    
+    
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         currentIndex = Int(scrollView.contentOffset.x / scrollView.width)
         
@@ -117,3 +159,54 @@ extension ShowImageViewController {
     }
     
 }
+
+
+class ShowImageTabBarView: UIView {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = UIColor(white: 0.0, alpha: 0.5)
+        layoutView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK:- layoutView
+    fileprivate func layoutView() {
+        
+    }
+}
+
+
+class ShowImageNavView: UIView {
+    
+    fileprivate lazy var backButton: UIButton = {
+        let button = UIButton(frame: CGRect(x: 10, y: Constant.statusHeight, width: 44, height: 44))
+        button.setImage(R.image.icon_nav_back(), for: .normal)
+        return button
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = UIColor(white: 0.0, alpha: 0.5)
+        layoutView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK:- layoutView
+    fileprivate func layoutView() {
+        addSubview(backButton)
+        backButton.addTarget(self, action: #selector(backButtonClick), for: .touchUpInside)
+    }
+    
+    // MARK:- Event
+    @objc fileprivate func backButtonClick() {
+        getControllerFromView()?.dismiss(animated: true, completion: nil)
+    }
+}
+

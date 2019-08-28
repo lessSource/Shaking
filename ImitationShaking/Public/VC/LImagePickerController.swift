@@ -17,7 +17,7 @@ class LImagePickerController: UINavigationController {
 
     private weak var imageDelagete: LImagePickerDelegate?
     
-    private var maxSelectCount: Int = 0
+    private(set) var maxSelectCount: Int = 0
     
     public var selectArray = [LAssetModel]()
 
@@ -29,9 +29,8 @@ class LImagePickerController: UINavigationController {
         let albumPickerVC = LAlbumPickerController()
         self.init(rootViewController: albumPickerVC)
         self.imageDelagete = delegate
-        self.maxSelectCount = count
+        self.maxSelectCount = count < 1 ? 1 : count
     }
-    
     
     private override init(rootViewController: UIViewController) {
         super.init(rootViewController: rootViewController)
@@ -72,6 +71,13 @@ class LImagePickerController: UINavigationController {
 //                promptView.delegate = self
             }
         }
+    }
+    
+    public func showAlertWithTitle(_ title: String) {
+        let alertVC = UIAlertController(title: "提示", message: title, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertVC.addAction(okAction)
+        present(alertVC, animated: true, completion: nil)
     }
     
 }

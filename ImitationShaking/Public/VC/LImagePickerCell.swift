@@ -10,7 +10,7 @@ import UIKit
 
 class LImagePickerCell: UICollectionViewCell {
     
-    typealias SelectClosure = (Bool) -> ()
+    typealias SelectClosure = (Bool) -> (Bool)
     
     public var didSelectButtonClosure: SelectClosure?
     
@@ -110,14 +110,13 @@ class LImagePickerCell: UICollectionViewCell {
     
     // MARK:- Event
      @objc fileprivate func selectButtonClick(_ sender: UIButton) {
-        selectImageView.image = sender.isSelected ? R.image.icon_album_nor() : R.image.icon_album_sel()
-        sender.isSelected = !sender.isSelected
-        if sender.isSelected {
-            selectImageView.showOscillatoryAnimation()
+        guard let closure = didSelectButtonClosure else { return }
+        if closure(sender.isSelected) {
+            selectImageView.image = sender.isSelected ? R.image.icon_album_nor() : R.image.icon_album_sel()
+            sender.isSelected = !sender.isSelected
+            if sender.isSelected {
+                selectImageView.showOscillatoryAnimation()
+            }
         }
-        if let closure = didSelectButtonClosure {
-            closure(sender.isSelected)
-        }
-        
     }
 }
