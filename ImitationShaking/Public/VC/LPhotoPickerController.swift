@@ -129,7 +129,7 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         navView.allNumber = 1
-        if dataArray[indexPath.item].asset.mediaType == .image {
+        if dataArray[indexPath.item].asset.mediaType == .video {
             guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
 //            animationDelegate = nil
             animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)

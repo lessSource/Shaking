@@ -98,7 +98,7 @@ extension LImagePickerManager {
             let smartAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: options)
             for i in 0..<smartAlbums.count {
                 let allPhotosOptions = PHFetchOptions()
-                allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+//                allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
                 let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: smartAlbums[i], options: allPhotosOptions)
                 if smartAlbums[i].assetCollectionSubtype == .smartAlbumAllHidden { continue }
                 if smartAlbums[i].assetCollectionSubtype.rawValue == 1000000201 { continue } // [最近删除] 相册

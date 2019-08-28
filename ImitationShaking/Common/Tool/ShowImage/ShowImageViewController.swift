@@ -109,14 +109,12 @@ class ShowImageViewController: UICollectionViewController {
 //            }) { finish in
 //                if finish { self.isNavHidden = !self.isNavHidden }
 //            }
-            if let model = dataArray[indexPath.item] as? PHAsset, model.mediaType == .video {
+            if let model = dataArray[indexPath.section] as? LAssetModel, model.asset.mediaType == .video {
                 let showVideoPlayVC = ShowVideoPlayViewController()
-                showVideoPlayVC.modalPresentationStyle = .custom
-//                showVideoPlayVC.asset = model.v
+                showVideoPlayVC.asset = model.asset
+                showVideoPlayVC.currentImage = cell.currentImage.image
                 present(showVideoPlayVC, animated: false, completion: nil)
             }
-            
-
         case .long: break
         }
     }
