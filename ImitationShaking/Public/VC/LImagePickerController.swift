@@ -19,7 +19,7 @@ class LImagePickerController: UINavigationController {
     
     private(set) var maxSelectCount: Int = 0
     
-    public var selectArray = [LAssetModel]()
+    public var selectArray = [LMediaResourcesModel]()
 
     deinit {
         print(self, "+++++释放")

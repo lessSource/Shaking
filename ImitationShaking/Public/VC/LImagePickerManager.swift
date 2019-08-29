@@ -43,12 +43,12 @@ extension LImagePickerManager {
     }
     
     // 获取相册中资源
-    func getPhotoAlbumMedia(_ mediaType: PHAssetMediaType = PHAssetMediaType.unknown, fetchResult: PHFetchResult<PHAsset>?, successPHAsset: @escaping ([LAssetModel]) -> () ) {
-        var asset = [LAssetModel]()
+    func getPhotoAlbumMedia(_ mediaType: PHAssetMediaType = PHAssetMediaType.unknown, fetchResult: PHFetchResult<PHAsset>?, successPHAsset: @escaping ([LMediaResourcesModel]) -> () ) {
+        var asset = [LMediaResourcesModel]()
         if let result = fetchResult {
             result.enumerateObjects({ (mediaAsset, index, stop) in
                 if mediaAsset.mediaType != .audio {
-                    let model = LAssetModel(asset: mediaAsset)
+                    let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: mediaAsset.mediaType == .image ? .image : .video)
                     asset.append(model)
                 }
             })
@@ -57,7 +57,7 @@ extension LImagePickerManager {
             getPhotoAlbumResources(mediaType) { (assetsFetchResult) in
                 assetsFetchResult.enumerateObjects({ (mediaAsset, index, stop) in
                     if mediaAsset.mediaType != .audio {
-                        let model = LAssetModel(asset: mediaAsset)
+                        let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: mediaAsset.mediaType == .image ? .image : .video)
                         asset.append(model)
                     }
                 })

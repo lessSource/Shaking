@@ -22,8 +22,6 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     public var isLivePhoto: Bool = false
     
-    public var isVideo: Bool = false
-    
     private(set) var action: actionClosure?
 
     private(set) var imageRequestID: PHImageRequestID?
@@ -148,19 +146,20 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     }
     
     // MARK:- public
-    public func updateImage(imageProtocol: ImageDataProtocol) {
+    public func updateImage(imageData: LMediaResourcesModel) {
         let start = CACurrentMediaTime()
         livePhoto.isHidden = true
-        if let image = imageProtocol as? UIImage {
+        
+        if let image = imageData.dataProtocol as? UIImage {
             currentImage.image = image
-        }else if let asset = imageProtocol as? PHAsset {
+        }else if let asset = imageData.dataProtocol as? PHAsset {
             loadImage(asset)
-        }else if let asset = imageProtocol as? LAssetModel {
+        }else if let asset = imageData.dataProtocol as? LAssetModel {
             loadImage(asset.asset)
-        }else if let string = imageProtocol as? String {
+        }else if let string = imageData.dataProtocol as? String {
             print(string)
         }
-        playerButton.isHidden = isVideo
+        playerButton.isHidden = imageData.dateEnum != .video
         print("3")
         let end = CACurrentMediaTime()
         print("方法耗时为：\(end-start)")

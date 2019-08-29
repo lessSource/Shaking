@@ -10,16 +10,6 @@
 import UIKit
 import Photos
 
-protocol ImageDataProtocol { }
-
-extension UIImage: ImageDataProtocol { }
-
-extension String: ImageDataProtocol { }
-
-extension PHAsset: ImageDataProtocol { }
-
-extension LAssetModel: ImageDataProtocol { }
-
 private let cellMargin: CGFloat = 20
 
 class ShowImageViewController: UICollectionViewController {
@@ -29,7 +19,7 @@ class ShowImageViewController: UICollectionViewController {
     /**  */
     fileprivate var currentIndex: Int = 0
     /** 数据 */
-    fileprivate var dataArray: Array = [ImageDataProtocol]()
+    fileprivate var dataArray: Array = [LMediaResourcesModel]()
     /** 是否显示导航栏 */
     fileprivate var isNavHidden: Bool = false
     
@@ -64,7 +54,7 @@ class ShowImageViewController: UICollectionViewController {
         self.currentIndex = currentIndex
     }
     
-    convenience init(dataArray: [ImageDataProtocol], currentIndex: Int) {
+    convenience init(dataArray: [LMediaResourcesModel], currentIndex: Int) {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: Constant.screenWidth + cellMargin, height: Constant.screenHeight)
         layout.minimumLineSpacing = 0
@@ -111,12 +101,10 @@ class ShowImageViewController: UICollectionViewController {
         case .long: break
             
         case .play:
-            if let model = dataArray[indexPath.section] as? LAssetModel {
-                let showVideoPlayVC = ShowVideoPlayViewController()
-                showVideoPlayVC.asset = model.asset
-                showVideoPlayVC.currentImage = cell.currentImage.image
-                present(showVideoPlayVC, animated: false, completion: nil)
-            }
+            let showVideoPlayVC = ShowVideoPlayViewController()
+            showVideoPlayVC.videoResoure = dataArray[indexPath.section].dataProtocol
+            showVideoPlayVC.currentImage = cell.currentImage.image
+            present(showVideoPlayVC, animated: false, completion: nil)
         }
     }
 }
@@ -134,8 +122,7 @@ extension ShowImageViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShowImageCollectionViewCell.identifire, for: indexPath) as! ShowImageCollectionViewCell
-        cell.isVideo = false
-        cell.updateImage(imageProtocol: dataArray[indexPath.section])
+        cell.updateImage(imageData: dataArray[indexPath.section])
         cell.imageClick(action: { [weak self] (type) in
             self?.imageClick(cell, cellForItemAt: indexPath, type: type)
         })

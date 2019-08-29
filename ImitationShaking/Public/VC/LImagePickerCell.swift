@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class LImagePickerCell: UICollectionViewCell {
     
@@ -14,16 +15,18 @@ class LImagePickerCell: UICollectionViewCell {
     
     public var didSelectButtonClosure: SelectClosure?
     
-    public var assetModel: LAssetModel? {
+    public var assetModel: LMediaResourcesModel? {
         didSet {
             guard let model = assetModel else {  return }
             selectButton.isSelected  = model.isSelect
             selectImageView.image = model.isSelect ? R.image.icon_album_sel() : R.image.icon_album_nor()
-            let width = (Constant.screenWidth - 3)/4
-            LImagePickerManager.shared.getPhotoWithAsset(model.asset, photoWidth: width) { (image, dic) in
-                self.imageView.image = image
+            if let asset = model.dataProtocol as? PHAsset {
+                let width = (Constant.screenWidth - 3)/4
+                LImagePickerManager.shared.getPhotoWithAsset(asset, photoWidth: width) { (image, dic) in
+                    self.imageView.image = image
+                }
+                backView.isHidden = asset.mediaType == .image
             }
-            backView.isHidden = model.asset.mediaType == .image
         }
     }
     

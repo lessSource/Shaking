@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class LAlbumPickerController: UIViewController {
     
@@ -60,8 +61,8 @@ class LAlbumPickerController: UIViewController {
         }
         for i in 0..<dataArray.count {
             var selectCount: Int = 0
-            for asset in navVC.selectArray {
-                if dataArray[i].fetchResult?.contains(asset.asset) == true {
+            for mediaModel in navVC.selectArray {
+                if dataArray[i].fetchResult?.contains(mediaModel.dataProtocol as? PHAsset ?? PHAsset()) == true {
                     selectCount += 1
                 }
             }

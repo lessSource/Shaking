@@ -12,7 +12,7 @@ protocol ShowImageProtocol { }
 
 extension ShowImageProtocol where Self: UIViewController, Self: UIViewControllerTransitioningDelegate {
     // 带动画的显示大图 ---- 必须遵循UIViewControllerTransitioningDelegate
-    func showImage(_ dataArray: [ImageDataProtocol], currentIndex: Int, delegate: ModelAnimationDelegate?) {
+    func showImage(_ dataArray: [LMediaResourcesModel], currentIndex: Int, delegate: ModelAnimationDelegate?) {
         let showImageVC = ShowImageViewController(dataArray: dataArray, currentIndex: currentIndex)
         showImageVC.transitioningDelegate = delegate
         showImageVC.modalPresentationStyle = .custom

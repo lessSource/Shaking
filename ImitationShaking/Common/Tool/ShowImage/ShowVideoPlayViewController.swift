@@ -14,7 +14,7 @@ class ShowVideoPlayViewController: UIViewController {
 
     public var currentImage: UIImage?
     
-    public var asset: PHAsset?
+    public var videoResoure: ImageDataProtocol?
     
     public var videoUrl: String?
     
@@ -74,6 +74,7 @@ class ShowVideoPlayViewController: UIViewController {
         
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapGestureClick))
         view.addGestureRecognizer(tapGesture)
+        
     }
     
     fileprivate func addNotification() {
@@ -98,7 +99,9 @@ class ShowVideoPlayViewController: UIViewController {
     }
     
     fileprivate func requestAVAsset() {
-        guard let phAsset = asset else { return }
+        guard let videoResoure = self.videoResoure else { return }
+        guard let phAsset = videoResoure as? PHAsset else { return }
+        
         PHImageManager.default().requestAVAsset(forVideo: phAsset, options: nil) { (asset, audio, dic) in
             DispatchQueue.main.async {
                 self.avAsset = asset
@@ -115,7 +118,7 @@ class ShowVideoPlayViewController: UIViewController {
         if let playerLayer = videoView.layer as? AVPlayerLayer {
             playerLayer.player = player
         }
-        coverImageView.isHidden = true
+        
         player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 1), queue: DispatchQueue.main, using: { [weak self] (time) in
             // 当前正在播放时间
             let loadTime = CMTimeGetSeconds(time)
@@ -154,8 +157,10 @@ class ShowVideoPlayViewController: UIViewController {
     }
     
     @objc fileprivate func playerButtonClick() {
+        seekProgress(progress: 0.0)
         playerButton.isHidden = true
-        videoPlay()
+        coverImageView.isHidden = true
+        player?.play()
     }
     
     @objc fileprivate func cancleButtonClick() {
@@ -174,13 +179,14 @@ class ShowVideoPlayViewController: UIViewController {
     }
     
     // 播放进度
-    fileprivate func progress() {
+    fileprivate func seekProgress(progress: CGFloat) {
         if let totalTime = player?.currentItem?.duration {
             let totalSec = CMTimeGetSeconds(totalTime)
-            let playTimeSec = totalSec * 0.5
+            let playTimeSec = totalSec * Float64(progress)
             let currentTime = CMTimeMake(value: Int64(playTimeSec), timescale: 1)
             player?.seek(to: currentTime) { (finished) in
-                
+                if finished {
+                }
             }
         }
     }
@@ -192,6 +198,7 @@ class ShowVideoPlayViewController: UIViewController {
             case .readyToPlay?:
                 print("准备播放")
                 player?.play()
+                coverImageView.isHidden = true
             case .failed?:
                 print("播放失败")
             case .unknown?:
