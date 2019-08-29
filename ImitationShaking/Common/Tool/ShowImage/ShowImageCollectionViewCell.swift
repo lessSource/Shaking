@@ -10,82 +10,64 @@ import UIKit
 import Photos
 import PhotosUI
 
-protocol CurrentViewProtocol { }
-
-extension CurrentViewProtocol where Self : UIView {
-    func loadImage(_ asset: PHAsset) { }
-}
-
-extension UIImageView : CurrentViewProtocol {
-    func loadImage(_ asset: PHAsset) {
-        switch asset.mediaSubtypes {
-        case .photoPanorama:
-            print("photoPanorama")
-        case .photoHDR:
-            print("photoHDR")
-        case .photoScreenshot:
-            print("photoScreenshot")
-        case .photoLive:
-            print("photoLive")
-            //        case .photoDepthEffect:
-        //            print("photoDepthEffect")
-        case .videoStreamed:
-            print("videoStreamed")
-        case .videoHighFrameRate:
-            print("videoHighFrameRate")
-        case .videoTimelapse:
-            print("videoTimelapse")
-        default:
-            print("photoDepthEffect")
-        }
-        
-        
-        let option: PHImageRequestOptions = PHImageRequestOptions()
-        option.resizeMode = .fast
-        option.isSynchronous = false
-        option.isNetworkAccessAllowed = true
-        option.deliveryMode = .highQualityFormat
-        var size: CGSize = .zero
-        if asset.mediaSubtypes == .photoPanorama {
-            let height: CGFloat = CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth) * Constant.screenWidth
-            size = CGSize(width: Constant.screenWidth, height: height)
-        }else {
-            size = PHImageManagerMaximumSize
-        }
-        PHCachingImageManager().requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: option) { (image, dic) in
-//            self.image = image?.drawImageInImage(R.image.icon_music(), watermarkImageRect: CGRect(x: 0, y: 0, width: 40, height: 40))
-            self.image = image
-        }
-    }
-}
-
-extension PHLivePhotoView: CurrentViewProtocol {
-    func loadImage(_ asset: PHAsset) {
-        let option: PHLivePhotoRequestOptions = PHLivePhotoRequestOptions()
-        option.isNetworkAccessAllowed = true
-        option.deliveryMode = .highQualityFormat
-        PHCachingImageManager().requestLivePhoto(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: option) { (livePhoto, dic) in
-            self.livePhoto = livePhoto
-        }
-    }
-}
-
-
 class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     enum ActionEnum {
-        case tap       // 点击
-        case long      // 长按
+        case tap    // 点击
+        case long   // 长按
+        case play   // 视频播放
     }
     
     typealias actionClosure = (_ actionType: ActionEnum) -> Void
     
-    private(set) lazy var currentImage = UIImageView()
+    public var isLivePhoto: Bool = false
     
-    public lazy var scrollView = UIScrollView()
+    public var isVideo: Bool = false
+    
     private(set) var action: actionClosure?
+
+    private(set) var imageRequestID: PHImageRequestID?
     
-    fileprivate lazy var livePhoto = PHLivePhotoView()
+    private(set) var assetIdentifier: String = ""
+    
+    private var livePhotoPlay: Bool = false
+    
+    fileprivate var asset: PHAsset?
+    
+    public lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.frame = contentView.bounds
+        scrollView.width -= 20
+        scrollView.minimumZoomScale = 1
+        scrollView.maximumZoomScale = 3
+        scrollView.delegate = self
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
+    
+    public lazy var currentImage: UIImageView = {
+        let image = UIImageView()
+        image.contentMode = .scaleAspectFit
+        image.frame = self.scrollView.bounds
+        image.isUserInteractionEnabled = true
+        return image
+    }()
+
+    fileprivate lazy var livePhoto: PHLivePhotoView = {
+        let livePhoto = PHLivePhotoView()
+        livePhoto.contentMode = .scaleAspectFit
+        livePhoto.frame = self.scrollView.bounds
+        livePhoto.delegate = self
+        return livePhoto
+    }()
+    
+    fileprivate lazy var playerButton: UIButton = {
+        let button = UIButton(frame: CGRect(x: Constant.screenWidth/2 - 25, y: Constant.screenHeight/2 - 25, width: 80, height: 80))
+        button.setBackgroundImage(R.image.icon_video(), for: .normal)
+        button.isHidden = true
+        return button
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -101,48 +83,33 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     }
     
     private func layoutView() {
-        scrollView.frame = contentView.bounds
-        scrollView.width -= 20
-        scrollView.minimumZoomScale = 1
-        scrollView.maximumZoomScale = 3
-        scrollView.delegate = self
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.showsVerticalScrollIndicator = false
         contentView.addSubview(scrollView)
+        scrollView.addSubview(currentImage)
+        scrollView.addSubview(playerButton)
+        scrollView.addSubview(livePhoto)
         
-        currentImage.contentMode = .scaleAspectFit
-        currentImage.frame = scrollView.bounds
-        currentImage.isUserInteractionEnabled = true
-        livePhoto.contentMode = .scaleAspectFit
-        livePhoto.frame = scrollView.bounds
-
+        playerButton.addTarget(self, action: #selector(playerButtonClick), for: .touchUpInside)
+        addGesture()
+    }
+    
+    // MARK:- Gesture
+    fileprivate func addGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAction))
         currentImage.addGestureRecognizer(tapGesture)
-//        livePhoto.addGestureRecognizer(tapGesture)
-
+        
         let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(longGestureClick(_ :)))
         currentImage.addGestureRecognizer(longGesture)
         
         let doubleGesture = UITapGestureRecognizer(target: self, action: #selector(ShowImageCollectionViewCell.doubleGestureClick(_ :)))
         doubleGesture.numberOfTapsRequired = 2;
         currentImage.addGestureRecognizer(doubleGesture)
-//        livePhoto.addGestureRecognizer(doubleGesture)
-
         tapGesture.require(toFail: doubleGesture)
         
-        scrollView.addSubview(currentImage)
-        scrollView.addSubview(livePhoto)
-
+        livePhoto.playbackGestureRecognizer.addTarget(self, action: #selector(playbackGesture))
     }
     
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return currentImage
-    }
     
-    func imageClick(action: @escaping actionClosure) {
-        self.action = action
-    }
-    
+    // MARK:- Event
     // 点击
     @objc func tapAction() {
         guard let action = action else { return }
@@ -153,6 +120,7 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         guard let action = action else { return }
         if gestureRecognizer.state == .began {
             action(.long)
+//            playLivePhoto()
         }
     }
     /** 双击 */
@@ -168,22 +136,117 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         }
     }
     
+    @objc func playerButtonClick() {
+        if let action = self.action {
+            action(.play)
+        }
+    }
+    
+    /** LivePhoto */
+    @objc func playbackGesture() {
+        print("playbackGesture")
+    }
+    
+    // MARK:- public
     public func updateImage(imageProtocol: ImageDataProtocol) {
         let start = CACurrentMediaTime()
-        print("1")
         livePhoto.isHidden = true
-        //        currentImage.isHidden = true
         if let image = imageProtocol as? UIImage {
             currentImage.image = image
         }else if let asset = imageProtocol as? PHAsset {
-            self.currentImage.loadImage(asset)
+            loadImage(asset)
         }else if let asset = imageProtocol as? LAssetModel {
-            self.currentImage.loadImage(asset.asset)
+            loadImage(asset.asset)
         }else if let string = imageProtocol as? String {
             print(string)
         }
+        playerButton.isHidden = isVideo
         print("3")
         let end = CACurrentMediaTime()
         print("方法耗时为：\(end-start)")
+    }
+    
+    public func imageClick(action: @escaping actionClosure) {
+        self.action = action
+    }
+
+    // MARK:- fileprivate
+    fileprivate func loadImage(_ asset: PHAsset) {
+        if livePhotoPlay { livePhoto.stopPlayback() }
+        self.asset = asset
+        assetIdentifier = asset.localIdentifier
+        let option: PHImageRequestOptions = PHImageRequestOptions()
+        option.resizeMode = .fast
+        option.isSynchronous = false
+        option.isNetworkAccessAllowed = true
+        option.deliveryMode = .highQualityFormat
+        var size: CGSize = .zero
+        let height: CGFloat = CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth) * Constant.screenWidth
+        size = CGSize(width: Constant.screenWidth, height: height)
+        let imageRequestID = PHCachingImageManager().requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: option) { (image, dic) in
+            if self.assetIdentifier == asset.localIdentifier {
+                self.currentImage.image = image
+            }else {
+                if let requestId = self.imageRequestID {
+                    PHCachingImageManager().cancelImageRequest(requestId)
+                }
+            }
+        }
+        if let requestId = self.imageRequestID, requestId != imageRequestID {
+            PHCachingImageManager().cancelImageRequest(requestId)
+        }
+        self.imageRequestID = imageRequestID
+    }
+    
+    fileprivate func playLivePhoto() {
+        if livePhotoPlay { return }
+        guard let asset = self.asset else { return }
+        if scrollView.zoomScale > 1 {
+            scrollView.setZoomScale(1, animated: true)
+        }
+        assetIdentifier = asset.localIdentifier
+        livePhoto.isHidden = false
+        let option: PHLivePhotoRequestOptions = PHLivePhotoRequestOptions()
+        option.isNetworkAccessAllowed = true
+        option.deliveryMode = .highQualityFormat
+        var size: CGSize = .zero
+        let height: CGFloat = CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth) * Constant.screenWidth
+        size = CGSize(width: Constant.screenWidth, height: height)
+        let imageRequestID = PHCachingImageManager().requestLivePhoto(for: asset, targetSize: size, contentMode: .aspectFill, options: option) { (livePhoto, dic) in
+            if self.assetIdentifier == asset.localIdentifier {
+                self.livePhoto.livePhoto = livePhoto
+                if !self.livePhotoPlay {
+                    self.livePhoto.startPlayback(with: .full)
+                }
+            }else {
+                if let requestId = self.imageRequestID {
+                    PHCachingImageManager().cancelImageRequest(requestId)
+                }
+            }
+        }
+        if let requestId = self.imageRequestID, requestId != imageRequestID {
+            PHCachingImageManager().cancelImageRequest(requestId)
+        }
+        self.imageRequestID = imageRequestID
+    }
+}
+
+
+extension ShowImageCollectionViewCell: PHLivePhotoViewDelegate {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        if livePhotoPlay {
+            return livePhoto
+        }
+        return currentImage
+    }
+    
+    func livePhotoView(_ livePhotoView: PHLivePhotoView, willBeginPlaybackWith playbackStyle: PHLivePhotoViewPlaybackStyle) {
+        livePhoto.isHidden = false
+        livePhotoPlay = true
+    }
+    
+    func livePhotoView(_ livePhotoView: PHLivePhotoView, didEndPlaybackWith playbackStyle: PHLivePhotoViewPlaybackStyle) {
+        livePhoto.isHidden = true
+        livePhotoPlay = false
     }
 }

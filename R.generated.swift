@@ -16,18 +16,22 @@ struct R: Rswift.Validatable {
     try intern.validate()
   }
   
-  /// This `R.file` struct is generated, and contains static references to 8 files.
+  /// This `R.file` struct is generated, and contains static references to 10 files.
   struct file {
     /// Resource file `icon_album_nor@2x.png`.
     static let icon_album_nor2xPng = Rswift.FileResource(bundle: R.hostingBundle, name: "icon_album_nor@2x", pathExtension: "png")
     /// Resource file `icon_album_sel@2x.png`.
     static let icon_album_sel2xPng = Rswift.FileResource(bundle: R.hostingBundle, name: "icon_album_sel@2x", pathExtension: "png")
+    /// Resource file `icon_close@2x.png`.
+    static let icon_close2xPng = Rswift.FileResource(bundle: R.hostingBundle, name: "icon_close@2x", pathExtension: "png")
     /// Resource file `icon_nav_back@2x.png`.
     static let icon_nav_back2xPng = Rswift.FileResource(bundle: R.hostingBundle, name: "icon_nav_back@2x", pathExtension: "png")
     /// Resource file `icon_permissions@2x.png`.
     static let icon_permissions2xPng = Rswift.FileResource(bundle: R.hostingBundle, name: "icon_permissions@2x", pathExtension: "png")
     /// Resource file `icon_permissions@3x.png`.
     static let icon_permissions3xPng = Rswift.FileResource(bundle: R.hostingBundle, name: "icon_permissions@3x", pathExtension: "png")
+    /// Resource file `icon_video@2x.png`.
+    static let icon_video2xPng = Rswift.FileResource(bundle: R.hostingBundle, name: "icon_video@2x", pathExtension: "png")
     /// Resource file `provincesData.json`.
     static let provincesDataJson = Rswift.FileResource(bundle: R.hostingBundle, name: "provincesData", pathExtension: "json")
     /// Resource file `schoolData.json`.
@@ -47,6 +51,12 @@ struct R: Rswift.Validatable {
       return fileResource.bundle.url(forResource: fileResource)
     }
     
+    /// `bundle.url(forResource: "icon_close@2x", withExtension: "png")`
+    static func icon_close2xPng(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.icon_close2xPng
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+    
     /// `bundle.url(forResource: "icon_nav_back@2x", withExtension: "png")`
     static func icon_nav_back2xPng(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.icon_nav_back2xPng
@@ -62,6 +72,12 @@ struct R: Rswift.Validatable {
     /// `bundle.url(forResource: "icon_permissions@3x", withExtension: "png")`
     static func icon_permissions3xPng(_: Void = ()) -> Foundation.URL? {
       let fileResource = R.file.icon_permissions3xPng
+      return fileResource.bundle.url(forResource: fileResource)
+    }
+    
+    /// `bundle.url(forResource: "icon_video@2x", withExtension: "png")`
+    static func icon_video2xPng(_: Void = ()) -> Foundation.URL? {
+      let fileResource = R.file.icon_video2xPng
       return fileResource.bundle.url(forResource: fileResource)
     }
     
@@ -86,7 +102,7 @@ struct R: Rswift.Validatable {
     fileprivate init() {}
   }
   
-  /// This `R.image` struct is generated, and contains static references to 28 images.
+  /// This `R.image` struct is generated, and contains static references to 29 images.
   struct image {
     /// Image `IMG_4A7DFD335A96-1`.
     static let img_4A7DFD335A961 = Rswift.ImageResource(bundle: R.hostingBundle, name: "IMG_4A7DFD335A96-1")
@@ -102,6 +118,8 @@ struct R: Rswift.Validatable {
     static let icon_btn_add = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_btn_add")
     /// Image `icon_camera`.
     static let icon_camera = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_camera")
+    /// Image `icon_close`.
+    static let icon_close = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_close")
     /// Image `icon_comments`.
     static let icon_comments = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_comments")
     /// Image `icon_countdown`.
@@ -142,8 +160,8 @@ struct R: Rswift.Validatable {
     static let icon_speed = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_speed")
     /// Image `icon_tailoring`.
     static let icon_tailoring = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_tailoring")
-    /// Image `iocn_album_nor`.
-    static let iocn_album_nor = Rswift.ImageResource(bundle: R.hostingBundle, name: "iocn_album_nor")
+    /// Image `icon_video`.
+    static let icon_video = Rswift.ImageResource(bundle: R.hostingBundle, name: "icon_video")
     
     /// `UIImage(named: "IMG_4A7DFD335A96-1", bundle: ..., traitCollection: ...)`
     static func img_4A7DFD335A961(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
@@ -178,6 +196,11 @@ struct R: Rswift.Validatable {
     /// `UIImage(named: "icon_camera", bundle: ..., traitCollection: ...)`
     static func icon_camera(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
       return UIKit.UIImage(resource: R.image.icon_camera, compatibleWith: traitCollection)
+    }
+    
+    /// `UIImage(named: "icon_close", bundle: ..., traitCollection: ...)`
+    static func icon_close(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_close, compatibleWith: traitCollection)
     }
     
     /// `UIImage(named: "icon_comments", bundle: ..., traitCollection: ...)`
@@ -280,9 +303,9 @@ struct R: Rswift.Validatable {
       return UIKit.UIImage(resource: R.image.icon_tailoring, compatibleWith: traitCollection)
     }
     
-    /// `UIImage(named: "iocn_album_nor", bundle: ..., traitCollection: ...)`
-    static func iocn_album_nor(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
-      return UIKit.UIImage(resource: R.image.iocn_album_nor, compatibleWith: traitCollection)
+    /// `UIImage(named: "icon_video", bundle: ..., traitCollection: ...)`
+    static func icon_video(compatibleWith traitCollection: UIKit.UITraitCollection? = nil) -> UIKit.UIImage? {
+      return UIKit.UIImage(resource: R.image.icon_video, compatibleWith: traitCollection)
     }
     
     fileprivate init() {}

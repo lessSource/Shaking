@@ -16,9 +16,15 @@ class ShowVideoPlayViewController: UIViewController {
     
     public var asset: PHAsset?
     
-    fileprivate var player: AVPlayer!
+    public var videoUrl: String?
     
-    fileprivate var playerItem: AVPlayerItem!
+    fileprivate var avAsset: AVAsset?
+    
+    fileprivate var player: AVPlayer?
+    
+    fileprivate var playerItem: AVPlayerItem?
+    
+    fileprivate var plyerLayer: AVPlayerLayer?
     
     fileprivate lazy var videoView: VideoPlayer = {
         let videoView = VideoPlayer(frame: self.view.bounds)
@@ -29,122 +35,176 @@ class ShowVideoPlayViewController: UIViewController {
     fileprivate lazy var coverImageView: UIImageView = {
         let image = UIImageView(frame: self.view.bounds)
         image.backgroundColor = UIColor.black
+        image.contentMode = .scaleAspectFit
         return image
     }()
     
-    fileprivate var plyerLayer: AVPlayerLayer?
+    fileprivate lazy var cancleButton: UIButton = {
+        let button = UIButton(frame: CGRect(x: 5, y: Constant.statusHeight + 2, width: 40, height: 40))
+        button.setBackgroundImage(R.image.icon_close(), for: .normal)
+        return button
+    }()
+    
+    fileprivate lazy var playerButton: UIButton = {
+        let button = UIButton(frame: CGRect(x: Constant.screenWidth/2 - 25, y: Constant.screenHeight/2 - 25, width: 80, height: 80))
+        button.setBackgroundImage(R.image.icon_video(), for: .normal)
+        button.isHidden = true
+        return button
+    }()
+    
+    deinit {
+        print("++++++++释放", self)
+        player?.pause()
+        NotificationCenter.default.removeObserver(self)
+        removeObserver()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(videoView)
         view.addSubview(coverImageView)
+        view.addSubview(cancleButton)
+        view.addSubview(playerButton)
         coverImageView.image = currentImage
+        cancleButton.addTarget(self, action: #selector(cancleButtonClick), for: .touchUpInside)
+        playerButton.addTarget(self, action: #selector(playerButtonClick), for: .touchUpInside)
         requestAVAsset()
+        addNotification()
         
+        let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapGestureClick))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    fileprivate func addNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(playToEndTime), name: .AVPlayerItemDidPlayToEndTime, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(becomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(becomeDeath), name: UIApplication.willResignActiveNotification, object: nil)
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-        self.playerItem.removeObserver(self, forKeyPath: "status")
-        self.playerItem.removeObserver(self, forKeyPath: "loadedTimeRanges")
-        self.playerItem.removeObserver(self, forKeyPath: "playbackBufferEmpty")
-        self.playerItem.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
-    }
     
     fileprivate func addObserver() {
-        self.playerItem.addObserver(self, forKeyPath: "status", options: .new, context: nil) // 播放状态
-        self.playerItem.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil) // 缓存区间，可用来获取缓存了多少
-        self.playerItem.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil) // 缓存不够了 自动暂停播放
-        self.playerItem.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil) // 缓存好了 手动播放
+        playerItem?.addObserver(self, forKeyPath: "status", options: .new, context: nil) // 播放状态
+        playerItem?.addObserver(self, forKeyPath: "loadedTimeRanges", options: .new, context: nil) // 缓存区间，可用来获取缓存了多少
+        playerItem?.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil) // 缓存不够了 自动暂停播放
+        playerItem?.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil) // 缓存好了 手动播放
+    }
+    
+    fileprivate func removeObserver() {
+        playerItem?.removeObserver(self, forKeyPath: "status")
+        playerItem?.removeObserver(self, forKeyPath: "loadedTimeRanges")
+        playerItem?.removeObserver(self, forKeyPath: "playbackBufferEmpty")
+        playerItem?.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
     }
     
     fileprivate func requestAVAsset() {
         guard let phAsset = asset else { return }
         PHImageManager.default().requestAVAsset(forVideo: phAsset, options: nil) { (asset, audio, dic) in
             DispatchQueue.main.async {
-                self.play(asset)
+                self.avAsset = asset
+                self.videoPlay()
             }
         }
     }
     
-    fileprivate func play(_ avAsset: AVAsset?) {
-        guard let avAsset = avAsset else { return }
-        let playerItem = AVPlayerItem(asset: avAsset)
-        self.playerItem = playerItem
+    fileprivate func videoPlay() {
+        guard let avAsset = self.avAsset else { return }
+        playerItem = AVPlayerItem(asset: avAsset)
         addObserver()
-        player = AVPlayer(playerItem: self.playerItem)
+        player = AVPlayer(playerItem: playerItem)
         if let playerLayer = videoView.layer as? AVPlayerLayer {
             playerLayer.player = player
         }
         coverImageView.isHidden = true
-        player.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 1), queue: DispatchQueue.main) { [weak self] (time) in
-            // 当前正在播放的时间
+        player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 1), queue: DispatchQueue.main, using: { [weak self] (time) in
+            // 当前正在播放时间
             let loadTime = CMTimeGetSeconds(time)
             // 视频总时间
-            let totalTime = CMTimeGetSeconds(self?.player.currentItem?.duration ?? time)
-            print(self?.changeTimeFormat(timeInterval: loadTime) ?? 0,"|||||",  self?.changeTimeFormat(timeInterval: totalTime) ?? 0)
-        }
-        
+            var totalTime: Float64 = 0
+            if let duration = self?.player?.currentItem?.duration {
+                totalTime = CMTimeGetSeconds(duration)
+            }
+            print(self?.changeTimeFormat(timeInterval: loadTime) as Any)
+            print(self?.changeTimeFormat(timeInterval: totalTime) as Any)
+        })
     }
     
+    // MARK:- Event
     @objc fileprivate func playToEndTime() {
         print("end")
         coverImageView.isHidden = false
+        playerButton.isHidden = false
     }
     
     @objc fileprivate func becomeActive() {
         print("进入前台")
-        player.play()
+        playerButton.isHidden = true
+        player?.play()
     }
     
     @objc fileprivate func becomeDeath() {
         print("进入后台")
-        player.pause()
+        playerButton.isHidden = false
+        player?.pause()
     }
     
+    @objc fileprivate func tapGestureClick() {
+        print("dddd")
+        
+    }
+    
+    @objc fileprivate func playerButtonClick() {
+        playerButton.isHidden = true
+        videoPlay()
+    }
+    
+    @objc fileprivate func cancleButtonClick() {
+        dismiss(animated: false, completion: nil)
+    }
+    
+    // MARK:- 操作
     // 静音
     fileprivate func muted() {
-        player.isMuted = false
+        player?.isMuted = false
     }
     
     // 音量
     fileprivate func volume() {
-        player.volume = 0.5
+        player?.volume = 0.5
     }
     
     // 播放进度
     fileprivate func progress() {
-        if let totalTime = player.currentItem?.duration {
+        if let totalTime = player?.currentItem?.duration {
             let totalSec = CMTimeGetSeconds(totalTime)
             let playTimeSec = totalSec * 0.5
             let currentTime = CMTimeMake(value: Int64(playTimeSec), timescale: 1)
-            player.seek(to: currentTime) { (finished) in
+            player?.seek(to: currentTime) { (finished) in
                 
             }
-            
         }
     }
     
+    // MARK:- observeValue
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "status" {
-            switch playerItem.status {
-            case .readyToPlay:
+            switch playerItem?.status {
+            case .readyToPlay?:
                 print("准备播放")
-                player.play()
-            case .failed:
+                player?.play()
+            case .failed?:
                 print("播放失败")
-            case .unknown:
+            case .unknown?:
                 print("unknown")
+            case .none:
+                print("no")
             @unknown default: break
                 
             }
         }else if keyPath == "loadedTimeRanges" {
-            let loadTimeArray = playerItem.loadedTimeRanges
+            let loadTimeArray = playerItem?.loadedTimeRanges
             // 获取最新缓存的区间
-            let newTimeRange: CMTimeRange = loadTimeArray.first as! CMTimeRange
+            let newTimeRange: CMTimeRange = loadTimeArray?.first as! CMTimeRange
             let startSeconds = CMTimeGetSeconds(newTimeRange.start)
             let durationSeconds = CMTimeGetSeconds(newTimeRange.duration)
             let totalBuffer = startSeconds + durationSeconds // 缓存总长度
@@ -153,7 +213,7 @@ class ShowVideoPlayViewController: UIViewController {
             print("正在缓存视频")
         }else if keyPath == "playbackLikelyToKeepUp" {
             print("缓存好了继续播放")
-            player.play()
+            player?.play()
         }
     }
     

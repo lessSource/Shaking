@@ -39,7 +39,6 @@ class ShowImageViewController: UICollectionViewController {
     }()
     
     
-    
     fileprivate lazy var tabBarView: ShowImageTabBarView = {
         let barView: ShowImageTabBarView = ShowImageTabBarView(frame: CGRect(x: 0, y: Constant.screenHeight, width: Constant.screenHeight, height: Constant.bottomBarHeight))
         return barView
@@ -103,19 +102,21 @@ class ShowImageViewController: UICollectionViewController {
     fileprivate func imageClick(_ cell: ShowImageCollectionViewCell, cellForItemAt indexPath: IndexPath, type: ShowImageCollectionViewCell.ActionEnum) {
         switch type {
         case .tap:
-//            UIView.animate(withDuration: 0.15, animations: {
-//                self.tabBarView.y = self.isNavHidden ? Constant.screenHeight : Constant.screenHeight - self.tabBarView.height
-//                self.navView.y = self.isNavHidden ? -Constant.navbarAndStatusBar : 0
-//            }) { finish in
-//                if finish { self.isNavHidden = !self.isNavHidden }
-//            }
-            if let model = dataArray[indexPath.section] as? LAssetModel, model.asset.mediaType == .video {
+            UIView.animate(withDuration: 0.15, animations: {
+                self.tabBarView.y = self.isNavHidden ? Constant.screenHeight : Constant.screenHeight - self.tabBarView.height
+                self.navView.y = self.isNavHidden ? -Constant.navbarAndStatusBar : 0
+            }) { finish in
+                if finish { self.isNavHidden = !self.isNavHidden }
+            }
+        case .long: break
+            
+        case .play:
+            if let model = dataArray[indexPath.section] as? LAssetModel {
                 let showVideoPlayVC = ShowVideoPlayViewController()
                 showVideoPlayVC.asset = model.asset
                 showVideoPlayVC.currentImage = cell.currentImage.image
                 present(showVideoPlayVC, animated: false, completion: nil)
             }
-        case .long: break
         }
     }
 }
@@ -133,6 +134,7 @@ extension ShowImageViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShowImageCollectionViewCell.identifire, for: indexPath) as! ShowImageCollectionViewCell
+        cell.isVideo = false
         cell.updateImage(imageProtocol: dataArray[indexPath.section])
         cell.imageClick(action: { [weak self] (type) in
             self?.imageClick(cell, cellForItemAt: indexPath, type: type)
