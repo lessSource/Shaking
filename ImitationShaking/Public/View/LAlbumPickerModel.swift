@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-protocol ImageDataProtocol {}
+protocol ImageDataProtocol { }
 
 extension UIImage: ImageDataProtocol { }
 
@@ -17,7 +17,6 @@ extension String: ImageDataProtocol { }
 
 extension PHAsset: ImageDataProtocol { }
 
-extension LAssetModel: ImageDataProtocol { }
 
 enum ImageDataEnum {
     case image
@@ -39,19 +38,7 @@ struct LAlbumPickerModel {
     var selectCount: Int = 0
 }
 
-struct LAssetModel {
-    /** 是否选中 */
-    var isSelect: Bool
-    /** 资源 */
-    var asset: PHAsset
-    
-    init(isSelect: Bool = false, asset: PHAsset) {
-        self.isSelect = isSelect
-        self.asset = asset
-    }
-}
-
-struct LMediaResourcesModel {
+struct LMediaResourcesModel: Equatable {
     /** 资源 */
     var dataProtocol: ImageDataProtocol
     /** 类型 */
@@ -67,5 +54,16 @@ struct LMediaResourcesModel {
         self.isSelect = isSelect
         self.videoTime = videoTime
     }
-    
 }
+
+func ==(lhs: LMediaResourcesModel, rhs: LMediaResourcesModel) -> Bool {
+    if let lhsStr = lhs.dataProtocol as? String, let rhsStr = rhs.dataProtocol as? String {
+        return lhsStr == rhsStr
+    }else if let lhsAss = lhs.dataProtocol as? PHAsset, let rhsAss = rhs.dataProtocol as? PHAsset {
+        return lhsAss.localIdentifier == rhsAss.localIdentifier
+    }else if let lhsImg = lhs.dataProtocol as? UIImage, let rhsImg = rhs.dataProtocol as? UIImage {
+        return lhsImg == rhsImg
+    }
+    return false
+}
+

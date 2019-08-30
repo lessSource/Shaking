@@ -50,6 +50,8 @@ extension LImagePickerManager {
                 if mediaAsset.mediaType != .audio {
                     let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: mediaAsset.mediaType == .image ? .image : .video)
                     asset.append(model)
+                }else {
+                    print("audioaudioaudioaudioaudio")
                 }
             })
             successPHAsset(asset)
@@ -59,6 +61,8 @@ extension LImagePickerManager {
                     if mediaAsset.mediaType != .audio {
                         let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: mediaAsset.mediaType == .image ? .image : .video)
                         asset.append(model)
+                    }else {
+                        print("audioaudioaudioaudioaudio")
                     }
                 })
                 successPHAsset(asset)
@@ -116,7 +120,7 @@ extension LImagePickerManager {
             for i in 0..<userAlbums.count {
                 if let collection = userAlbums[i] as? PHAssetCollection {
                     let allPhotosOptions = PHFetchOptions()
-                    allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+//                    allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
                     let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: collection, options: allPhotosOptions)
                     if fetchResult.count > 0 {
                         let model = LAlbumPickerModel(title: collection.localizedTitle ?? "", asset: fetchResult.lastObject,fetchResult: fetchResult, count: fetchResult.count, selectCount: 0)

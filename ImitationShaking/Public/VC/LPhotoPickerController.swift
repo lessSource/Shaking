@@ -79,9 +79,9 @@ class LPhotoPickerController: UIViewController {
         tabBarView.currentCount = navVC.selectArray.count
         if navVC.selectArray.count == 0 { return }
         dataArray = dataArray.map {
-//            var model = $0
-//            model.isSelect = navVC.selectArray.contains(where: {$0.dataProtocol == model.dataProtocol})
-            return $0
+            var model = $0
+            model.isSelect = navVC.selectArray.contains(where: {$0 == model})
+            return model
         }
     }
     
@@ -98,7 +98,7 @@ class LPhotoPickerController: UIViewController {
                 return false
             }
         }else {
-//            navVC.selectArray.removeAll(where: { $0.asset.localIdentifier == dataArray[indexPath.item].asset.localIdentifier })
+            navVC.selectArray.removeAll(where: { $0 == dataArray[indexPath.item] })
             dataArray[indexPath.item].isSelect = !isSelect
             tabBarView.currentCount = navVC.selectArray.count
             return true

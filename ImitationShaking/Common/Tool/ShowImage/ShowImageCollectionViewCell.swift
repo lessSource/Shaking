@@ -154,8 +154,6 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
             currentImage.image = image
         }else if let asset = imageData.dataProtocol as? PHAsset {
             loadImage(asset)
-        }else if let asset = imageData.dataProtocol as? LAssetModel {
-            loadImage(asset.asset)
         }else if let string = imageData.dataProtocol as? String {
             print(string)
         }
