@@ -48,7 +48,9 @@ extension LImagePickerManager {
         if let result = fetchResult {
             result.enumerateObjects({ (mediaAsset, index, stop) in
                 if mediaAsset.mediaType != .audio {
-                    let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: mediaAsset.mediaType == .image ? .image : .video)
+                    let time = mediaAsset.mediaType == .video ? self.getNewTimeFromDurationSecond(duration: Int(mediaAsset.duration)) : ""
+                    
+                    let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: mediaAsset.mediaType == .image ? .image : .video, videoTime: time)
                     asset.append(model)
                 }else {
                     print("audioaudioaudioaudioaudio")
@@ -59,7 +61,8 @@ extension LImagePickerManager {
             getPhotoAlbumResources(mediaType) { (assetsFetchResult) in
                 assetsFetchResult.enumerateObjects({ (mediaAsset, index, stop) in
                     if mediaAsset.mediaType != .audio {
-                        let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: mediaAsset.mediaType == .image ? .image : .video)
+                        let time = mediaAsset.mediaType == .video ? self.getNewTimeFromDurationSecond(duration: Int(mediaAsset.duration)) : ""
+                        let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: mediaAsset.mediaType == .image ? .image : .video, videoTime: time)
                         asset.append(model)
                     }else {
                         print("audioaudioaudioaudioaudio")
@@ -178,5 +181,25 @@ extension LImagePickerManager {
     
     
     // 获取
+    
+    // 格式化视频时间
+    func getNewTimeFromDurationSecond(duration: Int) -> String {
+        var newTime = ""
+        switch duration {
+        case 0..<10:
+            newTime = "0:0\(duration)"
+        case 10..<60:
+            newTime = "0:\(duration)"
+        default:
+            let min = duration / 60
+            let sec = duration - (min * 60)
+            if (sec < 10) {
+                newTime = "\(min):0\(sec)"
+            }else {
+                newTime = "\(min):\(sec)"
+            }
+        }
+        return newTime
+    }
     
 }

@@ -20,6 +20,7 @@ class LImagePickerCell: UICollectionViewCell {
             guard let model = assetModel else {  return }
             selectButton.isSelected  = model.isSelect
             selectImageView.image = model.isSelect ? R.image.icon_album_sel() : R.image.icon_album_nor()
+            timeLabel.text = model.videoTime
             if let asset = model.dataProtocol as? PHAsset {
                 let width = (Constant.screenWidth - 3)/4
                 LImagePickerManager.shared.getPhotoWithAsset(asset, photoWidth: width) { (image, dic) in
@@ -47,7 +48,6 @@ class LImagePickerCell: UICollectionViewCell {
     
     public lazy var timeLabel: UILabel = {
         let label = UILabel()
-        label.text = "12:00"
         label.textColor = UIColor.white
         label.font = UIFont.systemFont(ofSize: 10)
         return label
@@ -55,7 +55,7 @@ class LImagePickerCell: UICollectionViewCell {
     
     public lazy var backView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(white: 0, alpha: 0.7)
+        view.backgroundColor = UIColor(white: 0, alpha: 0.3)
         return view
     }()
     
@@ -96,7 +96,7 @@ class LImagePickerCell: UICollectionViewCell {
         
         timeLabel.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
-            make.left.equalTo(10)
+            make.right.equalTo(-10)
         }
         
         selectButton.snp.makeConstraints { (make) in

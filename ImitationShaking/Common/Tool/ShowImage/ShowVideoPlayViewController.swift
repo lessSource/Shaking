@@ -26,6 +26,8 @@ class ShowVideoPlayViewController: UIViewController {
     
     fileprivate var plyerLayer: AVPlayerLayer?
     
+    fileprivate var timeObserver: Any?
+    
     fileprivate lazy var videoView: VideoPlayer = {
         let videoView = VideoPlayer(frame: self.view.bounds)
         videoView.backgroundColor = UIColor.black
@@ -41,13 +43,14 @@ class ShowVideoPlayViewController: UIViewController {
     
     fileprivate lazy var cancleButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 5, y: Constant.statusHeight + 2, width: 40, height: 40))
-        button.setBackgroundImage(R.image.icon_close(), for: .normal)
+        button.setImage(R.image.icon_close(), for: .normal)
+        button.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return button
     }()
     
     fileprivate lazy var playerButton: UIButton = {
         let button = UIButton(frame: CGRect(x: Constant.screenWidth/2 - 25, y: Constant.screenHeight/2 - 25, width: 80, height: 80))
-        button.setBackgroundImage(R.image.icon_video(), for: .normal)
+        button.setImage(R.image.icon_video(), for: .normal)
         button.isHidden = true
         return button
     }()
@@ -55,6 +58,10 @@ class ShowVideoPlayViewController: UIViewController {
     deinit {
         print("++++++++释放", self)
         player?.pause()
+        if let observer = timeObserver {
+            player?.removeTimeObserver(observer)
+        }
+        player = nil
         NotificationCenter.default.removeObserver(self)
         removeObserver()
     }
@@ -119,7 +126,7 @@ class ShowVideoPlayViewController: UIViewController {
             playerLayer.player = player
         }
         
-        player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 1), queue: DispatchQueue.main, using: { [weak self] (time) in
+        timeObserver = player?.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 1), queue: DispatchQueue.main, using: { [weak self] (time) in
             // 当前正在播放时间
             let loadTime = CMTimeGetSeconds(time)
             // 视频总时间
@@ -198,7 +205,9 @@ class ShowVideoPlayViewController: UIViewController {
             case .readyToPlay?:
                 print("准备播放")
                 player?.play()
-                coverImageView.isHidden = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                   self.coverImageView.isHidden = true
+                }
             case .failed?:
                 print("播放失败")
             case .unknown?:
@@ -258,3 +267,15 @@ class VideoPlayer: UIView {
 // AVPlayerItemPlaybackStalledNotification
 // 播放失败
 // AVPlayerItemFailedToPlayToEndTimeNotification
+
+
+class VideoTabBarView: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}

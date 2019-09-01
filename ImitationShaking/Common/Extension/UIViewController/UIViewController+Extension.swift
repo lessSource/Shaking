@@ -30,4 +30,11 @@ extension UIViewController {
         let nav: BaseNavigationController = BaseNavigationController(rootViewController: viewController)
         present(nav, animated: true, completion: completion)
     }
+    
+    public func showAlertWithTitle(_ title: String) {
+        let alertVC = UIAlertController(title: "提示", message: title, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertVC.addAction(okAction)
+        present(alertVC, animated: true, completion: nil)
+    }
 }

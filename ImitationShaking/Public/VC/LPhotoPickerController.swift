@@ -10,8 +10,6 @@ import UIKit
 import Photos
 
 class LPhotoPickerController: UIViewController {
-
-    fileprivate var animationDelegate: ModelAnimationDelegate?
     
     public var pickerModel: LAlbumPickerModel?
     
@@ -94,7 +92,7 @@ class LPhotoPickerController: UIViewController {
                 tabBarView.currentCount = navVC.selectArray.count
                 return true
             }else {
-                navVC.showAlertWithTitle("最多只能选择\(navVC.maxSelectCount)张照片")
+                view.getControllerFromView()?.showAlertWithTitle("最多只能选择\(navVC.maxSelectCount)张照片")
                 return false
             }
         }else {
@@ -106,7 +104,7 @@ class LPhotoPickerController: UIViewController {
     }
 }
 
-extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource,UIViewControllerTransitioningDelegate, ShowImageProtocol, ImageTabBarViewDelegate {
+extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, ShowImageProtocol, ImageTabBarViewDelegate {
     func promptViewImageClick(_ promptView: PromptView) {
         if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -130,18 +128,32 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
         navView.allNumber = 1
         guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
         //            animationDelegate = nil
-        animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
-        //            animationDelegate = ModelAnimationDelegate(superView: cell.superview, currentIndex: indexPath.item)
-        showImage(dataArray, currentIndex: indexPath.item, delegate: animationDelegate)
+//        animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
+        showImage(dataArray, currentIndex: -1, fromVC: self)
+        
+//        showImage(dataArray, currentIndex: indexPath.item)
     }
     
     func imageTabBarViewButton(_ buttonType: ImageTabBarButtonType) {
-        guard let navVC = navigationController as? LImagePickerController else { return }
+//        guard let navVC = navigationController as? LImagePickerController else { return }
         if buttonType == .preview {
-//            animationDelegate = nil
-            animationDelegate = ModelAnimationDelegate(superView: nil, currentIndex: 0)
-            showImage(navVC.selectArray, currentIndex: 0, delegate: animationDelegate)
+////            animationDelegate = nil
+//            animationDelegate = ModelAnimationDelegate(superView: nil, currentIndex: 0)
+//            showImage(navVC.selectArray, currentIndex: 0, delegate: animationDelegate)
         }
     }
+}
+
+extension LPhotoPickerController: ShowImageVCDelegate {
+    
+    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int) -> Bool {
+        let indexPath = IndexPath(item: index, section: 0)
+        let isSelect: Bool = didSelectCellButton(dataArray[index].isSelect, indexPath: indexPath)
+        collectionView.reloadItems(at: [indexPath])
+        return isSelect
+    }
+    
+
+    
     
 }

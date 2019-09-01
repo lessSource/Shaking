@@ -24,7 +24,7 @@ class LAlbumPickerController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
-        tableView.rowHeight = 60
+        tableView.rowHeight = 80
         tableView.estimatedSectionFooterHeight = 0
         tableView.estimatedSectionHeaderHeight = 0
         tableView.separatorStyle = .none

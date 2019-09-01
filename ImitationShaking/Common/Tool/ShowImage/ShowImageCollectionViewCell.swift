@@ -62,7 +62,7 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
     
     fileprivate lazy var playerButton: UIButton = {
         let button = UIButton(frame: CGRect(x: Constant.screenWidth/2 - 25, y: Constant.screenHeight/2 - 25, width: 80, height: 80))
-        button.setBackgroundImage(R.image.icon_video(), for: .normal)
+        button.setImage(R.image.icon_video(), for: .normal)
         button.isHidden = true
         return button
     }()

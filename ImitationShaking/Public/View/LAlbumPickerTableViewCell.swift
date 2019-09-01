@@ -16,7 +16,7 @@ class LAlbumPickerTableViewCell: UITableViewCell {
             numberLabel.text = "\(albumModel.selectCount)"
             numberLabel.isHidden = albumModel.selectCount == 0
             if let asset = albumModel.asset {
-                LImagePickerManager.shared.getPhotoWithAsset(asset, photoWidth: 60) { (image, dic) in
+                LImagePickerManager.shared.getPhotoWithAsset(asset, photoWidth: 80) { (image, dic) in
                     self.coverImage.image = image
                 }
             }
@@ -46,7 +46,7 @@ class LAlbumPickerTableViewCell: UITableViewCell {
     fileprivate lazy var numberLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.white
-        label.backgroundColor = UIColor.green
+        label.backgroundColor = UIColor(red: 0.12, green: 0.73, blue: 0.13, alpha: 1.00)
         label.textAlignment = .right
         label.font = UIFont.systemFont(ofSize: 15)
         label.layer.cornerRadius = 12

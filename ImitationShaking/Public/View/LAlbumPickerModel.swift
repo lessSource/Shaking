@@ -24,13 +24,12 @@ enum ImageDataEnum {
     case livePhoto
 }
 
-
 struct LAlbumPickerModel {
     /** 标题 */
     var title: String = ""
-    /** 第一图片 */
+    /** first PHAsset */
     var asset: PHAsset?
-    /** 图片资源 */
+    /** 媒体资源 */
     var fetchResult: PHFetchResult<PHAsset>?
     /** 数量 */
     var count: Int = 0

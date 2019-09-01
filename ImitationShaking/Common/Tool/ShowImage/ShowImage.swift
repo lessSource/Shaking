@@ -12,10 +12,29 @@ protocol ShowImageProtocol { }
 
 extension ShowImageProtocol where Self: UIViewController, Self: UIViewControllerTransitioningDelegate {
     // 带动画的显示大图 ---- 必须遵循UIViewControllerTransitioningDelegate
-    func showImage(_ dataArray: [LMediaResourcesModel], currentIndex: Int, delegate: ModelAnimationDelegate?) {
-        let showImageVC = ShowImageViewController(dataArray: dataArray, currentIndex: currentIndex)
+    func showImage(_ dataArray: [LMediaResourcesModel], currentIndex: Int, delegate: ModelAnimationDelegate? = nil, fromVC: UIViewController? = nil) {
+        assert(dataArray.count != 0, "数据不能为空！！！！！")
+        assert(dataArray.count - 1 > currentIndex, "序号不能大于数组数量！！！！！")
+        if dataArray.count == 0 { return }
+        let index: Int = currentIndex >  dataArray.count - 1 ? 0 : currentIndex
+        let showImageVC = ShowImageViewController(dataArray: dataArray, currentIndex: index)
         showImageVC.transitioningDelegate = delegate
         showImageVC.modalPresentationStyle = .custom
+        showImageVC.delegate = fromVC as? ShowImageVCDelegate
+        present(showImageVC, animated: true, completion: nil)
+    }
+}
+
+extension ShowImageProtocol where Self: UIViewController {
+    // 不带动画的显示大图
+    func showImage(_ dataArray: [LMediaResourcesModel], currentIndex: Int, fromVC: UIViewController? = nil) {
+        assert(dataArray.count != 0, "数据不能为空！！！！！")
+        assert(dataArray.count - 1 > currentIndex, "序号不能大于数组数量！！！！！")
+        if dataArray.count == 0 { return }
+        let index: Int = currentIndex >  dataArray.count - 1 ? 0 : currentIndex
+        let showImageVC = ShowImageViewController(dataArray: dataArray, currentIndex: index)
+        showImageVC.modalTransitionStyle = .crossDissolve
+        showImageVC.delegate = fromVC as? ShowImageVCDelegate
         present(showImageVC, animated: true, completion: nil)
     }
 }

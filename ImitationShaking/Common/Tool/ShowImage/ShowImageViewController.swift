@@ -10,14 +10,36 @@
 import UIKit
 import Photos
 
+protocol ShowImageVCDelegate: NSObjectProtocol {
+    
+    func showImageDidDelete(_ viewController: ShowImageViewController, index: Int)
+    
+    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int) -> Bool
+    
+}
+
+extension ShowImageVCDelegate {
+    func showImageDidDelete(_ viewController: ShowImageViewController, index: Int) { }
+    
+    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int) -> Bool {
+        return false
+    }
+
+}
+
+
 private let cellMargin: CGFloat = 20
 
 class ShowImageViewController: UICollectionViewController {
+        
+    public weak var delegate: ShowImageVCDelegate?
     
-    fileprivate var imageArray: UIImage?
-    
-    /**  */
-    fileprivate var currentIndex: Int = 0
+    /** current index  */
+    fileprivate var currentIndex: Int = 0 {
+        didSet {
+            navView.titleLabel.text = "\(currentIndex + 1)/\(dataArray.count)"
+        }
+    }
     /** 数据 */
     fileprivate var dataArray: Array = [LMediaResourcesModel]()
     /** 是否显示导航栏 */
@@ -43,17 +65,6 @@ class ShowImageViewController: UICollectionViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(imageArray: UIImage?, currentIndex: Int) {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: Constant.screenWidth + cellMargin, height: Constant.screenHeight)
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        layout.scrollDirection = .horizontal
-        self.init(collectionViewLayout: layout)
-        self.imageArray = imageArray
-        self.currentIndex = currentIndex
-    }
-    
     convenience init(dataArray: [LMediaResourcesModel], currentIndex: Int) {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: Constant.screenWidth + cellMargin, height: Constant.screenHeight)
@@ -74,6 +85,15 @@ class ShowImageViewController: UICollectionViewController {
         layoutView()
         view.addSubview(tabBarView)
         view.addSubview(navView)
+        navView.titleLabel.text = "\(currentIndex + 1)/\(dataArray.count)"
+        navView.didSelectButtonClosure = { [weak self] select in
+            guard let `self` = self else { return false }
+            if self.delegate?.showImageDidSelect(self, index: self.currentIndex) == true {
+                self.dataArray[self.currentIndex].isSelect = !self.dataArray[self.currentIndex].isSelect
+                return true
+            }
+            return false
+        }
     }
 
     fileprivate func layoutView() {
@@ -83,10 +103,8 @@ class ShowImageViewController: UICollectionViewController {
         collectionView?.isPagingEnabled = true
         collectionView?.showsHorizontalScrollIndicator = false
         collectionView?.register(ShowImageCollectionViewCell.self, forCellWithReuseIdentifier: ShowImageCollectionViewCell.identifire)
-        assert(dataArray.count != 0, "数据不能为空！！！！！")
-        if dataArray.count > 0 {
-            collectionView?.scrollToItem(at: IndexPath(item: 0, section: currentIndex > dataArray.count - 1 ? 0 : currentIndex), at: .left, animated: false)
-        }
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: currentIndex), at: .left, animated: false)
+        collectionView?.scrollToItem(at: IndexPath(item: 0, section: currentIndex > dataArray.count - 1 ? 0 : currentIndex), at: .left, animated: false)
     }
     
     fileprivate func imageClick(_ cell: ShowImageCollectionViewCell, cellForItemAt indexPath: IndexPath, type: ShowImageCollectionViewCell.ActionEnum) {
@@ -99,7 +117,6 @@ class ShowImageViewController: UICollectionViewController {
                 if finish { self.isNavHidden = !self.isNavHidden }
             }
         case .long: break
-            
         case .play:
             let showVideoPlayVC = ShowVideoPlayViewController()
             showVideoPlayVC.videoResoure = dataArray[indexPath.section].dataProtocol
@@ -107,6 +124,7 @@ class ShowImageViewController: UICollectionViewController {
             present(showVideoPlayVC, animated: false, completion: nil)
         }
     }
+
 }
 
 // MARK: UICollectionViewDataSource
@@ -114,7 +132,6 @@ extension ShowImageViewController {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return dataArray.count
     }
-    
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
@@ -133,6 +150,7 @@ extension ShowImageViewController {
         let showImageCell = cell as! ShowImageCollectionViewCell
         showImageCell.scrollView.zoomScale = 1.0
     }
+
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath.item)
@@ -141,14 +159,31 @@ extension ShowImageViewController {
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         currentIndex = Int(scrollView.contentOffset.x / scrollView.width)
-        
-        print("/////////\(currentIndex)/////////")
+        navView.isImageSelect = dataArray[currentIndex].isSelect
     }
     
 }
 
 
 class ShowImageTabBarView: UIView {
+    
+    public var maxCount: Int = 1
+    
+    public var currentCount: Int = 0 {
+        didSet {
+            if currentCount == 0 {
+                completeButton.setTitle("完成", for: .normal)
+                completeButton.isUserInteractionEnabled = false
+                completeButton.setTitleColor(UIColor(white: 1.0, alpha: 0.5), for: .normal)
+            }else {
+                completeButton.setTitle("完成(\(currentCount)/\(maxCount))", for: .normal)
+                completeButton.isUserInteractionEnabled = true
+                completeButton.setTitleColor(UIColor(white: 1.0, alpha: 1.0), for: .normal)
+            }
+            completeButton.width = completeButton.titleLabel?.intrinsicContentSize.width ?? 0
+            completeButton.x = Constant.screenWidth - 15 - completeButton.width
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -160,19 +195,59 @@ class ShowImageTabBarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    fileprivate lazy var completeButton: UIButton = {
+        let button = UIButton(frame: CGRect(x: Constant.screenWidth - 55, y: 4.5, width: 40, height: 40))
+        button.setTitle("完成", for: .normal)
+        button.setTitleColor(UIColor(white: 1.0, alpha: 0.5), for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        return button
+    }()
+    
     // MARK:- layoutView
     fileprivate func layoutView() {
-        
+        addSubview(completeButton)
     }
 }
 
 
 class ShowImageNavView: UIView {
     
+    typealias SelectClosure = (Bool) -> (Bool)
+    
+    public var didSelectButtonClosure: SelectClosure?
+    
+    public var isImageSelect: Bool = false {
+        didSet {
+            selectImageView.image = !isImageSelect ? R.image.icon_album_nor() : R.image.icon_album_sel()
+            selectButton.isSelected = isImageSelect
+        }
+    }
+    
     fileprivate lazy var backButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 10, y: Constant.statusHeight, width: 44, height: 44))
         button.setImage(R.image.icon_nav_back(), for: .normal)
         return button
+    }()
+    
+    fileprivate lazy var selectImageView: UIImageView = {
+        let image = UIImageView(frame: CGRect(x: Constant.screenWidth - 34, y: Constant.statusHeight + 10, width: 24, height: 24))
+        image.contentMode = .scaleAspectFill
+        image.clipsToBounds = true
+        image.image = R.image.icon_album_nor()
+        return image
+    }()
+    
+    public lazy var selectButton: UIButton = {
+        let button = UIButton(frame: CGRect(x: Constant.screenWidth - 44, y: Constant.statusHeight, width: 44, height: 44))
+        return button
+    }()
+    
+    public lazy var titleLabel: UILabel = {
+        let label = UILabel(frame: CGRect(x: 100, y: Constant.statusHeight, width: Constant.screenWidth - 200, height: 44))
+        label.textColor = UIColor.white
+        label.font = UIFont.systemFont(ofSize: 15)
+        label.textAlignment = .center
+        return label
     }()
     
     override init(frame: CGRect) {
@@ -188,12 +263,28 @@ class ShowImageNavView: UIView {
     // MARK:- layoutView
     fileprivate func layoutView() {
         addSubview(backButton)
+        addSubview(selectImageView)
+        addSubview(selectButton)
+        addSubview(titleLabel)
         backButton.addTarget(self, action: #selector(backButtonClick), for: .touchUpInside)
+        selectButton.addTarget(self, action: #selector(selectButtonClick(_ :)), for: .touchUpInside)
     }
     
     // MARK:- Event
     @objc fileprivate func backButtonClick() {
         getControllerFromView()?.dismiss(animated: true, completion: nil)
     }
+    
+    @objc fileprivate func selectButtonClick(_ sender: UIButton) {
+        guard let closure = didSelectButtonClosure else { return }
+        if closure(sender.isSelected) {
+            selectImageView.image = sender.isSelected ? R.image.icon_album_nor() : R.image.icon_album_sel()
+            sender.isSelected = !sender.isSelected
+            if sender.isSelected {
+                selectImageView.showOscillatoryAnimation()
+            }
+        }
+    }
+    
 }
 
