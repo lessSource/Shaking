@@ -8,6 +8,28 @@
 
 import Foundation
 
+struct ShowImageStruct {
+    // 当前序号
+    var currentIndex: Int
+    // 数据源
+    var mediaArray: [LMediaResourcesModel]
+    // 是否显示删除
+    var isDelete: Bool
+    // 是否可以选择(isSelect 优先)
+    var isSelect: Bool
+    // 是否加载原图
+    var isOriginalImage: Bool
+    
+    init(currentIndex: Int, mediaArray: [LMediaResourcesModel], isDelete: Bool = false, isSelect: Bool = false, isOriginalImage: Bool = false) {
+        self.currentIndex = currentIndex
+        self.mediaArray = mediaArray
+        self.isDelete = isDelete
+        self.isSelect = isDelete
+        self.isOriginalImage = isOriginalImage
+    }
+}
+
+
 protocol ShowImageProtocol { }
 
 extension ShowImageProtocol where Self: UIViewController, Self: UIViewControllerTransitioningDelegate {
@@ -23,6 +45,17 @@ extension ShowImageProtocol where Self: UIViewController, Self: UIViewController
         showImageVC.delegate = fromVC as? ShowImageVCDelegate
         present(showImageVC, animated: true, completion: nil)
     }
+    
+    func showImage(_ imageStruct: ShowImageStruct, delegate: ModelAnimationDelegate?, fromeVC: UIViewController? = nil) {
+        assert(imageStruct.mediaArray.count != 0, "数据不能为空！！！！！")
+        assert(imageStruct.mediaArray.count  > imageStruct.currentIndex, "序号不能大于数组数量！！！！！")
+        if imageStruct.mediaArray.count == 0 { return }
+        let index: Int = imageStruct.currentIndex >  imageStruct.mediaArray.count - 1 ? 0 : imageStruct.currentIndex
+//        let showImageVC = ShowImageViewController(collectionViewLayout: <#T##UICollectionViewLayout#>)
+
+
+    }
+    
 }
 
 extension ShowImageProtocol where Self: UIViewController {

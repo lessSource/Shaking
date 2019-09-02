@@ -40,6 +40,9 @@ class ShowImageViewController: UICollectionViewController {
         
     public weak var delegate: ShowImageVCDelegate?
     
+    fileprivate var imageStruct: ShowImageStruct = ShowImageStruct(currentIndex: 0, mediaArray: [])
+    
+    
     /** current index  */
     fileprivate var currentIndex: Int = 0 {
         didSet {
@@ -61,13 +64,24 @@ class ShowImageViewController: UICollectionViewController {
         return barView
     }()
     
-    
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    convenience init(imageStruct: ShowImageStruct) {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: Constant.screenWidth + cellMargin, height: Constant.screenHeight)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        layout.scrollDirection = .horizontal
+        self.init(collectionViewLayout: layout)
+        self.imageStruct = imageStruct
+        self.dataArray = imageStruct.mediaArray
+        self.currentIndex = imageStruct.currentIndex
     }
     
     convenience init(dataArray: [LMediaResourcesModel], currentIndex: Int) {
