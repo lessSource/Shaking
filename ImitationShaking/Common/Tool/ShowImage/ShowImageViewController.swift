@@ -16,12 +16,18 @@ protocol ShowImageVCDelegate: NSObjectProtocol {
     
     func showImageDidSelect(_ viewController: ShowImageViewController, index: Int) -> Bool
     
+    func showImageDidSelect(_ viewContriller: ShowImageViewController, data: LMediaResourcesModel, index: Int) -> Bool
+    
 }
 
 extension ShowImageVCDelegate {
     func showImageDidDelete(_ viewController: ShowImageViewController, index: Int) { }
     
     func showImageDidSelect(_ viewController: ShowImageViewController, index: Int) -> Bool {
+        return false
+    }
+    
+    func showImageDidSelect(_ viewContriller: ShowImageViewController, data: LMediaResourcesModel, index: Int) -> Bool {
         return false
     }
 
@@ -50,9 +56,8 @@ class ShowImageViewController: UICollectionViewController {
         return navView
     }()
     
-    
     fileprivate lazy var tabBarView: ShowImageTabBarView = {
-        let barView: ShowImageTabBarView = ShowImageTabBarView(frame: CGRect(x: 0, y: Constant.screenHeight, width: Constant.screenHeight, height: Constant.bottomBarHeight))
+        let barView: ShowImageTabBarView = ShowImageTabBarView(frame: CGRect(x: 0, y: Constant.screenHeight, width: Constant.screenWidth, height: Constant.bottomBarHeight))
         return barView
     }()
     
@@ -104,7 +109,6 @@ class ShowImageViewController: UICollectionViewController {
         collectionView?.showsHorizontalScrollIndicator = false
         collectionView?.register(ShowImageCollectionViewCell.self, forCellWithReuseIdentifier: ShowImageCollectionViewCell.identifire)
         collectionView.scrollToItem(at: IndexPath(item: 0, section: currentIndex), at: .left, animated: false)
-        collectionView?.scrollToItem(at: IndexPath(item: 0, section: currentIndex > dataArray.count - 1 ? 0 : currentIndex), at: .left, animated: false)
     }
     
     fileprivate func imageClick(_ cell: ShowImageCollectionViewCell, cellForItemAt indexPath: IndexPath, type: ShowImageCollectionViewCell.ActionEnum) {
@@ -119,7 +123,7 @@ class ShowImageViewController: UICollectionViewController {
         case .long: break
         case .play:
             let showVideoPlayVC = ShowVideoPlayViewController()
-            showVideoPlayVC.videoResoure = dataArray[indexPath.section].dataProtocol
+            showVideoPlayVC.videoModel = dataArray[indexPath.section]
             showVideoPlayVC.currentImage = cell.currentImage.image
             present(showVideoPlayVC, animated: false, completion: nil)
         }

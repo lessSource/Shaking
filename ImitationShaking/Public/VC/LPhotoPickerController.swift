@@ -104,7 +104,7 @@ class LPhotoPickerController: UIViewController {
     }
 }
 
-extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, ShowImageProtocol, ImageTabBarViewDelegate {
+extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, ShowImageProtocol, ImageTabBarViewDelegate, UIViewControllerTransitioningDelegate {
     func promptViewImageClick(_ promptView: PromptView) {
         if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -129,17 +129,41 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
         guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
         //            animationDelegate = nil
 //        animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
-        showImage(dataArray, currentIndex: -1, fromVC: self)
+        showImage(dataArray, currentIndex: indexPath.item, fromVC: self)
         
 //        showImage(dataArray, currentIndex: indexPath.item)
     }
     
     func imageTabBarViewButton(_ buttonType: ImageTabBarButtonType) {
-//        guard let navVC = navigationController as? LImagePickerController else { return }
+        guard let navVC = navigationController as? LImagePickerController else { return }
         if buttonType == .preview {
-////            animationDelegate = nil
-//            animationDelegate = ModelAnimationDelegate(superView: nil, currentIndex: 0)
-//            showImage(navVC.selectArray, currentIndex: 0, delegate: animationDelegate)
+            let animationDelegate = ModelAnimationDelegate(superView: nil, currentIndex: 0)
+            showImage(navVC.selectArray, currentIndex: 0, delegate: animationDelegate, fromVC: self)
+        }else if buttonType == .complete {
+            let option = PHImageRequestOptions()
+            option.resizeMode = .fast
+            let group = DispatchGroup()
+            var imageArr = [UIImage]()
+            var assetArr = [PHAsset]()
+            for mediaModel in navVC.selectArray {
+                if let asset = mediaModel.dataProtocol as? PHAsset {
+                    group.enter()
+                    PHImageManager.default().requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: option) { (image, info) in
+                        if let image = image {
+                            imageArr.append(image)
+                            assetArr.append(asset)
+                        }
+                        group.leave()
+                    }
+                }
+            }
+            
+            group.notify(queue: DispatchQueue.main) {
+                print("1231232")
+                print(imageArr)
+                print(assetArr)
+            }
+            
         }
     }
 }
@@ -147,10 +171,16 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
 extension LPhotoPickerController: ShowImageVCDelegate {
     
     func showImageDidSelect(_ viewController: ShowImageViewController, index: Int) -> Bool {
-        let indexPath = IndexPath(item: index, section: 0)
-        let isSelect: Bool = didSelectCellButton(dataArray[index].isSelect, indexPath: indexPath)
-        collectionView.reloadItems(at: [indexPath])
-        return isSelect
+        guard let navVC = navigationController as? LImagePickerController else { return false}
+        if dataArray.contains(where: { $0 == navVC.selectArray[index] }) {
+            
+        }
+        return false
+        
+//        let indexPath = IndexPath(item: index, section: 0)
+//        let isSelect: Bool = didSelectCellButton(dataArray[index].isSelect, indexPath: indexPath)
+//        collectionView.reloadItems(at: [indexPath])
+//        return isSelect
     }
     
 

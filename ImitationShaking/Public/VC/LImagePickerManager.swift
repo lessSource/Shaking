@@ -47,26 +47,17 @@ extension LImagePickerManager {
         var asset = [LMediaResourcesModel]()
         if let result = fetchResult {
             result.enumerateObjects({ (mediaAsset, index, stop) in
-                if mediaAsset.mediaType != .audio {
-                    let time = mediaAsset.mediaType == .video ? self.getNewTimeFromDurationSecond(duration: Int(mediaAsset.duration)) : ""
-                    
-                    let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: mediaAsset.mediaType == .image ? .image : .video, videoTime: time)
-                    asset.append(model)
-                }else {
-                    print("audioaudioaudioaudioaudio")
-                }
+                let time = mediaAsset.mediaType == .video ? self.getNewTimeFromDurationSecond(duration: Int(mediaAsset.duration)) : ""
+                let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: self.getAssetType(asset: mediaAsset), videoTime: time)
+                asset.append(model)
             })
             successPHAsset(asset)
         }else {
             getPhotoAlbumResources(mediaType) { (assetsFetchResult) in
                 assetsFetchResult.enumerateObjects({ (mediaAsset, index, stop) in
-                    if mediaAsset.mediaType != .audio {
-                        let time = mediaAsset.mediaType == .video ? self.getNewTimeFromDurationSecond(duration: Int(mediaAsset.duration)) : ""
-                        let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: mediaAsset.mediaType == .image ? .image : .video, videoTime: time)
-                        asset.append(model)
-                    }else {
-                        print("audioaudioaudioaudioaudio")
-                    }
+                    let time = mediaAsset.mediaType == .video ? self.getNewTimeFromDurationSecond(duration: Int(mediaAsset.duration)) : ""
+                    let model = LMediaResourcesModel(dataProtocol: mediaAsset, dateEnum: self.getAssetType(asset: mediaAsset), videoTime: time)
+                    asset.append(model)
                 })
                 successPHAsset(asset)
             }
@@ -179,11 +170,27 @@ extension LImagePickerManager {
         return imageRequestId
     }
     
+
     
-    // 获取
-    
+}
+
+
+extension LImagePickerManager {
+    // 获取资源类型
+    fileprivate func getAssetType(asset: PHAsset) -> ImageDataEnum {
+        if asset.mediaType == .video { return .video }
+        if asset.mediaType == .audio { return .audio }
+        if asset.mediaType == .image {
+            if asset.mediaSubtypes == .photoLive { return .livePhoto }
+            if let filename = asset.value(forKey: "filename") as? String, filename.hasSuffix("GIF") {
+                return .gif
+            }
+        }
+        return .image
+    }
+
     // 格式化视频时间
-    func getNewTimeFromDurationSecond(duration: Int) -> String {
+    fileprivate func getNewTimeFromDurationSecond(duration: Int) -> String {
         var newTime = ""
         switch duration {
         case 0..<10:

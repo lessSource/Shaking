@@ -10,13 +10,11 @@ import UIKit
 import AVFoundation
 import Photos
 
-class ShowVideoPlayViewController: UIViewController {
+class ShowVideoPlayViewController: UIViewController, VideoTabBarViewDelegate {
 
     public var currentImage: UIImage?
     
-    public var videoResoure: ImageDataProtocol?
-    
-    public var videoUrl: String?
+    public var videoModel: LMediaResourcesModel?
     
     fileprivate var avAsset: AVAsset?
     
@@ -27,6 +25,15 @@ class ShowVideoPlayViewController: UIViewController {
     fileprivate var plyerLayer: AVPlayerLayer?
     
     fileprivate var timeObserver: Any?
+    
+    fileprivate var isProgress: Bool = false {
+        didSet {
+            if !isProgress {
+                hiddenProgress()
+            }
+            self.cancleButton.isHidden = !isProgress
+        }
+    }
     
     fileprivate lazy var videoView: VideoPlayer = {
         let videoView = VideoPlayer(frame: self.view.bounds)
@@ -55,6 +62,12 @@ class ShowVideoPlayViewController: UIViewController {
         return button
     }()
     
+    fileprivate lazy var tabBarView: VideoTabBarView = {
+        let barView: VideoTabBarView = VideoTabBarView(frame: CGRect(x: 0, y: Constant.screenHeight - Constant.bottomBarHeight, width: Constant.screenWidth, height: Constant.bottomBarHeight))
+        barView.delegate = self
+        return barView
+    }()
+    
     deinit {
         print("++++++++释放", self)
         player?.pause()
@@ -73,11 +86,14 @@ class ShowVideoPlayViewController: UIViewController {
         view.addSubview(coverImageView)
         view.addSubview(cancleButton)
         view.addSubview(playerButton)
+        view.addSubview(tabBarView)
         coverImageView.image = currentImage
+        tabBarView.endLabel.text = changeTimeFormat(timeInterval: Double(videoModel?.videoTime ?? "0") ?? 0)
         cancleButton.addTarget(self, action: #selector(cancleButtonClick), for: .touchUpInside)
         playerButton.addTarget(self, action: #selector(playerButtonClick), for: .touchUpInside)
         requestAVAsset()
         addNotification()
+        self.isProgress = true
         
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapGestureClick))
         view.addGestureRecognizer(tapGesture)
@@ -106,8 +122,8 @@ class ShowVideoPlayViewController: UIViewController {
     }
     
     fileprivate func requestAVAsset() {
-        guard let videoResoure = self.videoResoure else { return }
-        guard let phAsset = videoResoure as? PHAsset else { return }
+        guard let videoResoure = videoModel else { return }
+        guard let phAsset = videoResoure.dataProtocol as? PHAsset else { return }
         
         PHImageManager.default().requestAVAsset(forVideo: phAsset, options: nil) { (asset, audio, dic) in
             DispatchQueue.main.async {
@@ -134,9 +150,16 @@ class ShowVideoPlayViewController: UIViewController {
             if let duration = self?.player?.currentItem?.duration {
                 totalTime = CMTimeGetSeconds(duration)
             }
-            print(self?.changeTimeFormat(timeInterval: loadTime) as Any)
-            print(self?.changeTimeFormat(timeInterval: totalTime) as Any)
+            self?.tabBarView.progress(proportion: Float(loadTime/totalTime))
+            self?.tabBarView.startLabel.text = self?.changeTimeFormat(timeInterval: loadTime)
+            self?.tabBarView.endLabel.text = self?.changeTimeFormat(timeInterval: totalTime)
         })
+    }
+    
+    fileprivate func hiddenProgress() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.isProgress = false
+        }
     }
     
     // MARK:- Event
@@ -144,6 +167,7 @@ class ShowVideoPlayViewController: UIViewController {
         print("end")
         coverImageView.isHidden = false
         playerButton.isHidden = false
+        tabBarView.startLabel.text = "00:00:00"
     }
     
     @objc fileprivate func becomeActive() {
@@ -159,15 +183,11 @@ class ShowVideoPlayViewController: UIViewController {
     }
     
     @objc fileprivate func tapGestureClick() {
-        print("dddd")
-        
+        isProgress = !isProgress
     }
     
     @objc fileprivate func playerButtonClick() {
         seekProgress(progress: 0.0)
-        playerButton.isHidden = true
-        coverImageView.isHidden = true
-        player?.play()
     }
     
     @objc fileprivate func cancleButtonClick() {
@@ -193,9 +213,17 @@ class ShowVideoPlayViewController: UIViewController {
             let currentTime = CMTimeMake(value: Int64(playTimeSec), timescale: 1)
             player?.seek(to: currentTime) { (finished) in
                 if finished {
+                    self.playerButton.isHidden = true
+                    self.coverImageView.isHidden = true
+                    self.player?.play()
                 }
             }
         }
+    }
+    
+    // MARK:- VideoTabBarViewDelegate
+    func videoTabBarView(_ view: VideoTabBarView, changeValue: Float) {
+        seekProgress(progress: CGFloat(changeValue))
     }
     
     // MARK:- observeValue
@@ -268,14 +296,73 @@ class VideoPlayer: UIView {
 // 播放失败
 // AVPlayerItemFailedToPlayToEndTimeNotification
 
+protocol VideoTabBarViewDelegate: NSObjectProtocol {
+    func videoTabBarView(_ view: VideoTabBarView, changeValue: Float)
+}
+
 
 class VideoTabBarView: UIView {
+    
+    public weak var delegate: VideoTabBarViewDelegate?
+    
+    public lazy var startLabel: UILabel = {
+        let label = UILabel()
+        label.text = "00:00:00"
+        label.textColor = UIColor.white
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.frame = CGRect(x: 5, y: 0, width: label.intrinsicContentSize.width, height: 49)
+        return label
+    }()
+    
+    public lazy var endLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.text = "00:00:00"
+        label.textColor = UIColor.white
+        label.frame = CGRect(x: Constant.screenWidth - 5 - label.intrinsicContentSize.width , y: 0, width: label.intrinsicContentSize.width, height: 49)
+        return label
+    }()
+    
+    
+    fileprivate lazy var progressView: UISlider = {
+        let sliderView = UISlider(frame: CGRect(x: self.startLabel.frame.maxX + 5, y: self.startLabel.height/2 - 10, width: Constant.screenWidth - self.startLabel.width * 2 - 20, height: 20))
+        sliderView.tintColor = UIColor.white
+        sliderView.isContinuous = true
+        sliderView.setThumbImage(R.image.icon_slider(), for: .normal)
+        return sliderView
+    }()
+    
+    fileprivate lazy var gradientLayer: CAGradientLayer = {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height)
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.15)
+        gradientLayer.colors = [UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 0.2).cgColor, UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 0.0).cgColor]
+        gradientLayer.locations = [0, 1.0]
+        return gradientLayer
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        layer.addSublayer(gradientLayer)
+        addSubview(startLabel)
+        addSubview(endLabel)
+        addSubview(progressView)
+        progressView.addTarget(self, action: #selector(progressViewClick(_ :)), for: .valueChanged)
+    }
+    
+    public func progress(proportion: Float) {
+        if proportion.isNaN { return }
+        self.progressView.setValue(proportion, animated: true)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // Event
+    @objc fileprivate func progressViewClick(_ sender: UISlider) {
+        delegate?.videoTabBarView(self, changeValue: sender.value)
+    }
 }
+

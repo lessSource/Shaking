@@ -21,6 +21,7 @@ class LImagePickerCell: UICollectionViewCell {
             selectButton.isSelected  = model.isSelect
             selectImageView.image = model.isSelect ? R.image.icon_album_sel() : R.image.icon_album_nor()
             timeLabel.text = model.videoTime
+            print(model.dateEnum)
             if let asset = model.dataProtocol as? PHAsset {
                 let width = (Constant.screenWidth - 3)/4
                 LImagePickerManager.shared.getPhotoWithAsset(asset, photoWidth: width) { (image, dic) in

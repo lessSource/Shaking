@@ -21,7 +21,9 @@ extension PHAsset: ImageDataProtocol { }
 enum ImageDataEnum {
     case image
     case video
+    case audio
     case livePhoto
+    case gif
 }
 
 struct LAlbumPickerModel {
@@ -46,12 +48,15 @@ struct LMediaResourcesModel: Equatable {
     var isSelect: Bool
     /** 视频时间 */
     var videoTime: String
+    /** 选中序号 */
+    var selectIndex: Int
     
-    init(dataProtocol: ImageDataProtocol, dateEnum: ImageDataEnum,isSelect: Bool = false, videoTime: String = "") {
+    init(dataProtocol: ImageDataProtocol, dateEnum: ImageDataEnum,isSelect: Bool = false, videoTime: String = "", selectIndex: Int = 0) {
         self.dataProtocol = dataProtocol
         self.dateEnum = dateEnum
         self.isSelect = isSelect
         self.videoTime = videoTime
+        self.selectIndex = selectIndex
     }
 }
 
