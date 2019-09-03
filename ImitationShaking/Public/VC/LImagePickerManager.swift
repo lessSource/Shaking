@@ -162,9 +162,25 @@ extension LImagePickerManager {
     
     @discardableResult
     func getPhotoWithAsset(_ asset: PHAsset, photoWidth: CGFloat, completion: @escaping (UIImage?, [AnyHashable: Any]?) -> ()) -> PHImageRequestID {
+        var imageSieze: CGSize = .zero
+        if photoWidth < Constant.screenWidth {
+            imageSieze = CGSize(width: photoWidth, height: photoWidth)
+        }else {
+            let aspectRatio: CGFloat = CGFloat(asset.pixelWidth / asset.pixelHeight)
+            var pixelWith = photoWidth * Constant.sizeScale
+            if aspectRatio > 1.8 {
+                pixelWith = pixelWith * aspectRatio
+            }
+            if aspectRatio < 0.2 {
+                pixelWith = pixelWith * 0.5
+            }
+            let piexlHeight = pixelWith / aspectRatio
+            imageSieze = CGSize(width: pixelWith, height: piexlHeight)
+        }
+        
         let option = PHImageRequestOptions()
         option.resizeMode = .fast
-        let imageRequestId = PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: photoWidth, height: photoWidth), contentMode: .aspectFill, options: option) { (image, info) in
+        let imageRequestId = PHImageManager.default().requestImage(for: asset, targetSize: imageSieze, contentMode: .aspectFill, options: option) { (image, info) in
             completion(image, info)
         }
         return imageRequestId

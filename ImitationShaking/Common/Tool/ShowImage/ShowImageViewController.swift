@@ -107,9 +107,9 @@ class ShowImageViewController: UICollectionViewController {
         navView.titleLabel.text = "\(currentIndex + 1)/\(dataArray.count)"
         navView.didSelectButtonClosure = { [weak self] select in
             guard let `self` = self else { return false }
-            if self.delegate?.showImageDidSelect(self, index: self.currentIndex) == true {
+            if self.delegate?.showImageDidSelect(self, data: self.dataArray[self.currentIndex], index: self.currentIndex) == true {
                 self.dataArray[self.currentIndex].isSelect = !self.dataArray[self.currentIndex].isSelect
-                return true
+                self.dataArray[self.currentIndex].isSelect = !self.dataArray[self.currentIndex].isSelect
             }
             return false
         }
