@@ -90,7 +90,7 @@ extension PhotosChooseViewController: UICollectionViewDelegate, UICollectionView
             guard let cell = collectionView.cellForItem(at: indexPath) as? PhotosChooseCollectionViewCell else { return }
             delegate = nil
             delegate = ModelAnimationDelegate(originalView: cell.imageView)
-            showImage([LMediaResourcesModel(dataProtocol: imageDataArray[indexPath.row], dateEnum: .image)], currentIndex: 0, delegate: delegate)
+//            showImage([LMediaResourcesModel(dataProtocol: imageDataArray[indexPath.row], dateEnum: .image)], currentIndex: 0, delegate: delegate)
         }
     }
 }

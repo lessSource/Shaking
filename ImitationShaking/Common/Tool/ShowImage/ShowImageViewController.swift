@@ -11,8 +11,11 @@ import UIKit
 import Photos
 
 protocol ShowImageVCDelegate: NSObjectProtocol {
+    /** 删除 */
+    func showImageDidDelete(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel)
+    /** 选择 */
+    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel)
     
-    func showImageDidDelete(_ viewController: ShowImageViewController, index: Int)
     
     func showImageDidSelect(_ viewController: ShowImageViewController, index: Int) -> Bool
     
@@ -21,7 +24,8 @@ protocol ShowImageVCDelegate: NSObjectProtocol {
 }
 
 extension ShowImageVCDelegate {
-    func showImageDidDelete(_ viewController: ShowImageViewController, index: Int) { }
+    func showImageDidDelete(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) { }
+    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) { }
     
     func showImageDidSelect(_ viewController: ShowImageViewController, index: Int) -> Bool {
         return false
@@ -40,14 +44,17 @@ class ShowImageViewController: UICollectionViewController {
         
     public weak var delegate: ShowImageVCDelegate?
     
+    fileprivate lazy var configuration = ShowImageConfiguration(dataArray: [], currentIndex: 0)
+    
+    
+    
     /** current index  */
     fileprivate var currentIndex: Int = 0 {
         didSet {
-            navView.titleLabel.text = "\(currentIndex + 1)/\(dataArray.count)"
+            navView.titleLabel.text = "\(currentIndex + 1)/\(configuration.dataArray.count)"
         }
     }
-    /** 数据 */
-    fileprivate var dataArray: Array = [LMediaResourcesModel]()
+
     /** 是否显示导航栏 */
     fileprivate var isNavHidden: Bool = false
     
@@ -62,7 +69,7 @@ class ShowImageViewController: UICollectionViewController {
     }()
     
     
-    override init(collectionViewLayout layout: UICollectionViewLayout) {
+    fileprivate override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
     }
     
@@ -70,15 +77,14 @@ class ShowImageViewController: UICollectionViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(dataArray: [LMediaResourcesModel], currentIndex: Int) {
+    convenience init(configuration: ShowImageConfiguration) {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: Constant.screenWidth + cellMargin, height: Constant.screenHeight)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         layout.scrollDirection = .horizontal
         self.init(collectionViewLayout: layout)
-        self.dataArray = dataArray
-        self.currentIndex = currentIndex
+        self.configuration = configuration
     }
     
     deinit {
@@ -90,11 +96,11 @@ class ShowImageViewController: UICollectionViewController {
         layoutView()
         view.addSubview(tabBarView)
         view.addSubview(navView)
-        navView.titleLabel.text = "\(currentIndex + 1)/\(dataArray.count)"
+        navView.titleLabel.text = "\(currentIndex + 1)/\(configuration.dataArray.count)"
         navView.didSelectButtonClosure = { [weak self] select in
             guard let `self` = self else { return false }
             if self.delegate?.showImageDidSelect(self, index: self.currentIndex) == true {
-                self.dataArray[self.currentIndex].isSelect = !self.dataArray[self.currentIndex].isSelect
+                self.configuration.dataArray[self.currentIndex].isSelect = !self.configuration.dataArray[self.currentIndex].isSelect
                 return true
             }
             return false
@@ -108,7 +114,7 @@ class ShowImageViewController: UICollectionViewController {
         collectionView?.isPagingEnabled = true
         collectionView?.showsHorizontalScrollIndicator = false
         collectionView?.register(ShowImageCollectionViewCell.self, forCellWithReuseIdentifier: ShowImageCollectionViewCell.identifire)
-        collectionView.scrollToItem(at: IndexPath(item: 0, section: currentIndex), at: .left, animated: false)
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: configuration.currentIndex), at: .left, animated: false)
     }
     
     fileprivate func imageClick(_ cell: ShowImageCollectionViewCell, cellForItemAt indexPath: IndexPath, type: ShowImageCollectionViewCell.ActionEnum) {
@@ -123,7 +129,7 @@ class ShowImageViewController: UICollectionViewController {
         case .long: break
         case .play:
             let showVideoPlayVC = ShowVideoPlayViewController()
-            showVideoPlayVC.videoModel = dataArray[indexPath.section]
+            showVideoPlayVC.videoModel = configuration.dataArray[indexPath.section]
             showVideoPlayVC.currentImage = cell.currentImage.image
             present(showVideoPlayVC, animated: false, completion: nil)
         }
@@ -134,7 +140,7 @@ class ShowImageViewController: UICollectionViewController {
 // MARK: UICollectionViewDataSource
 extension ShowImageViewController {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return dataArray.count
+        return configuration.dataArray.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -143,7 +149,7 @@ extension ShowImageViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShowImageCollectionViewCell.identifire, for: indexPath) as! ShowImageCollectionViewCell
-        cell.updateImage(imageData: dataArray[indexPath.section])
+        cell.updateImage(imageData: configuration.dataArray[indexPath.section])
         cell.imageClick(action: { [weak self] (type) in
             self?.imageClick(cell, cellForItemAt: indexPath, type: type)
         })
@@ -163,7 +169,7 @@ extension ShowImageViewController {
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         currentIndex = Int(scrollView.contentOffset.x / scrollView.width)
-        navView.isImageSelect = dataArray[currentIndex].isSelect
+        navView.isImageSelect = configuration.dataArray[currentIndex].isSelect
     }
     
 }
@@ -292,3 +298,24 @@ class ShowImageNavView: UIView {
     
 }
 
+
+struct ShowImageConfiguration {
+    /** 数据源 */
+    var dataArray: [LMediaResourcesModel]
+    /** 当前数据 */
+    var currentIndex: Int
+    /** 是否带删除 */
+    var isDelete: Bool
+    /** 是否可以选择 */
+    var isSelect: Bool
+    /** 最多可以选择 */
+    var maxCount: Int
+    
+    init(dataArray: [LMediaResourcesModel], currentIndex: Int, isDelete: Bool = false, isSelect: Bool = false, maxCount: Int = 0) {
+        self.dataArray = dataArray
+        self.currentIndex = currentIndex
+        self.isDelete = isDelete
+        self.isSelect = isSelect
+        self.maxCount = maxCount
+    }
+}

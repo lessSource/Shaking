@@ -12,35 +12,28 @@ protocol ShowImageProtocol { }
 
 extension ShowImageProtocol where Self: UIViewController, Self: UIViewControllerTransitioningDelegate {
     // 带动画的显示大图 ---- 必须遵循UIViewControllerTransitioningDelegate
-    func showImage(_ dataArray: [LMediaResourcesModel], currentIndex: Int, delegate: ModelAnimationDelegate? = nil, fromVC: UIViewController? = nil) {
-        assert(dataArray.count != 0, "数据不能为空！！！！！")
-        assert(dataArray.count  > currentIndex, "序号不能大于数组数量！！！！！")
-        if dataArray.count == 0 { return }
-        let index: Int = currentIndex >  dataArray.count - 1 ? 0 : currentIndex
-        let showImageVC = ShowImageViewController(dataArray: dataArray, currentIndex: index)
+    func showImage(_ configuration: ShowImageConfiguration, delegate: ModelAnimationDelegate? = nil, formVC: UIViewController? = nil) {
+        assert(configuration.dataArray.count != 0, "数组不能为空！！！！")
+        assert(configuration.dataArray.count > configuration.currentIndex, "序号能不能大于数组数量！！！！")
+        let showImageVC = ShowImageViewController(configuration: configuration)
         showImageVC.transitioningDelegate = delegate
-        showImageVC.modalPresentationStyle = .custom
-        showImageVC.delegate = fromVC as? ShowImageVCDelegate
-        present(showImageVC, animated: true, completion: nil)
-    }
-}
-
-extension ShowImageProtocol where Self: UIViewController {
-    // 不带动画的显示大图
-    func showImage(_ dataArray: [LMediaResourcesModel], currentIndex: Int, fromVC: UIViewController? = nil) {
-        assert(dataArray.count != 0, "数据不能为空！！！！！")
-        assert(dataArray.count  > currentIndex, "序号不能大于数组数量！！！！！")
-        if dataArray.count == 0 { return }
-        let index: Int = currentIndex >  dataArray.count - 1 ? 0 : currentIndex
-        let showImageVC = ShowImageViewController(dataArray: dataArray, currentIndex: index)
-        showImageVC.modalTransitionStyle = .crossDissolve
-        showImageVC.delegate = fromVC as? ShowImageVCDelegate
+        if let _ = delegate {
+            showImageVC.modalPresentationStyle = .custom
+        }else {
+            showImageVC.modalTransitionStyle = .crossDissolve
+        }
+        showImageVC.delegate = formVC as? ShowImageVCDelegate
         present(showImageVC, animated: true, completion: nil)
     }
 }
 
 class ModelAnimationDelegate: NSObject, UIViewControllerTransitioningDelegate {
     fileprivate var isPresentAnimatotion: Bool = true
+    
+    
+    
+    
+    
     fileprivate var isSuperView: Bool = false
     
     fileprivate var originalView1: UIImageView?
@@ -91,8 +84,7 @@ extension ModelAnimationDelegate {
     // 显示动画
     fileprivate func presentViewAnimation(transitionContext: UIViewControllerContextTransitioning) {
         presentViewDefaultAnimation(transitionContext: transitionContext)
-//        guard let originalView = originalView1 else {
-//            return
+  //            return
 //        }
 //
 //        guard let image = originalView.image else {
@@ -155,9 +147,7 @@ extension ModelAnimationDelegate {
     
     // 默认显示动画
     fileprivate func presentViewDefaultAnimation(transitionContext: UIViewControllerContextTransitioning) {
-        guard let toView = transitionContext.view(forKey: .to) else {
-            return
-        }
+        guard let toView = transitionContext.view(forKey: .to) else { return }
         let containerView = transitionContext.containerView
         containerView.addSubview(toView)
         toView.transform = CGAffineTransform(translationX: toView.width, y: 0)

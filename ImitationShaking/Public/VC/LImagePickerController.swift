@@ -16,8 +16,23 @@ protocol LImagePickerDelegate: NSObjectProtocol {
 class LImagePickerController: UINavigationController {
 
     private weak var imageDelagete: LImagePickerDelegate?
+    /** 最多可选数量 默认9 */
+    private(set) var maxSelectCount: Int = 9
+    /** 最少可选数量 默认0 */
+    public var minSelectCount: Int = 0
+    /** 超时时间 默认15秒，当选取图片时间超过15还没取成功时，会自动dismiss */
+    public var timeout: Int = 15
+    /** 是否允许选取视频 默认true */
+    public var allowPickingVideo: Bool = true
+    /** 是否允许多选视频/图片 默认false */
+    public var allowPickingMultipleVideo: Bool = false
+    /** 是否允许拍照 默认false */
+    public var allowTakePicture: Bool = false
+    /** 是否允许拍摄视频 默认false */
+    public var allowTakeVideo: Bool = false
+    /** 视频最大拍摄时间 默认30s */
+    public var videoMaximumDuration: Int = 30
     
-    private(set) var maxSelectCount: Int = 0
     
     public var selectArray = [LMediaResourcesModel]()
 
@@ -25,7 +40,7 @@ class LImagePickerController: UINavigationController {
         print(self, "+++++释放")
     }
     
-    convenience init(withMaxImage count: Int, delegate: LImagePickerDelegate?) {
+    convenience init(withMaxImage count: Int = 9, delegate: LImagePickerDelegate?) {
         let albumPickerVC = LAlbumPickerController()
         self.init(rootViewController: albumPickerVC)
         self.imageDelagete = delegate

@@ -41,6 +41,10 @@ class LPhotoPickerController: UIViewController {
         return collectionView
     }()
     
+    fileprivate var animationDelegate: ModelAnimationDelegate?
+    
+    
+    
     fileprivate var dataArray = [LMediaResourcesModel]()
     
     deinit {
@@ -128,17 +132,17 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
         navView.allNumber = 1
         guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
         //            animationDelegate = nil
-//        animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
-        showImage(dataArray, currentIndex: indexPath.item, fromVC: self)
+        animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
+//        showImage(dataArray, currentIndex: indexPath.item,delegate: animationDelegate, fromVC: self)
+        showImage(ShowImageConfiguration(dataArray: dataArray, currentIndex: indexPath.item), delegate: animationDelegate)
         
-//        showImage(dataArray, currentIndex: indexPath.item)
     }
     
     func imageTabBarViewButton(_ buttonType: ImageTabBarButtonType) {
         guard let navVC = navigationController as? LImagePickerController else { return }
         if buttonType == .preview {
-            let animationDelegate = ModelAnimationDelegate(superView: nil, currentIndex: 0)
-            showImage(navVC.selectArray, currentIndex: 0, delegate: animationDelegate, fromVC: self)
+//            let animationDelegate = ModelAnimationDelegate(superView: nil, currentIndex: 0)
+//            showImage(navVC.selectArray, currentIndex: 0, delegate: animationDelegate, fromVC: self)
         }else if buttonType == .complete {
             let option = PHImageRequestOptions()
             option.resizeMode = .fast
