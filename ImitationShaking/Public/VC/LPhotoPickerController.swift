@@ -138,6 +138,7 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
         
     }
     
+    //  完成
     func imageTabBarViewButton(_ buttonType: ImageTabBarButtonType) {
         guard let navVC = navigationController as? LImagePickerController else { return }
         if buttonType == .preview {
@@ -173,21 +174,15 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
 }
 
 extension LPhotoPickerController: ShowImageVCDelegate {
-    
-    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int) -> Bool {
+    func showImageDidSelect(_ viewContriller: ShowImageViewController, data: LMediaResourcesModel, index: Int) -> Bool {
         guard let navVC = navigationController as? LImagePickerController else { return false}
-        if dataArray.contains(where: { $0 == navVC.selectArray[index] }) {
-            
+        if navVC.selectArray.contains(data) {
+            navVC.selectArray.removeAll(where: { $0 == data })
+        }else {
+            var model = data
+            model.isSelect = true
+            navVC.selectArray.append(model)
         }
-        return false
-        
-//        let indexPath = IndexPath(item: index, section: 0)
-//        let isSelect: Bool = didSelectCellButton(dataArray[index].isSelect, indexPath: indexPath)
-//        collectionView.reloadItems(at: [indexPath])
-//        return isSelect
+        return true
     }
-    
-
-    
-    
 }

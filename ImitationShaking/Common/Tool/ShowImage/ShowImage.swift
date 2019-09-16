@@ -8,6 +8,31 @@
 
 import Foundation
 
+struct ShowImageConfiguration {
+    /** 数据源 */
+    var dataArray: [LMediaResourcesModel]
+    /** 当前数据 */
+    var currentIndex: Int
+    /** 是否带删除 */
+    var isDelete: Bool
+    /** 是否可以选择 */
+    var isSelect: Bool
+    /** 最多可以选择 */
+    var maxCount: Int
+    // 是否加载原图
+    var isOriginalImage: Bool
+    
+    init(dataArray: [LMediaResourcesModel], currentIndex: Int, isDelete: Bool = false, isSelect: Bool = false, maxCount: Int = 0) {
+        self.dataArray = dataArray
+        self.currentIndex = currentIndex
+        self.isDelete = isDelete
+        self.isSelect = isSelect
+        self.maxCount = maxCount
+    }
+}
+
+
+
 protocol ShowImageProtocol { }
 
 extension ShowImageProtocol where Self: UIViewController, Self: UIViewControllerTransitioningDelegate {
@@ -22,9 +47,10 @@ extension ShowImageProtocol where Self: UIViewController, Self: UIViewController
         }else {
             showImageVC.modalTransitionStyle = .crossDissolve
         }
-        showImageVC.delegate = formVC as? ShowImageVCDelegate
         present(showImageVC, animated: true, completion: nil)
     }
+    
+    
 }
 
 class ModelAnimationDelegate: NSObject, UIViewControllerTransitioningDelegate {

@@ -47,7 +47,6 @@ class ShowImageViewController: UICollectionViewController {
     fileprivate lazy var configuration = ShowImageConfiguration(dataArray: [], currentIndex: 0)
     
     
-    
     /** current index  */
     fileprivate var currentIndex: Int = 0 {
         didSet {
@@ -73,6 +72,7 @@ class ShowImageViewController: UICollectionViewController {
         super.init(collectionViewLayout: layout)
     }
     
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -86,7 +86,7 @@ class ShowImageViewController: UICollectionViewController {
         self.init(collectionViewLayout: layout)
         self.configuration = configuration
     }
-    
+
     deinit {
         print(self, "+++++释放")
     }
@@ -102,6 +102,9 @@ class ShowImageViewController: UICollectionViewController {
             if self.delegate?.showImageDidSelect(self, index: self.currentIndex) == true {
                 self.configuration.dataArray[self.currentIndex].isSelect = !self.configuration.dataArray[self.currentIndex].isSelect
                 return true
+            }
+            if self.delegate?.showImageDidSelect(self, data: self.configuration.dataArray[self.currentIndex], index: self.currentIndex) == true {
+                self.configuration.dataArray[self.currentIndex].isSelect = !self.configuration.dataArray[self.currentIndex].isSelect
             }
             return false
         }
@@ -298,24 +301,3 @@ class ShowImageNavView: UIView {
     
 }
 
-
-struct ShowImageConfiguration {
-    /** 数据源 */
-    var dataArray: [LMediaResourcesModel]
-    /** 当前数据 */
-    var currentIndex: Int
-    /** 是否带删除 */
-    var isDelete: Bool
-    /** 是否可以选择 */
-    var isSelect: Bool
-    /** 最多可以选择 */
-    var maxCount: Int
-    
-    init(dataArray: [LMediaResourcesModel], currentIndex: Int, isDelete: Bool = false, isSelect: Bool = false, maxCount: Int = 0) {
-        self.dataArray = dataArray
-        self.currentIndex = currentIndex
-        self.isDelete = isDelete
-        self.isSelect = isSelect
-        self.maxCount = maxCount
-    }
-}
