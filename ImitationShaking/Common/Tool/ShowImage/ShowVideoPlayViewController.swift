@@ -264,7 +264,7 @@ class ShowVideoPlayViewController: UIViewController, VideoTabBarViewDelegate {
     // 转时间格式化
     fileprivate func changeTimeFormat(timeInterval: TimeInterval) -> String {
         if timeInterval.isNaN { return "00:00:00" }
-        return String(format: "%02d:%02d:%02d", (Int(timeInterval) % 3600) / 60, Int(timeInterval) / 3600, Int(timeInterval) % 60)
+        return String(format: "%02d:%02d:%02d", Int(timeInterval) / 3600, (Int(timeInterval) % 3600) / 60, Int(timeInterval) % 60)
     }
 }
 

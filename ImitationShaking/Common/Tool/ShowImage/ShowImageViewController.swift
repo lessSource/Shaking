@@ -48,7 +48,7 @@ class ShowImageViewController: UICollectionViewController {
     
     
     /** current index  */
-    fileprivate var currentIndex: Int = 0 {
+    fileprivate(set) var currentIndex: Int = 0 {
         didSet {
             navView.titleLabel.text = "\(currentIndex + 1)/\(configuration.dataArray.count)"
         }
@@ -152,6 +152,7 @@ extension ShowImageViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShowImageCollectionViewCell.identifire, for: indexPath) as! ShowImageCollectionViewCell
+        cell.isLivePhoto = true
         cell.updateImage(imageData: configuration.dataArray[indexPath.section])
         cell.imageClick(action: { [weak self] (type) in
             self?.imageClick(cell, cellForItemAt: indexPath, type: type)

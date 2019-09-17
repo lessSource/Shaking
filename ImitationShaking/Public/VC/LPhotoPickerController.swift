@@ -131,9 +131,7 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         navView.allNumber = 1
         guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
-        //            animationDelegate = nil
-        animationDelegate = ModelAnimationDelegate(originalView: cell.imageView)
-//        showImage(dataArray, currentIndex: indexPath.item,delegate: animationDelegate, fromVC: self)
+        animationDelegate = ModelAnimationDelegate(contentImage: cell.imageView, superView: collectionView)
         showImage(ShowImageConfiguration(dataArray: dataArray, currentIndex: indexPath.item), delegate: animationDelegate)
         
     }
@@ -142,8 +140,8 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
     func imageTabBarViewButton(_ buttonType: ImageTabBarButtonType) {
         guard let navVC = navigationController as? LImagePickerController else { return }
         if buttonType == .preview {
-//            let animationDelegate = ModelAnimationDelegate(superView: nil, currentIndex: 0)
-//            showImage(navVC.selectArray, currentIndex: 0, delegate: animationDelegate, fromVC: self)
+            animationDelegate = ModelAnimationDelegate()
+            showImage(ShowImageConfiguration(dataArray: navVC.selectArray, currentIndex: 0), delegate: animationDelegate)
         }else if buttonType == .complete {
             let option = PHImageRequestOptions()
             option.resizeMode = .fast

@@ -118,7 +118,7 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         guard let action = action else { return }
         if gestureRecognizer.state == .began {
             action(.long)
-//            playLivePhoto()
+            playLivePhoto()
         }
     }
     /** 双击 */
@@ -158,7 +158,6 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
             print(string)
         }
         playerButton.isHidden = imageData.dateEnum != .video
-        print("3")
         let end = CACurrentMediaTime()
         print("方法耗时为：\(end-start)")
     }

@@ -22,12 +22,13 @@ struct ShowImageConfiguration {
     // 是否加载原图
     var isOriginalImage: Bool
     
-    init(dataArray: [LMediaResourcesModel], currentIndex: Int, isDelete: Bool = false, isSelect: Bool = false, maxCount: Int = 0) {
+    init(dataArray: [LMediaResourcesModel], currentIndex: Int, isDelete: Bool = false, isSelect: Bool = false, maxCount: Int = 0, isOriginalImage: Bool = true) {
         self.dataArray = dataArray
         self.currentIndex = currentIndex
         self.isDelete = isDelete
         self.isSelect = isSelect
         self.maxCount = maxCount
+        self.isOriginalImage = isOriginalImage
     }
 }
 
@@ -55,28 +56,19 @@ extension ShowImageProtocol where Self: UIViewController, Self: UIViewController
 
 class ModelAnimationDelegate: NSObject, UIViewControllerTransitioningDelegate {
     fileprivate var isPresentAnimatotion: Bool = true
-    
-    
-    
-    
-    
-    fileprivate var isSuperView: Bool = false
-    
-    fileprivate var originalView1: UIImageView?
+    // 动画时间
     fileprivate let animatTime: TimeInterval = 0.3
-    
-    
+    // 父视图
     fileprivate var superView: UIView?
+    // 序号
     fileprivate var currentIndex: Int = 0
+    // 点击Image
+    fileprivate var contentImage: UIImageView?
     
-    init(originalView: UIImageView) {
-        self.originalView1 = originalView
-        super.init()
-    }
-    
-    init(superView: UIView?, currentIndex: Int) {
+    init(contentImage: UIImageView? = nil,superView: UIView? = nil, currentIndex: Int = 0) {
         self.superView = superView
         self.currentIndex = currentIndex
+        self.contentImage = contentImage
         super.init()
     }
     
@@ -109,66 +101,57 @@ extension ModelAnimationDelegate: UIViewControllerAnimatedTransitioning {
 extension ModelAnimationDelegate {
     // 显示动画
     fileprivate func presentViewAnimation(transitionContext: UIViewControllerContextTransitioning) {
-        presentViewDefaultAnimation(transitionContext: transitionContext)
-  //            return
-//        }
-//
-//        guard let image = originalView.image else {
-//            fatalError("there is no image at selectedImageView")
-//        }
-//
-//        // 过渡View
-//        guard let toView = transitionContext.view(forKey: .to) else {
-//            return
-//        }
-//        let toBackView = UIView(frame: toView.bounds)
-//        toBackView.backgroundColor = UIColor.black
-//        toView.addSubview(toBackView)
-//        // 容器View
-//        let containerView = transitionContext.containerView
-//        // 过渡view添加到容器上
-//        toView.alpha = 0
-//        containerView.addSubview(toView)
-//        // 新建一个imageView添加到目标view之上，做为动画view
-//        let animateView = UIImageView()
-//        animateView.image = image
-//        animateView.contentMode = .scaleAspectFill
-//        animateView.clipsToBounds = true
-//        // 被选中的imageView到目标view上的坐标转换
-//        guard let window = UIApplication.shared.delegate?.window else {
-//            return
-//        }
-//        let originalFrame = originalView.convert(originalView.bounds, to: window)
-//        animateView.frame = originalFrame
-//        containerView.addSubview(animateView)
-//
-//        // endFrame
-//        var endFrame: CGRect = .zero
-//        let imageHeight = image.size.height / image.size.width * Constant.screenWidth
-//        if imageHeight > Constant.screenHeight {
-//            endFrame.size.height = Constant.screenHeight
-//            endFrame.size.width = image.size.width / image.size.height * Constant.screenHeight
-//            endFrame.origin.y = 0
-//            endFrame.origin.x = Constant.screenWidth/2 - endFrame.width/2
-//        }else {
-//            endFrame.size.width = Constant.screenWidth
-//            endFrame.size.height = image.size.height * endFrame.width / image.size.width
-//            endFrame.origin.x = 0
-//            endFrame.origin.y = Constant.screenHeight/2 - endFrame.height/2
-//        }
-//        toView.transform = CGAffineTransform(translationX: 0, y: toView.height)
+        guard let `contentImage` = contentImage, let image = contentImage.image else {
+            presentViewDefaultAnimation(transitionContext: transitionContext)
+            return
+        }
+        // 过渡View
+        guard let toView = transitionContext.view(forKey: .to) else { return }
+        let toBackView = UIView(frame: toView.bounds)
+        toBackView.backgroundColor = UIColor.black
+        toView.addSubview(toBackView)
+        // 容器View
+        let containerView = transitionContext.containerView
+        // 过渡view添加到容器上
+        toView.alpha = 0
+        containerView.addSubview(toView)
+        // 新建一个imageView添加到目标view之上，做为动画view
+        let animateView = UIImageView()
+        animateView.image = contentImage.image
+        animateView.contentMode = .scaleAspectFill
+        animateView.clipsToBounds = true
+        // 被选中的imageView到目标view上的坐标转换
+        guard let window = UIApplication.shared.delegate?.window else { return }
+        let originalFrame = contentImage.convert(contentImage.bounds, to: window)
+        animateView.frame = originalFrame
+        containerView.addSubview(animateView)
 
-//        // 过渡动画
-//        UIView.animate(withDuration: animatTime, animations: {
-//            toView.alpha = 1
-//            toView.transform = CGAffineTransform(translationX: 0, y: 0)
+        // endFrame
+        var endFrame: CGRect = .zero
+        let imageHeight = image.size.height / image.size.width * Constant.screenWidth
+        if imageHeight > Constant.screenHeight {
+            endFrame.size.height = Constant.screenHeight
+            endFrame.size.width = image.size.width / image.size.height * Constant.screenHeight
+            endFrame.origin.y = 0
+            endFrame.origin.x = Constant.screenWidth/2 - endFrame.width/2
+        }else {
+            endFrame.size.width = Constant.screenWidth
+            endFrame.size.height = image.size.height * endFrame.width / image.size.width
+            endFrame.origin.x = 0
+            endFrame.origin.y = Constant.screenHeight/2 - endFrame.height/2
+        }
+        toView.transform = CGAffineTransform(translationX: 0, y: toView.height)
 
-//            animateView.frame = endFrame
-//        }) { _ in
-//            transitionContext.completeTransition(true)
-//            animateView.removeFromSuperview()
-//            toBackView.removeFromSuperview()
-//        }
+        // 过渡动画
+        UIView.animate(withDuration: animatTime, animations: {
+            animateView.frame = endFrame
+            toView.alpha = 1
+            toView.transform = CGAffineTransform(translationX: 0, y: 0)
+        }) { _ in
+            transitionContext.completeTransition(true)
+            animateView.removeFromSuperview()
+            toBackView.removeFromSuperview()
+        }
     }
     
     // 默认显示动画
@@ -186,69 +169,67 @@ extension ModelAnimationDelegate {
     
     // 消失动画
     fileprivate func dismissViewAnimation(transitionContext: UIViewControllerContextTransitioning) {
-        dismissViewDefaultAnimation(transitionContext: transitionContext)
+        guard let `contentImage` = contentImage else {
+            dismissViewDefaultAnimation(transitionContext: transitionContext)
+            return
+        }
+        // 过渡view
+        guard let fromeView = transitionContext.view(forKey: .from) else { return }
+        let formeBackView = UIView(frame: fromeView.bounds)
+        formeBackView.backgroundColor = UIColor.black
+        fromeView.addSubview(formeBackView)
+        // 容器view
+        let containerView = transitionContext.containerView
+        // 获取一系列view
+        guard let formVC = transitionContext.viewController(forKey: .from) as? ShowImageViewController, let cell = formVC.collectionView?.visibleCells.first as? ShowImageCollectionViewCell,let image = cell.currentImage.image ,let window = UIApplication.shared.delegate?.window else {
+            return
+        }
+
+        let imageSize: CGSize = cell.currentImage.image?.size ?? .zero
+        var startFrame: CGRect = .zero
+        let imageHeight = imageSize.height / imageSize.width * Constant.screenWidth
+        if imageHeight > Constant.screenHeight {
+            startFrame.size.height = Constant.screenHeight
+            startFrame.size.width = imageSize.width / imageSize.height * Constant.screenHeight
+            startFrame.origin.y = 0
+            startFrame.origin.x = Constant.screenWidth/2 - startFrame.width/2
+        }else {
+            startFrame.size.width = Constant.screenWidth
+            startFrame.size.height = imageSize.height * startFrame.width / image.size.width
+            startFrame.origin.x = 0
+            startFrame.origin.y = Constant.screenHeight/2 - startFrame.height/2
+        }
+
+        // 新建过渡动画imageView
+        let animateImageView = UIImageView()
+        animateImageView.frame = startFrame
+        animateImageView.image = image
+        animateImageView.contentMode = .scaleAspectFill
+        animateImageView.clipsToBounds = true
+        containerView.addSubview(animateImageView)
+
+        var endView: UIView?
+        if let collectionView = superView as? UICollectionView {
+            let indexPath = IndexPath(item: formVC.currentIndex, section: 0)
+            endView = collectionView.cellForItem(at: indexPath)
+        }else {
+            endView = superView?.subviews[formVC.currentIndex]
+        }
         
-        
-//        // 过渡view
-//        guard let fromeView = transitionContext.view(forKey: .from) else {
-//            return
-//        }
-//        let formeBackView = UIView(frame: fromeView.bounds)
-//        formeBackView.backgroundColor = UIColor.black
-//        fromeView.addSubview(formeBackView)
-//        // 容器view
-//        let containerView = transitionContext.containerView
-//        // 取出model的控制器
-//        guard let formVC = transitionContext.viewController(forKey: .from) as? ShowImageViewController else {
-//            return
-//        }
-//        // 取出当前显示的cell
-//        guard let cell = formVC.collectionView?.visibleCells.first as? ShowImageCollectionViewCell else {
-//            return
-//        }
-//        guard let image = cell.currentImage.image else {
-//            return
-//        }
-//        guard let window = UIApplication.shared.delegate?.window else {
-//            return
-//        }
-//
-//        let imageSize: CGSize = cell.currentImage.image?.size ?? .zero
-//        var startFrame: CGRect = .zero
-//        let imageHeight = imageSize.height / imageSize.width * Constant.screenWidth
-//        if imageHeight > Constant.screenHeight {
-//            startFrame.size.height = Constant.screenHeight
-//            startFrame.size.width = imageSize.width / imageSize.height * Constant.screenHeight
-//            startFrame.origin.y = 0
-//            startFrame.origin.x = Constant.screenWidth/2 - startFrame.width/2
-//        }else {
-//            startFrame.size.width = Constant.screenWidth
-//            startFrame.size.height = imageSize.height * startFrame.width / image.size.width
-//            startFrame.origin.x = 0
-//            startFrame.origin.y = Constant.screenHeight/2 - startFrame.height/2
-//        }
-//
-//        // 新建过渡动画imageView
-//        let animateImageView = UIImageView()
-//        animateImageView.frame = startFrame
-//        animateImageView.image = image
-//        animateImageView.contentMode = .scaleAspectFill
-//        animateImageView.clipsToBounds = true
-//        containerView.addSubview(animateImageView)
-//
-//        guard let originalView = originalView1 else {
-//            return
-//        }
-//
-//        let endFrame = originalView.convert(originalView.bounds, to: window)
-//        UIView.animate(withDuration: animatTime, animations: {
-//            animateImageView.frame = endFrame
-//            fromeView.alpha = 0
-//        }) { _ in
-//            transitionContext.completeTransition(true)
-//            animateImageView.removeFromSuperview()
-//            formeBackView.removeFromSuperview()
-//        }
+        var endFrame: CGRect = .zero
+        if let view = endView {
+            endFrame = view.convert(view.bounds, to: window)
+        }else {
+            endFrame = contentImage.convert(contentImage.bounds, to: window)
+        }
+        UIView.animate(withDuration: animatTime, animations: {
+            animateImageView.frame = endFrame
+            fromeView.alpha = 0
+        }) { _ in
+            transitionContext.completeTransition(true)
+            animateImageView.removeFromSuperview()
+            formeBackView.removeFromSuperview()
+        }
     }
     
     fileprivate func dismissViewDefaultAnimation(transitionContext: UIViewControllerContextTransitioning) {
