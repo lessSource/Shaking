@@ -19,7 +19,7 @@ struct ShowImageConfiguration {
     var isSelect: Bool
     /** 最多可以选择 */
     var maxCount: Int
-    // 是否加载原图
+    /** 是否加载原图 */
     var isOriginalImage: Bool
     
     init(dataArray: [LMediaResourcesModel], currentIndex: Int, isDelete: Bool = false, isSelect: Bool = false, maxCount: Int = 0, isOriginalImage: Bool = true) {
@@ -101,12 +101,12 @@ extension ModelAnimationDelegate: UIViewControllerAnimatedTransitioning {
 extension ModelAnimationDelegate {
     // 显示动画
     fileprivate func presentViewAnimation(transitionContext: UIViewControllerContextTransitioning) {
-        guard let `contentImage` = contentImage, let image = contentImage.image else {
+        // 获取view
+        guard let `contentImage` = contentImage, let image = contentImage.image,let toView = transitionContext.view(forKey: .to),let window = UIApplication.shared.delegate?.window else {
             presentViewDefaultAnimation(transitionContext: transitionContext)
             return
         }
-        // 过渡View
-        guard let toView = transitionContext.view(forKey: .to) else { return }
+        
         let toBackView = UIView(frame: toView.bounds)
         toBackView.backgroundColor = UIColor.black
         toView.addSubview(toBackView)
@@ -121,7 +121,7 @@ extension ModelAnimationDelegate {
         animateView.contentMode = .scaleAspectFill
         animateView.clipsToBounds = true
         // 被选中的imageView到目标view上的坐标转换
-        guard let window = UIApplication.shared.delegate?.window else { return }
+        
         let originalFrame = contentImage.convert(contentImage.bounds, to: window)
         animateView.frame = originalFrame
         containerView.addSubview(animateView)
@@ -140,13 +140,10 @@ extension ModelAnimationDelegate {
             endFrame.origin.x = 0
             endFrame.origin.y = Constant.screenHeight/2 - endFrame.height/2
         }
-        toView.transform = CGAffineTransform(translationX: 0, y: toView.height)
-
         // 过渡动画
         UIView.animate(withDuration: animatTime, animations: {
             animateView.frame = endFrame
             toView.alpha = 1
-            toView.transform = CGAffineTransform(translationX: 0, y: 0)
         }) { _ in
             transitionContext.completeTransition(true)
             animateView.removeFromSuperview()
@@ -169,10 +166,24 @@ extension ModelAnimationDelegate {
     
     // 消失动画
     fileprivate func dismissViewAnimation(transitionContext: UIViewControllerContextTransitioning) {
-        guard let `contentImage` = contentImage else {
+        // 获取一系列view
+        guard let formVC = transitionContext.viewController(forKey: .from) as? ShowImageViewController, let cell = formVC.collectionView?.visibleCells.first as? ShowImageCollectionViewCell,let image = cell.currentImage.image ,let window = UIApplication.shared.delegate?.window,let _ = contentImage else {
             dismissViewDefaultAnimation(transitionContext: transitionContext)
             return
         }
+        var endView: UIView?
+        if let collectionView = superView as? UICollectionView {
+            let indexPath = IndexPath(item: formVC.currentIndex, section: 0)
+            endView = collectionView.cellForItem(at: indexPath)
+        }else {
+            endView = superView?.subviews[formVC.currentIndex]
+        }
+        
+        if endView == nil {
+            dismissViewDefaultAnimation(transitionContext: transitionContext)
+            return
+        }
+        
         // 过渡view
         guard let fromeView = transitionContext.view(forKey: .from) else { return }
         let formeBackView = UIView(frame: fromeView.bounds)
@@ -180,10 +191,7 @@ extension ModelAnimationDelegate {
         fromeView.addSubview(formeBackView)
         // 容器view
         let containerView = transitionContext.containerView
-        // 获取一系列view
-        guard let formVC = transitionContext.viewController(forKey: .from) as? ShowImageViewController, let cell = formVC.collectionView?.visibleCells.first as? ShowImageCollectionViewCell,let image = cell.currentImage.image ,let window = UIApplication.shared.delegate?.window else {
-            return
-        }
+
 
         let imageSize: CGSize = cell.currentImage.image?.size ?? .zero
         var startFrame: CGRect = .zero
@@ -207,21 +215,8 @@ extension ModelAnimationDelegate {
         animateImageView.contentMode = .scaleAspectFill
         animateImageView.clipsToBounds = true
         containerView.addSubview(animateImageView)
-
-        var endView: UIView?
-        if let collectionView = superView as? UICollectionView {
-            let indexPath = IndexPath(item: formVC.currentIndex, section: 0)
-            endView = collectionView.cellForItem(at: indexPath)
-        }else {
-            endView = superView?.subviews[formVC.currentIndex]
-        }
+        let endFrame: CGRect = endView!.convert(endView!.bounds, to: window)
         
-        var endFrame: CGRect = .zero
-        if let view = endView {
-            endFrame = view.convert(view.bounds, to: window)
-        }else {
-            endFrame = contentImage.convert(contentImage.bounds, to: window)
-        }
         UIView.animate(withDuration: animatTime, animations: {
             animateImageView.frame = endFrame
             fromeView.alpha = 0

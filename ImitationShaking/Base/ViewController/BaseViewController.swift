@@ -14,7 +14,6 @@ class BaseViewController: UIViewController {
         print(self.description + "释放")
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,5 +25,10 @@ class BaseViewController: UIViewController {
     var isSideslipping: Bool {
         return true
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
 
 }

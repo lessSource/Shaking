@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import Photos
 
-class ShowVideoPlayViewController: UIViewController, VideoTabBarViewDelegate {
+class ShowVideoPlayViewController: BaseViewController, VideoTabBarViewDelegate {
 
     public var currentImage: UIImage?
     
@@ -69,7 +69,6 @@ class ShowVideoPlayViewController: UIViewController, VideoTabBarViewDelegate {
     }()
     
     deinit {
-        print("++++++++释放", self)
         player?.pause()
         if let observer = timeObserver {
             player?.removeTimeObserver(observer)
