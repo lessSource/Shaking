@@ -153,6 +153,11 @@ class ShowVideoPlayViewController: BaseViewController, VideoTabBarViewDelegate {
             self?.tabBarView.startLabel.text = self?.changeTimeFormat(timeInterval: loadTime)
             self?.tabBarView.endLabel.text = self?.changeTimeFormat(timeInterval: totalTime)
         })
+//        UIColor { (<#UITraitCollection#>) -> UIColor in
+//            <#code#>
+//        }
+//        ddd
+//        33
     }
     
     fileprivate func hiddenProgress() {

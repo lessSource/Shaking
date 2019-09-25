@@ -42,6 +42,7 @@ extension ShowImageProtocol where Self: UIViewController, Self: UIViewController
         assert(configuration.dataArray.count != 0, "数组不能为空！！！！")
         assert(configuration.dataArray.count > configuration.currentIndex, "序号能不能大于数组数量！！！！")
         let showImageVC = ShowImageViewController(configuration: configuration)
+        showImageVC.imageDelegate = formVC as? ShowImageVCDelegate
         showImageVC.transitioningDelegate = delegate
         if let _ = delegate {
             showImageVC.modalPresentationStyle = .custom

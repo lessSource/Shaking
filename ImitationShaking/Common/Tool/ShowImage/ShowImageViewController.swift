@@ -12,26 +12,18 @@ import Photos
 
 protocol ShowImageVCDelegate: NSObjectProtocol {
     /** 删除 */
-    func showImageDidDelete(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel)
+    func showImageDidDelete(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) -> Bool
     /** 选择 */
-    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel)
-    
-    
-    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int) -> Bool
-    
-    func showImageDidSelect(_ viewContriller: ShowImageViewController, data: LMediaResourcesModel, index: Int) -> Bool
-    
+    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) -> Bool
 }
 
 extension ShowImageVCDelegate {
-    func showImageDidDelete(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) { }
-    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) { }
     
-    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int) -> Bool {
+    func showImageDidDelete(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) -> Bool {
         return false
     }
     
-    func showImageDidSelect(_ viewContriller: ShowImageViewController, data: LMediaResourcesModel, index: Int) -> Bool {
+    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) -> Bool {
         return false
     }
 
@@ -42,10 +34,9 @@ private let cellMargin: CGFloat = 20
 
 class ShowImageViewController: UICollectionViewController {
         
-    public weak var delegate: ShowImageVCDelegate?
+    public weak var imageDelegate: ShowImageVCDelegate?
     
     fileprivate lazy var configuration = ShowImageConfiguration(dataArray: [], currentIndex: 0)
-    
     
     /** current index  */
     fileprivate(set) var currentIndex: Int = 0 {
@@ -59,6 +50,7 @@ class ShowImageViewController: UICollectionViewController {
     
     fileprivate lazy var navView: ShowImageNavView = {
         let navView = ShowImageNavView(frame: CGRect(x: 0, y: -Constant.navbarAndStatusBar, width: Constant.screenWidth, height: Constant.navbarAndStatusBar))
+        navView.configuration = configuration
         return navView
     }()
     
@@ -97,16 +89,13 @@ class ShowImageViewController: UICollectionViewController {
         view.addSubview(tabBarView)
         view.addSubview(navView)
         navView.titleLabel.text = "\(currentIndex + 1)/\(configuration.dataArray.count)"
-        navView.didSelectButtonClosure = { [weak self] select in
-            guard let `self` = self else { return false }
-            if self.delegate?.showImageDidSelect(self, index: self.currentIndex) == true {
-                self.configuration.dataArray[self.currentIndex].isSelect = !self.configuration.dataArray[self.currentIndex].isSelect
-                return true
+        
+        navView.didSelectButtonClosure = { [weak self] in
+            guard let `self` = self else { return  }
+            if self.imageDelegate?.showImageDidSelect(self, index: self.currentIndex, imageData: self.configuration.dataArray[self.currentIndex]) == true {
+                self.configuration.dataArray[self.currentIndex].isSelect = !self.configuration.dataArray[self.currentIndex].isSelect;
+                self.navView.selectImageViewAnimation(self.configuration.dataArray[self.currentIndex].isSelect)
             }
-            if self.delegate?.showImageDidSelect(self, data: self.configuration.dataArray[self.currentIndex], index: self.currentIndex) == true {
-                self.configuration.dataArray[self.currentIndex].isSelect = !self.configuration.dataArray[self.currentIndex].isSelect
-            }
-            return false
         }
     }
 
@@ -226,14 +215,15 @@ class ShowImageTabBarView: UIView {
 
 class ShowImageNavView: UIView {
     
-    typealias SelectClosure = (Bool) -> (Bool)
+    typealias SelectClosure = () -> ()
     
+    public lazy var configuration = ShowImageConfiguration(dataArray: [], currentIndex: 0)
+        
     public var didSelectButtonClosure: SelectClosure?
     
     public var isImageSelect: Bool = false {
         didSet {
             selectImageView.image = !isImageSelect ? R.image.icon_album_nor() : R.image.icon_album_sel()
-            selectButton.isSelected = isImageSelect
         }
     }
     
@@ -284,6 +274,12 @@ class ShowImageNavView: UIView {
         selectButton.addTarget(self, action: #selector(selectButtonClick(_ :)), for: .touchUpInside)
     }
     
+    // MARK:- public
+    public func selectImageViewAnimation(_ isSelect: Bool) {
+        if isSelect { selectImageView.showOscillatoryAnimation() }
+        isImageSelect = isSelect
+    }
+    
     // MARK:- Event
     @objc fileprivate func backButtonClick() {
         getControllerFromView()?.dismiss(animated: true, completion: nil)
@@ -291,13 +287,7 @@ class ShowImageNavView: UIView {
     
     @objc fileprivate func selectButtonClick(_ sender: UIButton) {
         guard let closure = didSelectButtonClosure else { return }
-        if closure(sender.isSelected) {
-            selectImageView.image = sender.isSelected ? R.image.icon_album_nor() : R.image.icon_album_sel()
-            sender.isSelected = !sender.isSelected
-            if sender.isSelected {
-                selectImageView.showOscillatoryAnimation()
-            }
-        }
+        closure()
     }
     
 }

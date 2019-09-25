@@ -44,7 +44,6 @@ class LPhotoPickerController: UIViewController {
     fileprivate var animationDelegate: ModelAnimationDelegate?
     
     
-    
     fileprivate var dataArray = [LMediaResourcesModel]()
     
     deinit {
@@ -132,7 +131,7 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
         navView.allNumber = 1
         guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
         animationDelegate = ModelAnimationDelegate(contentImage: cell.imageView, superView: collectionView)
-        showImage(ShowImageConfiguration(dataArray: dataArray, currentIndex: indexPath.item), delegate: animationDelegate)
+        showImage(ShowImageConfiguration(dataArray: dataArray, currentIndex: indexPath.item), delegate: animationDelegate, formVC: self)
         
     }
     
@@ -172,15 +171,18 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
 }
 
 extension LPhotoPickerController: ShowImageVCDelegate {
-    func showImageDidSelect(_ viewContriller: ShowImageViewController, data: LMediaResourcesModel, index: Int) -> Bool {
-        guard let navVC = navigationController as? LImagePickerController else { return false}
-        if navVC.selectArray.contains(data) {
-            navVC.selectArray.removeAll(where: { $0 == data })
+    func showImageDidSelect(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) -> Bool {
+        guard let navVC = navigationController as? LImagePickerController else { return false }
+        if navVC.selectArray.contains(imageData) {
+            navVC.selectArray.removeAll(where: { $0 == imageData })
+            return true
         }else {
-            var model = data
-            model.isSelect = true
-            navVC.selectArray.append(model)
+            if navVC.selectArray.count >= navVC.maxSelectCount {
+                return false
+            }else {
+                navVC.selectArray.append(imageData)
+                return true
+            }
         }
-        return true
     }
 }
