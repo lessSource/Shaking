@@ -10,6 +10,7 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 import Moya
+import Photos
 
 class HomeViewController: BaseViewController {
     
@@ -178,7 +179,9 @@ class HomeViewController: BaseViewController {
 }
 
 extension HomeViewController: LImagePickerDelegate {
-    
+    func imagePickerController(_ picker: LImagePickerController, photos: [UIImage], assers: [PHAsset]) {
+        print(photos, assers)
+    }
 }
 
 

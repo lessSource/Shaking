@@ -9,6 +9,7 @@
 import UIKit
 import Photos
 
+
 class LPhotoPickerController: UIViewController {
     
     public var pickerModel: LAlbumPickerModel?
@@ -95,7 +96,7 @@ class LPhotoPickerController: UIViewController {
                 tabBarView.currentCount = navVC.selectArray.count
                 return true
             }else {
-                view.getControllerFromView()?.showAlertWithTitle("最多只能选择\(navVC.maxSelectCount)张照片")
+                self.showAlertWithTitle("最多只能选择\(navVC.maxSelectCount)张照片")                
                 return false
             }
         }else {
@@ -129,9 +130,9 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         navView.allNumber = 1
-        guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell else { return }
+        guard let cell = collectionView.cellForItem(at: indexPath) as? LImagePickerCell, let navVC = navigationController as? LImagePickerController else { return }
         animationDelegate = ModelAnimationDelegate(contentImage: cell.imageView, superView: collectionView)
-        showImage(ShowImageConfiguration(dataArray: dataArray, currentIndex: indexPath.item), delegate: animationDelegate, formVC: self)
+        showImage(ShowImageConfiguration(dataArray: dataArray, currentIndex: indexPath.item, maxCount: navVC.maxSelectCount), delegate: animationDelegate, formVC: self)
         
     }
     
@@ -140,37 +141,22 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
         guard let navVC = navigationController as? LImagePickerController else { return }
         if buttonType == .preview {
             animationDelegate = ModelAnimationDelegate()
-            showImage(ShowImageConfiguration(dataArray: navVC.selectArray, currentIndex: 0), delegate: animationDelegate)
+            showImage(ShowImageConfiguration(dataArray: navVC.selectArray, currentIndex: 0, maxCount: navVC.maxSelectCount), delegate: animationDelegate)
         }else if buttonType == .complete {
-            let option = PHImageRequestOptions()
-            option.resizeMode = .fast
-            let group = DispatchGroup()
-            var imageArr = [UIImage]()
-            var assetArr = [PHAsset]()
-            for mediaModel in navVC.selectArray {
-                if let asset = mediaModel.dataProtocol as? PHAsset {
-                    group.enter()
-                    PHImageManager.default().requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: option) { (image, info) in
-                        if let image = image {
-                            imageArr.append(image)
-                            assetArr.append(asset)
-                        }
-                        group.leave()
-                    }
-                }
+            LImagePickerManager.shared.getSelectPhotoWithAsset(dataArray) { (imageArr, assetArr) in
+                navVC.imageDelagete?.imagePickerController(navVC, photos: imageArr, assers: assetArr)
+                self.dismiss(animated: true, completion: nil)
             }
-            
-            group.notify(queue: DispatchQueue.main) {
-                print("1231232")
-                print(imageArr)
-                print(assetArr)
-            }
-            
         }
     }
 }
 
 extension LPhotoPickerController: ShowImageVCDelegate {
+    func showImageDidDisappear(_ viewController: ShowImageViewController) {
+        checkSelectedModels()
+        collectionView.reloadData()
+    }
+    
     func showImageDidSelect(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) -> Bool {
         guard let navVC = navigationController as? LImagePickerController else { return false }
         if navVC.selectArray.contains(imageData) {

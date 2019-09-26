@@ -33,7 +33,6 @@ struct ShowImageConfiguration {
 }
 
 
-
 protocol ShowImageProtocol { }
 
 extension ShowImageProtocol where Self: UIViewController, Self: UIViewControllerTransitioningDelegate {

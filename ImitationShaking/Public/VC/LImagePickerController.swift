@@ -10,12 +10,16 @@ import UIKit
 import Photos
 
 protocol LImagePickerDelegate: NSObjectProtocol {
-    
+    func imagePickerController(_ picker: LImagePickerController, photos: [UIImage], assers: [PHAsset])
+}
+
+extension LImagePickerDelegate {
+    func imagePickerController(_ picker: LImagePickerController, photos: [UIImage], assers: [PHAsset]) { }
 }
 
 class LImagePickerController: UINavigationController {
 
-    private weak var imageDelagete: LImagePickerDelegate?
+    private(set) weak var imageDelagete: LImagePickerDelegate?
     /** 最多可选数量 默认9 */
     private(set) var maxSelectCount: Int = 9
     /** 最少可选数量 默认0 */
@@ -87,14 +91,6 @@ class LImagePickerController: UINavigationController {
             }
         }
     }
-    
-//    public func showAlertWithTitle(_ title: String) {
-//        let alertVC = UIAlertController(title: "提示", message: title, preferredStyle: .alert)
-//        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-//        alertVC.addAction(okAction)
-//        present(alertVC, animated: true, completion: nil)
-//    }
-    
 }
 
 

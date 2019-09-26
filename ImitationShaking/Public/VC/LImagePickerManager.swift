@@ -41,6 +41,55 @@ extension LImagePickerManager {
             }
         }
     }
+}
+
+
+extension LImagePickerManager {
+    // 获取相册
+    public func getAlbumResources(_ mediaType: PHAssetMediaType = PHAssetMediaType.unknown, complete: @escaping (_ dataArray: [LAlbumPickerModel]) -> ()) {
+        DispatchQueue.global().async {
+            var array: Array = [LAlbumPickerModel]()
+            let options = PHFetchOptions()
+            
+            let smartAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: options)
+            for i in 0..<smartAlbums.count {
+                let allPhotosOptions = PHFetchOptions()
+                if mediaType != .unknown {
+                    allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", mediaType.rawValue)
+                }
+                let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: smartAlbums[i], options: allPhotosOptions)
+                if smartAlbums[i].assetCollectionSubtype == .smartAlbumAllHidden { continue }
+                if smartAlbums[i].assetCollectionSubtype.rawValue == 1000000201 { continue } // [最近删除] 相册
+                if fetchResult.count > 0 {
+                    let model = LAlbumPickerModel(title: smartAlbums[i].localizedTitle ?? "", asset: fetchResult.lastObject, fetchResult: fetchResult, count: fetchResult.count, selectCount: 0)
+                    if smartAlbums[i].assetCollectionSubtype == .smartAlbumUserLibrary {
+                        array.insert(model, at: 0)
+                    }else {
+                        array.append(model)
+                    }
+                }
+            }
+            let userAlbums = PHCollectionList.fetchTopLevelUserCollections(with: options)
+            for i in 0..<userAlbums.count {
+                if let collection = userAlbums[i] as? PHAssetCollection {
+                    let allPhotosOptions = PHFetchOptions()
+                    if mediaType != .unknown {
+                        allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", mediaType.rawValue)
+                    }
+                    let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: collection, options: allPhotosOptions)
+                    if fetchResult.count > 0 {
+                        let model = LAlbumPickerModel(title: collection.localizedTitle ?? "", asset: fetchResult.lastObject,fetchResult: fetchResult, count: fetchResult.count, selectCount: 0)
+                        array.append(model)
+                    }
+                }
+            }
+            DispatchQueue.main.async {
+                complete(array)
+            }
+        }
+    }
+    
+    
     
     // 获取相册中资源
     func getPhotoAlbumMedia(_ mediaType: PHAssetMediaType = PHAssetMediaType.unknown, fetchResult: PHFetchResult<PHAsset>?, successPHAsset: @escaping ([LMediaResourcesModel]) -> () ) {
@@ -68,11 +117,8 @@ extension LImagePickerManager {
     private func getPhotoAlbumResources(_ mediaType: PHAssetMediaType = PHAssetMediaType.unknown, successPHAsset: @escaping (PHFetchResult<PHAsset>) -> ()) {
         DispatchQueue.global().async {
             var mediaTypePHAsset: PHFetchResult<PHAsset> = PHFetchResult()
-            
             // 获取所有资源
             let allPhotosOptions = PHFetchOptions()
-            // 按照创建时间倒叙
-//            allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
             // 获取所需资源
             if mediaType == .unknown {
                 mediaTypePHAsset = PHAsset.fetchAssets(with: allPhotosOptions)
@@ -81,87 +127,18 @@ extension LImagePickerManager {
                 
                 mediaTypePHAsset = PHAsset.fetchAssets(with: mediaType, options: allPhotosOptions)
             }
-
             DispatchQueue.main.async {
                 successPHAsset(mediaTypePHAsset)
             }
         }
     }
-    
-    public func getAlbumResources(_ complete: @escaping (_ dataArray: [LAlbumPickerModel]) -> ()) {
-        DispatchQueue.global().async {
-            var array: Array = [LAlbumPickerModel]()
-            let options = PHFetchOptions()
-            
-            let smartAlbums: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: options)
-            for i in 0..<smartAlbums.count {
-                let allPhotosOptions = PHFetchOptions()
-//                allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-                let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: smartAlbums[i], options: allPhotosOptions)
-                if smartAlbums[i].assetCollectionSubtype == .smartAlbumAllHidden { continue }
-                if smartAlbums[i].assetCollectionSubtype.rawValue == 1000000201 { continue } // [最近删除] 相册
+}
 
-                if fetchResult.count > 0 {
-                    let model = LAlbumPickerModel(title: smartAlbums[i].localizedTitle ?? "", asset: fetchResult.lastObject, fetchResult: fetchResult, count: fetchResult.count, selectCount: 0)
-                    if smartAlbums[i].assetCollectionSubtype == .smartAlbumUserLibrary {
-                        array.insert(model, at: 0)
-                    }else {
-                        array.append(model)
-                    }
-                }
-            }
-            let userAlbums = PHCollectionList.fetchTopLevelUserCollections(with: options)
-            for i in 0..<userAlbums.count {
-                if let collection = userAlbums[i] as? PHAssetCollection {
-                    let allPhotosOptions = PHFetchOptions()
-//                    allPhotosOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-                    let fetchResult: PHFetchResult = PHAsset.fetchAssets(in: collection, options: allPhotosOptions)
-                    if fetchResult.count > 0 {
-                        let model = LAlbumPickerModel(title: collection.localizedTitle ?? "", asset: fetchResult.lastObject,fetchResult: fetchResult, count: fetchResult.count, selectCount: 0)
-                        array.append(model)
-                    }
-                }
-            }
-            DispatchQueue.main.async {
-                complete(array)
-            }
-        }
-    }
-    
-//    // 获取图片
-//    @discardableResult
-//    func getPhotoWithAsset(asset: PHAsset, photoWidth: CGFloat, networkAccessAllowed: Bool, completion: (_ photo: UIImage, _ info: [AnyHashable: Any], _ isDegraded: Bool) -> (), progressHandler: (_ progress: Double, _ error: Error, _ stop: Bool, _ info: [AnyHashable: Any]) -> ()) -> PHImageRequestID {
-//        
-//        var image: UIImage?
-//        let option: PHImageRequestOptions = PHImageRequestOptions()
-//        option.resizeMode = .fast
-//        let imageRequestID = PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: photoWidth, height: photoWidth), contentMode: .aspectFill, options: option) { (result, info) in
-//            image = result
-//            let downloadFinined = ((info?[PHImageCancelledKey]) != nil) && ((info?[PHImageErrorKey]) != nil)
-//            if downloadFinined && (result != nil) {
-//                image = result?.fixOrientation()
-//                completion(image!, info!, ((info?[PHImageResultIsDegradedKey]) != nil))
-//            }
-//            
-//            if (info![PHImageResultIsInCloudKey] != nil) && result != nil && networkAccessAllowed {
-//                let options: PHImageRequestOptions = PHImageRequestOptions()
-////                options.progressHandler = { progress, error, stop, info in
-////                    DispatchQueue.main.async {
-////                        progressHandler(progress, error, stop, info)
-////                    }
-////                }
-//                options.isNetworkAccessAllowed = true
-//                options.resizeMode = .fast
-//                PHImageManager.default().requestImageData(for: asset, options: options) { (data, dataUTI, orientation, info) in
-//                    
-//                }
-//            }
-//        }
-//        
-//    }
-    
+
+extension LImagePickerManager {
+    // 获取图片
     @discardableResult
-    func getPhotoWithAsset(_ asset: PHAsset, photoWidth: CGFloat, completion: @escaping (UIImage?, [AnyHashable: Any]?) -> ()) -> PHImageRequestID {
+    func getPhotoWithAsset(_ asset: PHAsset, photoWidth: CGFloat, completion: @escaping (UIImage, [AnyHashable: Any]?) -> ()) -> PHImageRequestID {
         var imageSize: CGSize = .zero
         let aspectRatio: CGFloat = CGFloat(asset.pixelWidth) / CGFloat(asset.pixelHeight)
         var pixelWith = photoWidth * Constant.sizeScale
@@ -175,14 +152,72 @@ extension LImagePickerManager {
         imageSize = CGSize(width: pixelWith, height: piexlHeight)
         let option = PHImageRequestOptions()
         option.resizeMode = .fast
-        let imageRequestId = PHImageManager.default().requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFill, options: option) { (image, info) in
-            completion(image, info)
+        let imageRequestId = PHImageManager.default().requestImage(for: asset, targetSize: imageSize, contentMode: .aspectFill, options: option) { (result, info) in
+            if let image = result {
+                completion(image, info)
+            }
         }
         return imageRequestId
     }
     
-
+    // 获取原图
+    @discardableResult
+    func getOriginalPhotoWithAsset(_ asset: PHAsset, progressHandler: PHAssetImageProgressHandler?, completion: @escaping (UIImage, [AnyHashable: Any]?) -> ()) -> PHImageRequestID {
+        let option = PHImageRequestOptions()
+        option.isNetworkAccessAllowed = true
+        option.progressHandler = progressHandler
+        option.resizeMode = .fast
+        option.isSynchronous = true
+        //        let imageRequestId = PHImageManager.default().requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .aspectFit, options: option) { (result, info) in
+        //            let downloadFinined = !(info?[PHImageCancelledKey] as? Bool == true) && info?[PHImageErrorKey] != nil
+        //            if result != nil && downloadFinined && info != nil {
+        //                completion(result!, info)
+        //            }
+        //        }
+        
+        let imageRequestId = PHImageManager.default().requestImageData(for: asset, options: option) { (data, str, orientation, info) in
+            if let imageData = data, let image = UIImage(data: imageData) {
+                completion(image, info)
+            }
+        }
+        return imageRequestId
+    }
+        
+    // 取消获取图片
+    func cancelGetPhoto(_ imageRequestId: PHImageRequestID) {
+        PHImageManager.default().cancelImageRequest(imageRequestId)
+    }
     
+    // 获取选择的图片
+    func getSelectPhotoWithAsset(_ dataArray: [LMediaResourcesModel], photoWidth: CGFloat = 80, isOriginal: Bool = true, completion: @escaping ([UIImage], [PHAsset]) -> ()) {
+        MBAlertUtil.alertManager.showLoadingMessage()
+        let group = DispatchGroup()
+        let queue = DispatchQueue(label: "com.getPhoto.queue")
+        var imageArr = [UIImage]()
+        var assetArr = [PHAsset]()
+        for mediaModel in dataArray {
+            queue.async(group: group, execute: DispatchWorkItem(block: {
+                guard let asset = mediaModel.dataProtocol as? PHAsset else { return }
+                if isOriginal {
+                    print(Thread.current)
+                    self.getOriginalPhotoWithAsset(asset, progressHandler: nil) { (image, info) in
+                        imageArr.append(image)
+                        assetArr.append(asset)
+                    }
+                }else {
+                    self.getPhotoWithAsset(asset, photoWidth: photoWidth) { (image, info) in
+                        imageArr.append(image)
+                        assetArr.append(asset)
+                    }
+                }
+            }))
+        }
+        
+        group.notify(queue: DispatchQueue.main) {
+            MBAlertUtil.alertManager.hiddenLoading()
+            completion(imageArr, assetArr)
+        }
+    }
 }
 
 

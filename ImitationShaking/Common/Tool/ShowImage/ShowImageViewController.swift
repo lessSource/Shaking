@@ -15,6 +15,8 @@ protocol ShowImageVCDelegate: NSObjectProtocol {
     func showImageDidDelete(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) -> Bool
     /** 选择 */
     func showImageDidSelect(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) -> Bool
+    /** 页面已经消失 */
+    func showImageDidDisappear(_ viewController: ShowImageViewController)
 }
 
 extension ShowImageVCDelegate {
@@ -26,6 +28,8 @@ extension ShowImageVCDelegate {
     func showImageDidSelect(_ viewController: ShowImageViewController, index: Int, imageData: LMediaResourcesModel) -> Bool {
         return false
     }
+    
+    func showImageDidDisappear(_ viewController: ShowImageViewController) { }
 
 }
 
@@ -83,6 +87,11 @@ class ShowImageViewController: UICollectionViewController {
         print(self, "+++++释放")
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.imageDelegate?.showImageDidDisappear(self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutView()
@@ -95,6 +104,8 @@ class ShowImageViewController: UICollectionViewController {
             if self.imageDelegate?.showImageDidSelect(self, index: self.currentIndex, imageData: self.configuration.dataArray[self.currentIndex]) == true {
                 self.configuration.dataArray[self.currentIndex].isSelect = !self.configuration.dataArray[self.currentIndex].isSelect;
                 self.navView.selectImageViewAnimation(self.configuration.dataArray[self.currentIndex].isSelect)
+            }else {
+                self.showAlertWithTitle("最多只能选择\(self.configuration.maxCount)张照片")
             }
         }
     }
