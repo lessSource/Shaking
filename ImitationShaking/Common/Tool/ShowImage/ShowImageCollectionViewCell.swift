@@ -171,25 +171,14 @@ class ShowImageCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
         if livePhotoPlay { livePhoto.stopPlayback() }
         self.asset = asset
         assetIdentifier = asset.localIdentifier
-        let option: PHImageRequestOptions = PHImageRequestOptions()
-        option.resizeMode = .fast
-        option.isSynchronous = false
-        option.isNetworkAccessAllowed = true
-        option.deliveryMode = .highQualityFormat
-        var size: CGSize = .zero
-        let height: CGFloat = CGFloat(asset.pixelHeight) / CGFloat(asset.pixelWidth) * Constant.screenWidth
-        size = CGSize(width: Constant.screenWidth, height: height)
-        let imageRequestID = PHCachingImageManager().requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: option) { (image, dic) in
+        let imageRequestID = LImagePickerManager.shared.getOriginalPhotoWithAsset(asset, progressHandler: nil) { (image, info) in
             if self.assetIdentifier == asset.localIdentifier {
-                self.currentImage.image = image
-            }else {
-                if let requestId = self.imageRequestID {
-                    PHCachingImageManager().cancelImageRequest(requestId)
-                }
-            }
-        }
-        if let requestId = self.imageRequestID, requestId != imageRequestID {
-            PHCachingImageManager().cancelImageRequest(requestId)
+                  self.currentImage.image = image
+              }else {
+                  if let requestId = self.imageRequestID {
+                    LImagePickerManager.shared.cancelGetPhoto(requestId)
+                  }
+              }
         }
         self.imageRequestID = imageRequestID
     }

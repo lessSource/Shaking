@@ -228,9 +228,7 @@ extension LImagePickerManager {
         if asset.mediaType == .audio { return .audio }
         if asset.mediaType == .image {
             if asset.mediaSubtypes == .photoLive { return .livePhoto }
-            if let filename = asset.value(forKey: "filename") as? String, filename.hasSuffix("GIF") {
-                return .gif
-            }
+            if let filename = asset.value(forKey: "filename") as? String, filename.hasSuffix("GIF") { return .gif }
         }
         return .image
     }

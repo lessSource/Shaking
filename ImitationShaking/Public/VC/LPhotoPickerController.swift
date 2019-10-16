@@ -143,7 +143,7 @@ extension LPhotoPickerController: PromptViewDelegate, UICollectionViewDelegate, 
             animationDelegate = ModelAnimationDelegate()
             showImage(ShowImageConfiguration(dataArray: navVC.selectArray, currentIndex: 0, maxCount: navVC.maxSelectCount), delegate: animationDelegate)
         }else if buttonType == .complete {
-            LImagePickerManager.shared.getSelectPhotoWithAsset(dataArray) { (imageArr, assetArr) in
+            LImagePickerManager.shared.getSelectPhotoWithAsset(navVC.selectArray) { (imageArr, assetArr) in
                 navVC.imageDelagete?.imagePickerController(navVC, photos: imageArr, assers: assetArr)
                 self.dismiss(animated: true, completion: nil)
             }
